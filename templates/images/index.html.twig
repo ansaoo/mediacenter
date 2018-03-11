@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% use 'base_images.html.twig' %}
+
+{% block title_page %}Images{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block activity_stream %}
+    <div class="col-lg-12">
+        {% for file in videos %}
+            <div class="file-box">
+                <div class="file" title="{{ file }}">
+                    <span class="corner"></span>
+                    <video src="{{ asset('home/'~folder~file) }}" class="img-responsive" width="192">
+                    <div class="file-name">
+                        {{ file }}
+                        <br>
+                    </div>
+                    {#</a>#}
+                </div>
+            </div>
+        {% endfor %}
+        {% for file in images %}
+            <div class="file-box" id="{{ file }}">
+                <div class="file" title="{{ file }}">
+                        <span class="corner"></span>
+                        <img src="{{ asset('home/'~folder~file) }}" class="img-responsive" width="192">
+                        <div class="file-name">
+                            {{ file }}
+                            <a target="_blank" href="{{ path('delete', {'filename': asset('home/'~folder~file)}) }}">x</a>
+                            <button id="{{ asset('home/'~folder~file) }}">x</button><br>
+                        </div>
+                    {#</a>#}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('button').click(function () {
+            $.getJSON('{{ path('delete', {'filename': 'test'}) }}', {file: this.id}, function (data) {
+                console.log(data);
+                $('div#'+data.deleted.split('/')[2]).remove();
+            })
+        })
+    </script>
+{% endblock javascripts %}

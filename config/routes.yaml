@@ -1,0 +1,31 @@
+#index:
+#    path: /
+#    defaults: { _controller: 'App\Controller\DefaultController::index' }
+
+download:
+  path: /download/{base}/{filename}
+  controller: App\Controller\DownloadController::index
+  requirements:
+      base: img
+      filename: .+
+
+images:
+  path: /images
+  controller: App\Controller\ImageViewController::index
+
+images_view:
+  path: /images/{year}/{month}
+  controller: App\Controller\ImageViewController::view
+  requirements:
+      year: 2015|2016|2017|2018|TEMP
+      month: .+
+
+delete:
+  path: /delete/{filename}
+  controller: App\Controller\DeleteController::index
+  requirements:
+      filename: .+
+
+upload:
+  path: /upload
+  controller: App\Controller\UploadController::new
