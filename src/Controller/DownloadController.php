@@ -21,8 +21,9 @@ class DownloadController extends Controller
          * $basePath can be either exposed (typically inside web/)
          * or "internal"
          */
-        $basePath = $this->container->getParameter('imagePath');
-        $filePath = $basePath.'/'.$filename;
+//        $basePath = $this->container->getParameter('imagePath');
+
+        $filePath = $base.'/'.$filename;
 
         // check if file exists
         $fs = new FileSystem();

@@ -6,7 +6,7 @@ download:
   path: /download/{base}/{filename}
   controller: App\Controller\DownloadController::index
   requirements:
-      base: img
+      base: .+
       filename: .+
 
 images:
