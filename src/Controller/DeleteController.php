@@ -9,8 +9,10 @@
 namespace App\Controller;
 
 
+use App\Document\Car;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeleteController extends Controller
 {

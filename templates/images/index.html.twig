@@ -1,52 +1,263 @@
 {% extends 'base.html.twig' %}
 
-{% use 'base_images.html.twig' %}
-
 {% block title_page %}Images{% endblock %}
 
 {% block stylesheets %}
+
+    <link href="{{ asset('css/plugins/jsTree/style.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/blueimp/css/blueimp-gallery.min.css') }}" rel="stylesheet">
+
 {% endblock %}
 
-{% block activity_stream %}
-    <div class="col-lg-12">
-        {% for file in videos %}
-            <div class="file-box">
-                <div class="file" title="{{ file }}">
-                    <span class="corner"></span>
-                    <video src="{{ asset('home/'~folder~file) }}" class="img-responsive" width="192">
-                    <div class="file-name">
-                        {{ file }}
-                        <br>
-                    </div>
-                    {#</a>#}
-                </div>
-            </div>
-        {% endfor %}
-        {% for file in images %}
-            <div class="file-box" id="{{ file }}">
-                <div class="file" title="{{ file }}">
-                        <span class="corner"></span>
-                        <img src="{{ asset('home/'~folder~file) }}" class="img-responsive" width="192">
-                        <div class="file-name">
-                            {{ file }}
-                            <a target="_blank" href="{{ path('delete', {'filename': asset('home/'~folder~file)}) }}">x</a>
-                            <button id="{{ asset('home/'~folder~file) }}">x</button><br>
-                        </div>
-                    {#</a>#}
-                </div>
-            </div>
-        {% endfor %}
+{% block page_heading %}
+    <div class="col-lg-10">
+        <h2>Images</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li class="active">
+                <strong>Images</strong>
+            </li>
+        </ol>
     </div>
+    <div class="col-lg-2">
 
+    </div>
+{% endblock page_heading %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="file-manager">
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <span class="btn btn-primary btn-file">
+                                <span class="fileinput-new">Upload files</span>
+                            <span class="fileinput-exists">Changer</span>
+                                <input type="file" id="upload_task_file" name="upload_task[file]" multiple/>
+                            </span>
+                            <span class="fileinput-filename"></span>
+                            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                        </div>
+                        <div id="progress_span" class="m-t-sm small"></div>
+                        <div id="progress" class="progress progress-mini" style="margin-bottom: 10px">
+                            <div class="progress-bar" style="width: 0%;"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <h5>Folders </h5>
+                        {#<div id="jstree">#}
+                        <ul class="folder-list" style="padding: 0">
+                            <li>
+                                <a id="mkdir">
+                                    <i class="fa fa-folder"></i>
+                                    <span>New <i class="fa fa-plus-square-o"></i></span>
+                                </a>
+                            </li>
+                            {% for dir in folder %}
+                                <li>
+                                    <a href="{{ path('images_view', {'year': dir|split('-')[0],'month': dir|split('-')[1]}) }}">
+                                        <i class="fa fa-folder"></i> {{ dir }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {#</div>#}
+                        <h5 class="tag-title">Tags</h5>
+                        <ul class="tag-list" style="padding: 0">
+                            <li><a href="">Family</a></li>
+                            <li><a href="">Work</a></li>
+                            <li><a href="">Home</a></li>
+                            <li><a href="">Children</a></li>
+                            <li><a href="">Holidays</a></li>
+                            <li><a href="">Music</a></li>
+                            <li><a href="">Photography</a></li>
+                            <li><a href="">Film</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+
+                        <div class="ibox-content">
+                            <h2>Récents</h2>
+                            <div class="lightBoxGallery">
+                                {% for file in images %}
+                                    <a href="{{ asset('home/TEMP/'~file) }}" title="{{ file }}" data-gallery="">
+                                        <img src="{{ asset('home/TEMP/'~file) }}" width="92">
+                                    </a>
+                                {% endfor %}
+                                <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                                <div id="blueimp-gallery" class="blueimp-gallery">
+                                    <div class="slides"></div>
+                                    <h3 class="title"></h3>
+                                    <a class="prev">‹</a>
+                                    <a class="next">›</a>
+                                    <a class="close">×</a>
+                                    <a class="play-pause"></a>
+                                    <ol class="indicator"></ol>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
 
 {% block javascripts %}
+
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="{{ asset('js/plugins/blueimp/vendor/jquery.ui.widget.js') }}"></script>
+    <!-- blueimp Gallery script -->
+    <script src="{{ asset('js/plugins/blueimp/jquery.blueimp-gallery.min.js') }}"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="{{ asset('js/plugins/blueimp/jquery.iframe-transport.js') }}"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="{{ asset('js/plugins/blueimp/jquery.fileupload.js') }}"></script>
+    <!-- The File Upload processing plugin -->
+    <script src="{{ asset('js/plugins/blueimp/jquery.fileupload-process.js') }}"></script>
+    {#<!-- The File Upload validation plugin -->#}
+    {#<script src="{{ asset('js/plugins/blueimp/jquery.fileupload-validate.js') }}"></script>#}
+    {#<!-- The File Upload user interface plugin -->#}
+    {#<script src="{{ asset('js/plugins/blueimp/jquery.fileupload-ui.js') }}"></script>#}
+    <!-- The main application script -->
+    <script src="{{ asset('js/plugins/blueimp/main.js') }}"></script>
+    <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+    {#<!--[if (gte IE 8)&(lt IE 10)]>#}
+    {#<script src="{{ asset('js/plugins/blueimp/js/cors/jquery.xdr-transport.js') }}"></script>#}
+    {#<![endif]-->#}
+    <script src="{{ asset('js/plugins/jsTree/jstree.min.js') }}"></script>
+    <style>
+        .jstree-open > .jstree-anchor > .fa-folder:before {
+            content: "\f07c";
+        }
+
+        .jstree-default .jstree-icon.none {
+            width: 0;
+        }
+    </style>
     <script>
-        $('button').click(function () {
-            $.getJSON('{{ path('delete', {'filename': 'test'}) }}', {file: this.id}, function (data) {
-                console.log(data);
-                $('div#'+data.deleted.split('/')[2]).remove();
-            })
+        $(document).ready(function () {
+
+            $('#upload_task_file').fileupload({
+                url: 'upload',
+                sequentialUploads: true,
+                dataType: 'json',
+                replaceFileInput: true,
+                done: function (e, data) {
+                    var progress_info = $('#progress_span');
+                    progress_info.text('Finalisation ...');
+                    $.getJSON(
+                        'merge_file',
+                        {file: data.files[0].name, size: data.files[0].size},
+                        function (result) {
+                            progress_info.text('');
+                            if (result.success) {
+                                toastr.success('Done');
+                            } else {
+                                $('#progress .progress-bar').css('width', '0%');
+                                toastr.error('Error')
+                            }
+                        }).fail(function () {
+                        progress_info.text('');
+                        $('#progress .progress-bar').css('width', '0%');
+                        toastr.error('Error');
+                    });
+                },
+                progressall: function (e, data) {
+                    var progress_info = $('#progress_span');
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                    if (progress <= 100) {
+                        progress_info.text('Uploading ... ' + progress + ' %');
+                    } else {
+                        progress_info.text('');
+                    }
+                },
+                maxChunkSize: 1900000,
+                add: function (e, data) {
+                    var that = this;
+                    var fu = $(this).data('blueimp-fileupload') || $(this).data('fileupload');
+                    $.getJSON('verif_file', {
+                        file: data.files[0].name,
+                        maxChunkSize: fu.options.maxChunkSize
+                    }, function (result) {
+                        var file = result.file;
+                        data.uploadedBytes = file && file.size;
+                        if (file.size === 0) {
+                            $.blueimp.fileupload.prototype
+                                .options.add.call(that, e, data);
+                        } else if (confirm('File partial uploaded. Do you want to resume it ?')) {
+                            $.blueimp.fileupload.prototype
+                                .options.add.call(that, e, data);
+                        }
+                    });
+                }
+            });
+
+            $('#jstree').jstree({
+                'core' : {
+                    'check_callback' : true
+                },
+                'plugins' : [ 'types', 'dnd' ],
+                'types' : {
+                    'default' : {
+                        'icon' : 'fa fa-folder'
+                    },
+                    'html' : {
+                        'icon' : 'fa fa-file-code-o'
+                    },
+                    'svg' : {
+                        'icon' : 'fa fa-file-picture-o'
+                    },
+                    'css' : {
+                        'icon' : 'fa fa-file-code-o'
+                    },
+                    'img' : {
+                        'icon' : 'fa fa-file-image-o'
+                    },
+                    'js' : {
+                        'icon' : 'fa fa-file-text-o'
+                    }
+
+                }
+            });
+
+            $('#mkdir').on('click',function () {
+                var new_folder = prompt('Nouveau dossier');
+                $.ajax({
+                    url: '{{ path('create_folder') }}',
+                    method: 'POST',
+                    data: {'folder': new_folder},
+                    dataType: 'json'
+                }).done(function (response) {
+                    if (response.done) {
+                        toastr.success('Folder %name% was created.'.replace('%name%', response.done));
+                    } else {
+                        toastr.error(response.error)
+                    }
+                }).fail(function (xhr, textStatus, errorThrown) {
+                    toastr.error(errorThrown);
+                })
+            });
         })
     </script>
+
 {% endblock javascripts %}

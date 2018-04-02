@@ -1,4 +1,52 @@
 {
+    "alcaeus/mongo-php-adapter": {
+        "version": "1.1.5"
+    },
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
+        }
+    },
+    "doctrine/cache": {
+        "version": "v1.7.1"
+    },
+    "doctrine/collections": {
+        "version": "v1.5.0"
+    },
+    "doctrine/common": {
+        "version": "v2.8.1"
+    },
+    "doctrine/inflector": {
+        "version": "v1.3.0"
+    },
+    "doctrine/instantiator": {
+        "version": "1.1.0"
+    },
+    "doctrine/lexer": {
+        "version": "v1.0.1"
+    },
+    "doctrine/mongodb": {
+        "version": "1.6.1"
+    },
+    "doctrine/mongodb-odm": {
+        "version": "1.2.1"
+    },
+    "doctrine/mongodb-odm-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "e1ee362a520ff9e3e7c38fb5399499427ed91314"
+        }
+    },
+    "mongodb/mongodb": {
+        "version": "1.1.2"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -10,6 +58,15 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
+        }
     },
     "symfony/asset": {
         "version": "v3.4.6"
@@ -36,6 +93,9 @@
         "version": "v3.4.6"
     },
     "symfony/dependency-injection": {
+        "version": "v3.4.6"
+    },
+    "symfony/doctrine-bridge": {
         "version": "v3.4.6"
     },
     "symfony/dotenv": {
@@ -111,6 +171,15 @@
             "branch": "master",
             "version": "3.3",
             "ref": "a249484db698d1a847a30291c8f732414ac47e25"
+        }
+    },
+    "symfony/translation": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6bcd6c570c017ea6ae5a7a6a027c929fd3542cd8"
         }
     },
     "symfony/twig-bridge": {

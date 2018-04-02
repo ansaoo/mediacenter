@@ -2,6 +2,11 @@
 #    path: /
 #    defaults: { _controller: 'App\Controller\DefaultController::index' }
 
+create_folder:
+  path: /create_folder
+  methods: 'POST'
+  controller: App\Controller\CreateFolderController::mkdir
+
 download:
   path: /download/{base}/{filename}
   controller: App\Controller\DownloadController::index
@@ -28,4 +33,8 @@ delete:
 
 upload:
   path: /upload
-  controller: App\Controller\UploadController::new
+  controller: App\Controller\UploadController::index
+
+create:
+  path: /create
+  controller: App\Controller\CreateFolderController::create
