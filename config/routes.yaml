@@ -22,7 +22,7 @@ images_view:
   path: /images/{year}/{month}
   controller: App\Controller\ImageViewController::view
   requirements:
-      year: 2015|2016|2017|2018|TEMP
+      year: .+
       month: .+
 
 delete:

@@ -23,10 +23,10 @@ class CreateFolderController extends Controller
             return $this->json(array('error' => 'Folder name required'));
         }
 
-        if (is_dir($this->getParameter('publicPath') . '/home/' . $folder)) {
+        if (is_dir($this->getParameter('imagePath') . '/' . $folder)) {
             return $this->json(array('error' => 'dir_exist'));
         }
-        mkdir($this->getParameter('publicPath') . '/home/' . $folder);
+        mkdir($this->getParameter('imagePath') . '/' . $folder);
         return $this->json(array('done' => $folder));
     }
 

@@ -1,9 +1,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    imagePath: '/home/ansaoo/Images/'
+#    imagePath: '/home/ansaoo/Images'
+    imagePath: '%kernel.project_dir%/public/img'
     publicPath: '%kernel.project_dir%/public'
-    uploadPath: '%kernel.project_dir%/public/home/TEMP'
+    uploadPath: '%kernel.project_dir%/public/upload'
     locale: 'en'
 
 services:
