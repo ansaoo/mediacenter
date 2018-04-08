@@ -37,7 +37,7 @@
                     <div class="lightBoxGallery">
                         {% for file in images %}
                         <a href="{{ asset('home/'~folder~file) }}" title="{{ file }}" data-gallery="">
-                            <img src="{{ asset('home/'~folder~file) }}" width="128">
+                            <img src="{{ asset('img/'~folder~file) }}" width="128">
                         </a>
                         {% endfor %}
                         <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
