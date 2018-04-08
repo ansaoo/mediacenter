@@ -36,7 +36,7 @@
 
                     <div class="lightBoxGallery">
                         {% for file in images %}
-                        <a href="{{ asset('home/'~folder~file) }}" title="{{ file }}" data-gallery="">
+                        <a href="{{ asset('img/'~folder~file) }}" title="{{ file }}" data-gallery="">
                             <img src="{{ asset('img/'~folder~file) }}" width="128">
                         </a>
                         {% endfor %}
