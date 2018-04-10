@@ -35,7 +35,7 @@ class DownloadController extends Controller
         $response = new BinaryFileResponse($filePath);
         $response->trustXSendfileTypeHeader();
         $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE,
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $filename,
             iconv('UTF-8', 'ASCII//TRANSLIT', $filename)
         );

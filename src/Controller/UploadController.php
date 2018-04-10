@@ -14,14 +14,12 @@ use App\Form\UploadTaskType;
 use App\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UploadController extends Controller
 {
-    public function index(SessionInterface $session, Request $request, FileUploader $fileUploader)
+    public function index(Request $request, FileUploader $fileUploader)
     {
         $task = new UploadTask();
         $form = $this->createForm(UploadTaskType::class, $task);
@@ -52,10 +50,6 @@ class UploadController extends Controller
             } else {
                 return $this->json(array('test' => 'no file'));
             }
-//            return $this->render('upload/new.html.twig', array(
-//                'form' => $form->createView(),
-//                'files' => null,
-//            ));
         }
 
         return $this->render('upload/new.html.twig', array(
@@ -78,18 +72,12 @@ class UploadController extends Controller
         $maxChunkSize = $request->query->get('maxChunkSize') ? $request->query->get('maxChunkSize') : 0;
         if ($filename) {
             $find = glob($fileUploader->getTargetDir() .'/'. $filename .'.*');
-//            if (!empty($find)) {
-//                unlink(end($find));
-//            }
             $size = 0;
             foreach ($find as $file) {
                 $size += filesize($file);
             }
-//            $size -= filesize(end($find));
-//            $size = $maxChunkSize < $size ? $size - $maxChunkSize : 0;
             return $this->json(array('file' => array('size' => $size)));
         }
-
         return $this->json(array('file' => null));
     }
 
@@ -111,7 +99,7 @@ class UploadController extends Controller
             $find = glob($fileUploader->getTargetDir() .'/'. $filename .'.*');
             $count = count($find);
             $files = implode("\" \"", $find);
-            $cleanedName = $fileUploader->getTargetDir() .'/'. $cleanedName;
+            $cleanedName = $this->getParameter('uploadPath') .'/'. $cleanedName;
             $command = "cat \"$files\" > \"$cleanedName\"";
             $process = new Process($command);
             $process->run();

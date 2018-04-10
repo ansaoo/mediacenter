@@ -1,4 +1,8 @@
 twig:
     paths: ['%kernel.project_dir%/templates']
+    globals:
+        api_url: '%api_url%'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes:
+            - bootstrap_3_horizontal_layout.html.twig

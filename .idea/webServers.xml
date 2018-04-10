@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0655f6f9-4343-4587-bb2d-7324c07ccaf8" name="Alienware-X51-R2" url="http://192.168.0.10:8000/index.php">
+        <fileTransfer host="192.168.0.10" port="22" rootFolder="/var/www/mediacenter/" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

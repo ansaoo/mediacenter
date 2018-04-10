@@ -12,7 +12,7 @@ download:
   controller: App\Controller\DownloadController::index
   requirements:
       base: .+
-      filename: .+
+      filename: .*
 
 images:
   path: /images
@@ -38,3 +38,7 @@ upload:
 create:
   path: /create
   controller: App\Controller\CreateFolderController::create
+
+youtube_dl:
+  path: /tools/youtube
+  controller: App\Controller\YouTubeController::index
