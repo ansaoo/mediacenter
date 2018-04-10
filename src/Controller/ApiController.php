@@ -7,7 +7,7 @@
  */
 
 namespace App\Controller;
-
+header('Access-Control-Allow-Origin: *');
 
 use App\Entity\YouTubeTask;
 use App\Services\YouTubeDownloader;

@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
 #    imagePath: '/home/ansaoo/Images'
-    api_url: 'http://127.0.0.1:8000/api.php'
+    api_url: 'http://localhost:8000/api.php'
     ddlPath: '%kernel.project_dir%/public/ddl'
     imagePath: '%kernel.project_dir%/public/img'
     publicPath: '%kernel.project_dir%/public'
