@@ -2,37 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="970ab591-8382-41e9-944a-c8b6b71bc4b8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/packages" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/webServers.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/bundles.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/routes.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/routes/annotations.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/routes/dev/twig.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/api/services.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/api.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/ddl/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ApiKernel.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Controller/ApiController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Controller/YouTubeController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Entity/YouTubeTask.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Form/YouTubeTaskType.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/tools/youtube.html.twig" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/home" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/packages/twig.yaml" afterPath="$PROJECT_DIR$/config/packages/twig.yaml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.yaml" afterPath="$PROJECT_DIR$/config/routes.yaml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/services.yaml" afterPath="$PROJECT_DIR$/config/services.yaml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mediacenter.iml" afterPath="$PROJECT_DIR$/mediacenter.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/DownloadController.php" afterPath="$PROJECT_DIR$/src/Controller/DownloadController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/UploadController.php" afterPath="$PROJECT_DIR$/src/Controller/UploadController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/symfony.lock" afterPath="$PROJECT_DIR$/symfony.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html.twig" afterPath="$PROJECT_DIR$/templates/base.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/images/index.html.twig" afterPath="$PROJECT_DIR$/templates/images/index.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" afterPath="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,18 +18,7 @@
     <executablePath>composer</executablePath>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="youtube.html.twig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/tools/youtube.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="9" column="30" lean-forward="false" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <replaceStrings>
@@ -106,10 +66,10 @@
         <option value="$PROJECT_DIR$/src/Controller/YouTubeController.php" />
         <option value="$PROJECT_DIR$/config/routes.yaml" />
         <option value="$PROJECT_DIR$/src/Controller/ApiController.php" />
-        <option value="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" />
         <option value="$PROJECT_DIR$/src/Controller/DownloadController.php" />
         <option value="$PROJECT_DIR$/src/Form/YouTubeTaskType.php" />
         <option value="$PROJECT_DIR$/templates/tools/youtube.html.twig" />
+        <option value="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" />
       </list>
     </option>
   </component>
@@ -357,7 +317,7 @@
       <workItem from="1523194071913" duration="1131000" />
       <workItem from="1523285555289" duration="1968000" />
       <workItem from="1523357979724" duration="7782000" />
-      <workItem from="1523384182070" duration="7850000" />
+      <workItem from="1523384182070" duration="7900000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1520772251620</created>
@@ -401,11 +361,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523194113740</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix #4">
+      <created>1523395556351</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1523395556351</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84003000" />
+    <option name="totallyTimeSpent" value="84053000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="1258" height="740" extended-state="0" />
@@ -449,7 +416,8 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Avancement #1:&#10; - add blueimp gallery" />
     <MESSAGE value="Contrib #1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Contrib #1" />
+    <MESSAGE value="Fix #4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix #4" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -688,6 +656,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="6" column="49" lean-forward="false" selection-start-line="6" selection-start-column="49" selection-end-line="6" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -695,6 +664,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14">
           <caret line="1" column="17" lean-forward="false" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -710,6 +680,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="28">
           <caret line="213" column="0" lean-forward="true" selection-start-line="213" selection-start-column="0" selection-end-line="213" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -724,6 +695,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -731,6 +703,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
           <caret line="3" column="28" lean-forward="false" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -738,6 +711,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="434">
           <caret line="31" column="46" lean-forward="true" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -745,6 +719,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -806,14 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Services/YouTubeDownloader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/YouTubeController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
@@ -826,8 +793,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/tools/youtube.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
+        <state relative-caret-position="-714">
           <caret line="9" column="30" lean-forward="false" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Services/YouTubeDownloader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="53" column="53" lean-forward="false" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
           <folding />
         </state>
       </provider>

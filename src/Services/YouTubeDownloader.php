@@ -52,7 +52,6 @@ class YouTubeDownloader
         $command = "ffmpeg -i \"". $this->getTargetDir() .
             "/$filename\" -vn -acodec aac \"".
             $this->getTargetDir() ."/$outname.m4a\"";
-        file_put_contents('test', $command);
         $process = new Process($command);
         $process->run();
 
