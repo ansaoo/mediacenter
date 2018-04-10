@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="970ab591-8382-41e9-944a-c8b6b71bc4b8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" afterPath="$PROJECT_DIR$/src/Services/YouTubeDownloader.php" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -317,7 +316,7 @@
       <workItem from="1523194071913" duration="1131000" />
       <workItem from="1523285555289" duration="1968000" />
       <workItem from="1523357979724" duration="7782000" />
-      <workItem from="1523384182070" duration="7900000" />
+      <workItem from="1523384182070" duration="7908000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1520772251620</created>
@@ -368,11 +367,18 @@
       <option name="project" value="LOCAL" />
       <updated>1523395556351</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fix #4">
+      <created>1523395597323</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1523395597323</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84053000" />
+    <option name="totallyTimeSpent" value="84061000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="1258" height="740" extended-state="0" />
