@@ -24,17 +24,21 @@ class YouTubeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ref = $request->headers->get('referer');
+            preg_match('/(.*):8000*/', $ref, $match);
             return $this->render('tools/youtube.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $downloader->download($task),
-                'url' => $task->getUrl()
+                'url' => $task->getUrl(),
+                'api_url' => $match[0] ?? null
             ));
         }
 
         return $this->render('tools/youtube.html.twig', array(
             'form' => $form->createView(),
             'title' => null,
-            'url' => null
+            'url' => null,
+            'api_url' => null
         ));
     }
 }

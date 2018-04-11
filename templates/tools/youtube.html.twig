@@ -64,7 +64,7 @@
         $(document).ready(function () {
             {% if url %}
             $.ajax({
-                url: '{{ (api_url~'?app=youtubedl')|raw }}',
+                url: '{{ (api_url~'/api.php?app=youtubedl')|raw }}',
                 dataType: 'json',
                 data: {url: '{{ url }}'}
             }).done(function (data) {
@@ -74,7 +74,7 @@
                     {href: '{{ path('download', {'base': 'ddl', 'filename': ''}) }}'+data, text: 'video'})
                 );
                 $.ajax({
-                    url: '{{ (api_url~'?app=extract')|raw }}',
+                    url: '{{ (api_url~'/api.php?app=extract')|raw }}',
                     dataType: 'json',
                     data: {filename: data}
                 }).done(function (result) {
