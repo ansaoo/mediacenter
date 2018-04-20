@@ -22,6 +22,9 @@ class DownloadController extends Controller
          * or "internal"
          */
 //        $basePath = $this->container->getParameter('imagePath');
+        if ($base == 'img') {
+            $base = $this->getParameter('img_thumb_path').'/'.substr($filename, 0, 7);
+        }
 
         $filePath = $base.'/'.$filename;
 

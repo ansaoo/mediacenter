@@ -8,37 +8,41 @@
 
 namespace App\Controller;
 
+use App\Entity\ImgSearchTask;
+use App\Form\ImgSearchTaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class ImageViewController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $folder = glob($this->getParameter('imagePath').'/*-*');
-        $images = glob($this->getParameter('imagePath')."/TEMP/*_thumb.jpg");
-        return $this->render('images/index.html.twig', array(
-            'folder' => array_map(function ($e) {
-                return basename($e);
-            }, $folder),
-            'images' => array_map(function ($e) {
-                return basename($e);
-            }, $images),
-            'videos' => null
-        ));
-    }
+        $task = new ImgSearchTask();
+        $form = $this->createForm(ImgSearchTaskType::class, $task);
+        $form->handleRequest($request);
 
-    public function view($year,$month)
-    {
-        $images = glob($this->getParameter('imagePath')."/$year-$month/*_thumb.jpg");
-        $videos = glob($this->getParameter('imagePath')."/$year-$month/*.MP4");
-        return $this->render('images/view.html.twig', array(
-            'folder' => "$year-$month/",
-            'images' => array_map(function ($e) {
-                return basename($e);
-            }, $images),
-            'videos' => array_map(function ($e) {
-                return basename($e);
-            }, $videos),
+        $ref = $request->headers->get('referer');
+        preg_match('/(.*):8000*/', $ref, $match);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->render('images/index.html.twig', array(
+                'form' => $form->createView(),
+                'title' => $task->getKeyword()->format('Y-m-d'),
+                'api_url' => $match[0] ?? null,
+                'method' => 'search/image',
+                'keyword' => array(
+                    'gte' => $task->getKeyword()->format('Y-m-d'),
+                    'lt' => $task->getKeyword()->add(new \DateInterval('P1M'))->format('Y-m-d'),
+                )
+            ));
+        }
+
+        return $this->render('images/index.html.twig', array(
+            'form' => $form->createView(),
+            'title' => 'Récents',
+            'api_url' => $match[0] ?? null,
+            'method' => 'recent/image',
+            'keyword' => array()
         ));
     }
 }

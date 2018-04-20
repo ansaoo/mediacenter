@@ -45,7 +45,7 @@
                             {#<li><a href="{{ path('logout') }}">Logout</a></li>#}
                         {#</ul>#}
                     </div>
-                    <div class="logo-element">ISAN</div>
+                    <div class="logo-element">Home</div>
                 </li>
                 <li>
                     <a href="{{ path('images') }}"><i class="fa fa-book"></i> <span class="nav-label">Bibliothèque</span></a>
@@ -63,6 +63,7 @@
                         <li><a href="{{ path('images') }}">Albums</a></li>
                         <li><a href="{{ path('images') }}">Artistes</a></li>
                         <li><a href="{{ path('images') }}">Genres</a></li>
+                        <li><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>
                     </ul>
                 </li>
                 <li>
@@ -72,11 +73,10 @@
                     <a href="{{ path('images') }}"><i class="fa fa-gamepad"></i> <span class="nav-label">Jeux</span></a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-cogs"></i> <span class="nav-label">Outils</span><span class="fa arrow"></span></a>
+                    <a href=""><i class="fa fa-car"></i> <span class="nav-label">Voitures</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="{{ path('images') }}">Loyers</a></li>
-                        <li><a href="{{ path('images') }}">Voitures</a></li>
-                        <li><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>
+                        <li><a href="{{ path('car_view') }}">Overview</a></li>
+                        <li><a href="{{ path('car_data') }}">Data</a></li>
                     </ul>
                 </li>
             </ul>
@@ -163,7 +163,7 @@
         </div>
         <div class="footer">
             <div class="text-center">
-                <small>ISAN System provided by</small><img src="{{ asset('img/isan_ia_s1.gif') }}">
+                {#<small>ISAN System provided by</small><img src="{{ asset('img/isan_ia_s1.gif') }}">#}
             </div>
         </div>
 

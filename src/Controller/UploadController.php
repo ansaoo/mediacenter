@@ -12,10 +12,13 @@ namespace App\Controller;
 use App\Entity\UploadTask;
 use App\Form\UploadTaskType;
 use App\Services\FileUploader;
+use App\Services\ImgLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Yaml\Yaml;
 
 class UploadController extends Controller
 {
@@ -89,17 +92,18 @@ class UploadController extends Controller
      * @param FileUploader $fileUploader
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function merge_file(Request $request, FileUploader $fileUploader)
+    public function merge_file(Request $request, FileUploader $fileUploader, ImgLoader $imgLoader)
     {
         $count = 0;
-        $filename = $request->query ? $request->query->get('file') : null;
-        $size = $request->query ? $request->query->get('size') : null;
+        $_type = $request->query->get('type') ?? 'uploadPath';
+        $filename = $request->query->get('file') ?? null;
+        $size = $request->query->get('size') ?? null;
         $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $filename);
         if ($filename) {
-            $find = glob($fileUploader->getTargetDir() .'/'. $filename .'.*');
+            $find = glob($fileUploader->getTargetDir() . '/' . $filename . '.*');
             $count = count($find);
             $files = implode("\" \"", $find);
-            $cleanedName = $this->getParameter('uploadPath') .'/'. $cleanedName;
+            $cleanedName = $this->getParameter($_type) . '/' . $cleanedName;
             $command = "cat \"$files\" > \"$cleanedName\"";
             $process = new Process($command);
             $process->run();
@@ -107,10 +111,54 @@ class UploadController extends Controller
                 unlink($files);
             }
             if (filesize($cleanedName) == $size) {
+                if ($_type == 'image_path') {
+                    if ($imgLoader->check($cleanedName)) {
+                        $cleanedName = $imgLoader->rename($cleanedName);
+                    }
+                    $command = $this->getParameter('datasource_cmd') . $cleanedName;
+                    file_put_contents(
+                        'logs/command',
+                        Yaml::dump(
+                            array(
+                                uniqid('', true) => array(
+                                    'eventDate' => date_create('now'),
+                                    'subject' => $filename,
+                                    'body' => $command
+                                )
+                            )
+                        ),
+                        FILE_APPEND);
+                    $load = new Process($command);
+                    $load->run();
+                    file_put_contents(
+                        'logs/es_load_success',
+                        Yaml::dump(
+                            array(
+                                uniqid('', true) => array(
+                                    'eventDate' => date_create('now'),
+                                    'subject' => $filename,
+                                    'body' => $load->getOutput()
+                                )
+                            )
+                        ),
+                        FILE_APPEND);
+                    file_put_contents(
+                        'logs/es_load_error',
+                        Yaml::dump(
+                            array(
+                                uniqid('', true) => array(
+                                    'eventDate' => date_create('now'),
+                                    'subject' => $filename,
+                                    'body' => $load->getErrorOutput()
+                                )
+                            )
+                        ),
+                        FILE_APPEND);
+                }
                 return $this->json(array('success' => basename($cleanedName)));
             } else {
                 unlink($cleanedName);
-                return $this->json('fail');
+                return $this->json(array('error' => basename($cleanedName)));
             }
         }
         return $this->json('fail');

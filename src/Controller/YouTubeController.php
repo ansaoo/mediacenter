@@ -23,10 +23,11 @@ class YouTubeController extends Controller
         $form = $this->createForm(YouTubeTaskType::class, $task);
         $form->handleRequest($request);
 
+        $ref = $request->headers->get('referer');
+        preg_match('/(.*):8000*/', $ref, $match);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $ref = $request->headers->get('referer');
-            preg_match('/(.*):8000*/', $ref, $match);
-            return $this->render('tools/youtube.html.twig', array(
+            return $this->render('music/youtube.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $downloader->download($task),
                 'url' => $task->getUrl(),
@@ -34,11 +35,11 @@ class YouTubeController extends Controller
             ));
         }
 
-        return $this->render('tools/youtube.html.twig', array(
+        return $this->render('music/youtube.html.twig', array(
             'form' => $form->createView(),
             'title' => null,
             'url' => null,
-            'api_url' => null
+            'api_url' => $match[0] ?? null
         ));
     }
 }

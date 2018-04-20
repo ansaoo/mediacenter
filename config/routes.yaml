@@ -18,13 +18,6 @@ images:
   path: /images
   controller: App\Controller\ImageViewController::index
 
-images_view:
-  path: /images/{year}/{month}
-  controller: App\Controller\ImageViewController::view
-  requirements:
-      year: .+
-      month: .+
-
 delete:
   path: /delete/{filename}
   controller: App\Controller\DeleteController::index
@@ -39,6 +32,14 @@ create:
   path: /create
   controller: App\Controller\CreateFolderController::create
 
+car_view:
+  path: /car/overview
+  controller: App\Controller\CarController::overview
+
+car_data:
+  path: /car/data
+  controller: App\Controller\CarController::data
+
 youtube_dl:
-  path: /tools/youtube
+  path: /music/youtube
   controller: App\Controller\YouTubeController::index

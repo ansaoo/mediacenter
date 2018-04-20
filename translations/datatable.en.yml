@@ -1,0 +1,89 @@
+dt:
+  button:
+    copy:         "Copy"
+    csv:          "CSV"
+    excel:        "Excel"
+    pdf:          "PDF"
+    print:        "Print"
+  decimal:        "."
+  emptyTable:     "No data available in table"
+  info:           "Showing _START_ to _END_ of _TOTAL_ entries"
+  infoEmpty:      "Showing 0 to 0 of 0 entries"
+  infoFiltered:   "(filtered from _MAX_ total entries)"
+  infoPostFix:    ""
+  thousands:      ","
+  lengthMenu:     "Show _MENU_ entries"
+  loadingRecords: "Loading..."
+  processing:     "Processing..."
+  search:         "Filter records:"
+  zeroRecords:    "No matching records found"
+  paginate:
+      first:      "First"
+      last:       "Last"
+      next:       "Next"
+      previous:   "Previous"
+  aria:
+      sortAscending:  ": activate to sort column ascending"
+      sortDescending: ": activate to sort column descending"
+error_data:
+  regid: "REGID"
+  error_count: "Error count"
+  error: "Error"
+
+export_view:
+  "#index": "#index"
+  "#match": "#match"
+  "#group": "#group"
+  RA: RA
+  Client: Client
+  RegDate: RegDate
+  REGID: REGID
+  Submitted ISAN: Submitted ISAN
+  ISAN: ISAN
+  ROOT ISAN: ROOT ISAN
+  Titles: Titles
+  Serial Titles: Serial Titles
+  Type: Type
+  Color: Color
+  Year: Year
+  Dura: Dura
+  Countries: Countries
+  Lang: Lang
+  Directors: Directors
+  Actors: Actors
+  Companies: Companies
+  MT-Sc: MT-Sc
+  "#Season": "#Season"
+  "#Episode": "#Episode"
+  DurMin: DurMin
+  DurMax: DurMax
+  YorMin: YorMin
+  YorMax: YorMax
+  M-Type_Nb: M-Type_Nb
+  S-TTL: S-TTL
+  S-STL: S-STL
+  S-DIR: S-DIR
+  S-ACT: S-ACT
+  S-YOR: S-YOR
+  S-DUR: S-DUR
+  S-COL: S-COL
+  S-CTY: S-CTY
+  S-LANG: S-LANG
+  S-COMP: S-COMP
+  S-WTYP: S-WTYP
+  S-ISAN: S-ISAN
+  LEV(TTL): LEV(TTL)
+  LEV(SHTTL): LEV(SHTTL)
+  MMScore: MMScore
+  Debug Msg: Debug Msg
+  M-Kind: M-Kind
+  Alt. IDs: Alt. IDs
+  Conf. Rule: Conf. Rule
+  Auto-M: Auto-M
+  M-DIR: M-DIR
+  M-TTL: M-TTL
+  M: M
+  Conf-ID: Conf-ID
+  Conf-Txt: Conf-Txt
+  Status: Status
+  Login: Login

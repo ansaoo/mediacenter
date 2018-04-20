@@ -44,6 +44,15 @@
             "ref": "e1ee362a520ff9e3e7c38fb5399499427ed91314"
         }
     },
+    "elasticsearch/elasticsearch": {
+        "version": "v6.0.1"
+    },
+    "guzzlehttp/ringphp": {
+        "version": "1.1.0"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0.0"
+    },
     "mongodb/mongodb": {
         "version": "1.1.2"
     },
@@ -61,6 +70,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "react/promise": {
+        "version": "v2.5.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "4.0",

@@ -28,8 +28,9 @@ class YouTubeDownloader
 
     public function download(YouTubeTask $task)
     {
-        $base = 'youtube-dl '.$task->getUrl();
-        $processTitle = new Process($base. ' -e');
+        preg_match('/.*watch\?v=(.*)/', $task->getUrl(), $match);
+        $base = 'youtube-dl -e '.$task->getUrl();
+        $processTitle = new Process($base);
         $processTitle->run();
 //        $title = $processTitle->getOutput();
 //        $command = $base.' --audio-quality 0 -f "mp4" -o "'.
@@ -42,7 +43,8 @@ class YouTubeDownloader
 
         return array(
             'error' => $processTitle->getErrorOutput(),
-            'success' => $processTitle->getOutput()
+            'success' => $processTitle->getOutput(),
+            'id' => $match[1] ?? null
         );
     }
 

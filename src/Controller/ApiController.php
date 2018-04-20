@@ -39,6 +39,21 @@ class ApiController extends Controller
                     'output' => '%(title)s.%(ext)s',
                 ));
                 $dl->setDownloadPath($this->getParameter('ddlPath'));
+//                $dl->onProgress(function ($progress) {
+//                    $percentage = $progress['percentage'];
+//                    $size = $progress['size'];
+//                    $speed = $progress['speed'] ?? null;
+//                    $eta = $progress['eta'] ?? null;
+//
+//                    echo "Percentage: $percentage; Size: $size";
+//                    if ($speed) {
+//                        echo "; Speed: $speed";
+//                    }
+//                    if ($eta) {
+//                        echo "; ETA: $eta";
+//                    }
+//                    // Will print: Percentage: 21.3%; Size: 4.69MiB; Speed: 4.47MiB/s; ETA: 00:01
+//                });
                 $video = $dl->download($request->query->get('url'));
                 return $this->json($video->getFilename());
             default:

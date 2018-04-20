@@ -5,3 +5,27 @@
 api:
   path: /
   controller: App\Controller\ApiController::index
+
+es_data:
+  path: /elastic/data/{index}/{_type}
+  controller: App\Controller\EsController::data
+
+es_delete:
+  path: /elastic/delete/{index}/{_id}
+  controller: App\Controller\EsController::delete
+
+es_histo:
+  path: /elastic/histo
+  controller: App\Controller\EsController::histo
+
+es_recent:
+  path: /elastic/recent/{index}
+  controller: App\Controller\EsController::recent
+
+es_search:
+  path: /elastic/search/{index}
+  controller: App\Controller\EsController::search
+
+es_stat:
+  path: /elastic/stat
+  controller: App\Controller\EsController::index

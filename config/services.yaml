@@ -3,8 +3,11 @@
 parameters:
 #    imagePath: '/home/ansaoo/Images'
     api_url: 'http://localhost:8000/api.php'
+    es_url: '127.0.0.1:9200'
+    datasource_cmd: '/home/samuel/Projects/datasource/sql/boot_image.py '
     ddlPath: '%kernel.project_dir%/public/ddl'
-    imagePath: '%kernel.project_dir%/public/img'
+    image_path: '/home/ansaoo/Images'
+    img_thumb_path: '/home/ansaoo/thumbnail'
     publicPath: '%kernel.project_dir%/public'
     uploadPath: '%kernel.project_dir%/public/upload'
     tmpPath: '%kernel.project_dir%/public/upload/tmp'
@@ -33,6 +36,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Services\ImgLoader:
+        arguments:
+            $targetDir: '%image_path%'
 
     App\Services\FileUploader:
         arguments:
