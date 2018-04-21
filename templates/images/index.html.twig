@@ -73,6 +73,12 @@
                             <li><a href="">Film</a></li>
                         </ul>
                         <div class="clearfix"></div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <h5>Stats </h5>
+                        <div class="tot-img">0 photos</div>
+                        <div class="size-img">0 Go</div>
                     </div>
                 </div>
             </div>
@@ -120,6 +126,18 @@
     <script>
         $(document).ready(function () {
 
+            $.ajax({
+                url: '{{ api_url }}/api.php/elastic/size/image',
+                dataType: 'json'
+            }).done(function (response) {
+                $('.tot-img').text(
+                    '%nb% photos'.replace('%nb%',response.total)
+                );
+                $('.size-img').text(
+                    '%nb% Mo'.replace('%nb%', response.size)
+                );
+            });
+
             $('#upload_task_file').fileupload({
                 url: 'upload',
                 sequentialUploads: false,
@@ -136,8 +154,7 @@
                             size: data.files[0].size,
                             type: 'image_path'
                         },
-                        function (result) {
-//                            progress_info.text('');
+                        function (result) {//                            progress_info.text('');
                             if (result.success) {
                                 toastr.success('%filename% ok'.replace('%filename%', result.success));
                             } else {

@@ -6,6 +6,10 @@ api:
   path: /
   controller: App\Controller\ApiController::index
 
+es_health:
+  path: /elastic/health
+  controller: App\Controller\EsController::health
+
 es_data:
   path: /elastic/data/{index}/{_type}
   controller: App\Controller\EsController::data
@@ -25,6 +29,10 @@ es_recent:
 es_search:
   path: /elastic/search/{index}
   controller: App\Controller\EsController::search
+
+es_size:
+  path: /elastic/size/{index}
+  controller: App\Controller\EsController::size
 
 es_stat:
   path: /elastic/stat

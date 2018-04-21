@@ -15,6 +15,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EsController extends Controller
 {
+    public function health(Request $request)
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(array($this->getParameter('es_url')))
+            ->build();
+        $params = array(
+            'index' => '_cat',
+            'type' => 'health',
+            'body' => array()
+        );
+        $response = $client->search($params);
+//        if ($response) {
+//            $response = explode(' ', $response);
+//        }
+        return $response;
+    }
+
     public function index(Request $request)
     {
         $client = ClientBuilder::create()
@@ -273,5 +290,38 @@ class EsController extends Controller
         );
         $response = $client->index($params);
         return $this->json('No update');
+    }
+
+    public function size(Request $request, $index)
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(array($this->getParameter('es_url')))
+            ->build();
+        $params = array(
+            'index' => $index,
+            'type' => '_doc',
+            'body' => [
+                "size"=> 0,
+                "query"=> [
+                    "match"=> [
+                        "status"=> true
+                    ]
+                ],
+                "aggs"=> [
+                    "total_size"=> [
+                        "sum"=> [
+                            "field"=> "fileSize"
+                        ]
+                    ]
+                ]
+            ]
+        );
+        $response = $client->search($params);
+        $tot = $response['hits']['total'] ?? 0;
+        $size = $response['aggregations']['total_size']['value'] ?? 0;
+        return $this->json(array(
+            'total'=> $tot,
+            'size'=> round($size/1024/1024, 1)
+        ));
     }
 }
