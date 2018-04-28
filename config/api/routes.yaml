@@ -19,8 +19,12 @@ es_delete:
   controller: App\Controller\EsController::delete
 
 es_histo:
-  path: /elastic/histo
+  path: /elastic/histo/{period}
   controller: App\Controller\EsController::histo
+
+es_histo_price:
+  path: /elastic/histo_price
+  controller: App\Controller\EsController::histo_price
 
 es_recent:
   path: /elastic/recent/{index}

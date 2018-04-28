@@ -6,7 +6,11 @@
 
     <link href="{{ asset('css/plugins/jsTree/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins/nanogallery2/nanogallery2.min.css') }}" rel="stylesheet">
-
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block page_heading %}
@@ -87,11 +91,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
-
+                        <div class="ibox-title">
+                            <h5>{{ title }}</h5>
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-xs btn-warning hidden" id="delete">Supprimer</button>
+                            </div>
+                        </div>
                         <div class="ibox-content">
-                            <h2>{{ title }}</h2>
                             <div id="my_nanogallery2"></div>
-                            <button type="button" id="delete">Supprimer</button>
                         </div>
                     </div>
                 </div>
@@ -134,8 +141,10 @@
                     '%nb% photos'.replace('%nb%',response.total)
                 );
                 $('.size-img').text(
-                    '%nb% Mo'.replace('%nb%', response.size)
+                    '%nb%'.replace('%nb%', response.size)
                 );
+            }).fail(function () {
+
             });
 
             $('#upload_task_file').fileupload({
@@ -156,10 +165,10 @@
                         },
                         function (result) {//                            progress_info.text('');
                             if (result.success) {
-                                toastr.success('%filename% ok'.replace('%filename%', result.success));
+                                toastr.success('%filename% ok'.replace('%filename%', result.filename));
                             } else {
                                 $('#progress .progress-bar').css('width', '0%');
-                                toastr.error('%filename% fail'.replace('%filename%', result.error))
+                                toastr.error('%filename% fail'.replace('%filename%', result.filename))
                             }
                         }).fail(function () {
                         progress_info.text('');
@@ -210,7 +219,15 @@
                         {% endfor %}
                     },
                     dataType: 'json',
-                    async: false
+                    async: false,
+                    error: function () {
+                        toastr.error('Error in loading data');
+                        $("#my_nanogallery2").append(
+                            $('<div>').attr({'class': 'alert alert-danger'}).append(
+                                $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
+                            )
+                        );
+                    }
                 }).responseText),
                 thumbnailWidth:  'auto',
                 thumbnailHeight: 150,
@@ -221,6 +238,12 @@
                 thumbnailLabel:     { display: false },
                 itemsBaseURL:    '{{ path('download', {'base': 'img', 'filename': ''}) }}',
                 locationHash:    false
+            }).on('itemSelected.nanogallery2', function () {
+                $('#delete').removeClass('hidden');
+            }).on('itemUnSelected.nanogallery2', function () {
+                if ($('#my_nanogallery2').nanogallery2('itemsSelectedGet').length === 0) {
+                    $('#delete').addClass('hidden');
+                }
             });
 
             $('#delete').on('click', function () {

@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 
+use App\Services\Utils;
 use Elasticsearch\ClientBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,7 +79,7 @@ class EsController extends Controller
         return $this->json($response['aggregations']['groupBy_voiture']['buckets']);
     }
 
-    public function histo(Request $request)
+    public function histo(Request $request, $period)
     {
         $client = ClientBuilder::create()
             ->setHosts(array($this->getParameter('es_url')))
@@ -94,7 +95,7 @@ class EsController extends Controller
                 "groupBy_date"=> [
                     "date_histogram"=> [
                         "field"=> "eventDate",
-                        "interval"=> "month"
+                        "interval"=> $period
                     ],
                     "aggs"=> [
                         "groupBy_voiture"=> [
@@ -126,13 +127,77 @@ class EsController extends Controller
                 'celica' => 0,
                 'laguna' => 0
             );
-            $temp[$value['groupBy_voiture']['buckets'][0]['key']] =
-                $value['groupBy_voiture']['buckets'][0]['kilometer']['value'];
+            if (isset($value['groupBy_voiture']['buckets'][0]['key'])) {
+                $temp[$value['groupBy_voiture']['buckets'][0]['key']] =
+                    $value['groupBy_voiture']['buckets'][0]['kilometer']['value'];
+            }
             if (isset($value['groupBy_voiture']['buckets'][1]['key'])) {
                 $temp[$value['groupBy_voiture']['buckets'][1]['key']] =
                     $value['groupBy_voiture']['buckets'][1]['kilometer']['value'];
             }
             $result[] = $temp;
+        }
+        return $this->json($result);
+    }
+
+    public function histo_price(Request $request)
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(array($this->getParameter('es_url')))
+            ->build();
+        $body = [
+            "size"=> 0,
+            "query"=> [
+                "match"=> [
+                    "attr"=> "fuel"
+                ]
+            ],
+            "aggs"=> [
+                "groupBy_date"=> [
+                    "date_histogram"=> [
+                        "field"=> "eventDate",
+                        "interval"=> "week"
+                    ],
+                    "aggs"=> [
+                        "groupBy_type"=> [
+                            "terms"=> [
+                                "field"=> "type.keyword"
+                            ],
+                            "aggs"=> [
+                                "prix"=> [
+                                    "avg"=> [
+                                        "field"=> "prix"
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $params = array(
+            'index' => 'car',
+            'type' => '_doc',
+            'body' => $body
+        );
+        $response = $client->search($params);
+        $result = array(
+            'SP98'=> array(),
+            'GO'=> array()
+        );
+        foreach ($response['aggregations']['groupBy_date']['buckets'] as $value) {
+            if (isset($value['groupBy_type']['buckets'][0]['key'])) {
+                $result[$value['groupBy_type']['buckets'][0]['key']][] = array(
+                    $value['key'],
+                    $value['groupBy_type']['buckets'][0]['prix']['value']
+                );
+            }
+            if (isset($value['groupBy_type']['buckets'][1]['key'])) {
+                $result[$value['groupBy_type']['buckets'][1]['key']][] = array(
+                    $value['key'],
+                    $value['groupBy_type']['buckets'][1]['prix']['value']
+                );
+            }
         }
         return $this->json($result);
     }
@@ -143,7 +208,7 @@ class EsController extends Controller
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
         $body = [
-            "size"=> 5,
+            "size"=> 10,
             "query"=> [
                 "range"=> [
                     "eventDate"=> [
@@ -321,7 +386,7 @@ class EsController extends Controller
         $size = $response['aggregations']['total_size']['value'] ?? 0;
         return $this->json(array(
             'total'=> $tot,
-            'size'=> round($size/1024/1024, 1)
+            'size'=> Utils::human_filesize($size)
         ));
     }
 }

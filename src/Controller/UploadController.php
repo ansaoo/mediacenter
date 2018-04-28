@@ -114,46 +114,9 @@ class UploadController extends Controller
                 if ($_type == 'image_path') {
                     if ($imgLoader->check($cleanedName)) {
                         $cleanedName = $imgLoader->rename($cleanedName);
+                        $response = $imgLoader->load($cleanedName);
+                        return $this->json($response);
                     }
-                    $command = $this->getParameter('datasource_cmd') . $cleanedName;
-                    file_put_contents(
-                        'logs/command',
-                        Yaml::dump(
-                            array(
-                                uniqid('', true) => array(
-                                    'eventDate' => date_create('now'),
-                                    'subject' => $filename,
-                                    'body' => $command
-                                )
-                            )
-                        ),
-                        FILE_APPEND);
-                    $load = new Process($command);
-                    $load->run();
-                    file_put_contents(
-                        'logs/es_load_success',
-                        Yaml::dump(
-                            array(
-                                uniqid('', true) => array(
-                                    'eventDate' => date_create('now'),
-                                    'subject' => $filename,
-                                    'body' => $load->getOutput()
-                                )
-                            )
-                        ),
-                        FILE_APPEND);
-                    file_put_contents(
-                        'logs/es_load_error',
-                        Yaml::dump(
-                            array(
-                                uniqid('', true) => array(
-                                    'eventDate' => date_create('now'),
-                                    'subject' => $filename,
-                                    'body' => $load->getErrorOutput()
-                                )
-                            )
-                        ),
-                        FILE_APPEND);
                 }
                 return $this->json(array('success' => basename($cleanedName)));
             } else {

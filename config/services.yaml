@@ -4,7 +4,7 @@ parameters:
 #    imagePath: '/home/ansaoo/Images'
     api_url: 'http://localhost:8000/api.php'
     es_url: '127.0.0.1:9200'
-    datasource_cmd: '/home/samuel/Projects/datasource/sql/boot_image.py '
+    datasource_cmd: '/home/samuel/Projects/datasource/sql/boot_image.py'
     ddlPath: '%kernel.project_dir%/public/ddl'
     image_path: '/home/ansaoo/Images/TEMP'
     img_thumb_path: '/home/ansaoo/Images/thumbnail'
@@ -40,6 +40,7 @@ services:
     App\Services\ImgLoader:
         arguments:
             $targetDir: '%image_path%'
+            $datasourceExe: '%datasource_cmd%'
 
     App\Services\FileUploader:
         arguments:

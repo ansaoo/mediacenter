@@ -10,14 +10,25 @@ namespace App\Services;
 
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Yaml\Yaml;
 
 class ImgLoader
 {
     private $target;
+    private $datasourceExe;
 
-    public function __construct($targetDir)
+    public function __construct($targetDir, $datasourceExe)
     {
         $this->target = $targetDir;
+        $this->datasourceExe = $datasourceExe;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDatasourceExe()
+    {
+        return $this->datasourceExe;
     }
 
     public function check($filename)
@@ -39,5 +50,57 @@ class ImgLoader
         } else {
             return $filename;
         }
+    }
+
+    public function load($filename)
+    {
+        $command = $this->getDatasourceExe() . " --file $filename";
+        file_put_contents(
+            'logs/command',
+            Yaml::dump(
+                array(
+                    md5(uniqid('cmd', true)) => array(
+                        'eventDate' => date_create('now'),
+                        'subject' => $filename,
+                        'body' => $command
+                    )
+                )
+            ),
+            FILE_APPEND);
+        $load = new Process($command);
+        $load->run();
+        if ($load->getOutput()) {
+            file_put_contents(
+                'logs/es_load_success',
+                Yaml::dump(
+                    array(
+                        md5(uniqid('es', true)) => array(
+                            'eventDate' => date_create('now'),
+                            'subject' => $filename,
+                            'body' => $load->getOutput()
+                        )
+                    )
+                ),
+                FILE_APPEND);
+        } else {
+            file_put_contents(
+                'logs/es_load_error',
+                Yaml::dump(
+                    array(
+                        md5(uniqid('es', true)) => array(
+                            'eventDate' => date_create('now'),
+                            'subject' => $filename,
+                            'error' => true,
+                            'body' => $load->getErrorOutput()
+                        )
+                    )
+                ),
+                FILE_APPEND);
+        }
+        return array(
+            'filename' => $filename,
+            'success' => $load->getOutput(),
+            'error' => $load->getErrorOutput()
+        );
     }
 }
