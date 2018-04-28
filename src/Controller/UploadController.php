@@ -98,6 +98,7 @@ class UploadController extends Controller
         $_type = $request->query->get('type') ?? 'uploadPath';
         $filename = $request->query->get('file') ?? null;
         $size = $request->query->get('size') ?? null;
+        $lastModified = $request->query->get('lastModified') ?? null;
         $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $filename);
         if ($filename) {
             $find = glob($fileUploader->getTargetDir() . '/' . $filename . '.*');
@@ -107,6 +108,26 @@ class UploadController extends Controller
             $command = "cat \"$files\" > \"$cleanedName\"";
             $process = new Process($command);
             $process->run();
+            if ($lastModified && date_create($lastModified)) {
+                $lastModified = date_create($lastModified)->format('YmdHi.s');
+                $cmd = "touch -t $lastModified $cleanedName";
+                $setDate = new Process($cmd);
+                $setDate->run();
+                file_put_contents(
+                    'logs/command',
+                    Yaml::dump(
+                        array(
+                            md5(uniqid('touch'),true) => array(
+                                'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
+                                'subject' => $filename,
+                                'cmd' => $cmd,
+                                'output' => $setDate->getOutput() ?? $setDate->getErrorOutput()
+                            )
+                        )
+                    ),
+                    FILE_APPEND
+                );
+            }
             foreach ($find as $files) {
                 unlink($files);
             }

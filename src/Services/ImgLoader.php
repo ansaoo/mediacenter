@@ -59,10 +59,10 @@ class ImgLoader
             'logs/command',
             Yaml::dump(
                 array(
-                    md5(uniqid('cmd', true)) => array(
-                        'eventDate' => date_create('now'),
+                    md5(uniqid('load', true)) => array(
+                        'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
                         'subject' => $filename,
-                        'body' => $command
+                        'cmd' => $command
                     )
                 )
             ),
@@ -75,7 +75,7 @@ class ImgLoader
                 Yaml::dump(
                     array(
                         md5(uniqid('es', true)) => array(
-                            'eventDate' => date_create('now'),
+                            'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
                             'subject' => $filename,
                             'body' => $load->getOutput()
                         )
@@ -88,10 +88,9 @@ class ImgLoader
                 Yaml::dump(
                     array(
                         md5(uniqid('es', true)) => array(
-                            'eventDate' => date_create('now'),
+                            'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
                             'subject' => $filename,
-                            'error' => true,
-                            'body' => $load->getErrorOutput()
+                            'error' => $load->getErrorOutput()
                         )
                     )
                 ),
