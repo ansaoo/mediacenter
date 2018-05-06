@@ -2,33 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="970ab591-8382-41e9-944a-c8b6b71bc4b8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Entity/CarAddEntryTask.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Form/CarAddEntryTaskType.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/car/stat_list.html.twig" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/images/tag_view.html.twig" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/utils/loading.html.twig" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/templates/images/view.html.twig" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/php.xml" afterPath="$PROJECT_DIR$/.idea/php.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/composer.lock" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/api/routes.yaml" afterPath="$PROJECT_DIR$/config/api/routes.yaml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/bundles.php" afterPath="$PROJECT_DIR$/config/bundles.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.yaml" afterPath="$PROJECT_DIR$/config/routes.yaml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mediacenter.iml" afterPath="$PROJECT_DIR$/mediacenter.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/CarController.php" afterPath="$PROJECT_DIR$/src/Controller/CarController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/api/services.yaml" afterPath="$PROJECT_DIR$/config/api/services.yaml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/services.yaml" afterPath="$PROJECT_DIR$/config/services.yaml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/EsController.php" afterPath="$PROJECT_DIR$/src/Controller/EsController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/ImageViewController.php" afterPath="$PROJECT_DIR$/src/Controller/ImageViewController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/UploadController.php" afterPath="$PROJECT_DIR$/src/Controller/UploadController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/YouTubeController.php" afterPath="$PROJECT_DIR$/src/Controller/YouTubeController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/ImgSearchTaskType.php" afterPath="$PROJECT_DIR$/src/Form/ImgSearchTaskType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/UploadTaskType.php" afterPath="$PROJECT_DIR$/src/Form/UploadTaskType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Form/YouTubeTaskType.php" afterPath="$PROJECT_DIR$/src/Form/YouTubeTaskType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Services/ImgLoader.php" afterPath="$PROJECT_DIR$/src/Services/ImgLoader.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/symfony.lock" afterPath="$PROJECT_DIR$/symfony.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html.twig" afterPath="$PROJECT_DIR$/templates/base.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/car/overview.html.twig" afterPath="$PROJECT_DIR$/templates/car/overview.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/images/index.html.twig" afterPath="$PROJECT_DIR$/templates/images/index.html.twig" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,7 +22,28 @@
     <executablePath>composer</executablePath>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="EsController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Controller/EsController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="224">
+              <caret line="254" column="26" lean-forward="true" selection-start-line="254" selection-start-column="26" selection-end-line="254" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImageViewController.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Controller/ImageViewController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="63" column="76" lean-forward="true" selection-start-line="63" selection-start-column="76" selection-end-line="63" selection-end-column="76" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -76,7 +76,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Document/Car.php" />
         <option value="$PROJECT_DIR$/public/.gitignore" />
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/src/Controller/DeleteController.php" />
@@ -104,8 +103,6 @@
         <option value="$PROJECT_DIR$/src/Services/Utils.php" />
         <option value="$PROJECT_DIR$/templates/car/data.html.twig" />
         <option value="$PROJECT_DIR$/src/Services/FileUploader.php" />
-        <option value="$PROJECT_DIR$/config/services.yaml" />
-        <option value="$PROJECT_DIR$/config/api/services.yaml" />
         <option value="$PROJECT_DIR$/src/Entity/CarAddEntryTask.php" />
         <option value="$PROJECT_DIR$/public/logs/command" />
         <option value="$PROJECT_DIR$/src/Services/ImgLoader.php" />
@@ -124,9 +121,12 @@
         <option value="$PROJECT_DIR$/config/routes.yaml" />
         <option value="$PROJECT_DIR$/src/Form/ImgSearchTaskType.php" />
         <option value="$PROJECT_DIR$/src/Controller/ImageViewController.php" />
-        <option value="$PROJECT_DIR$/src/Controller/EsController.php" />
         <option value="$PROJECT_DIR$/templates/images/index.html.twig" />
         <option value="$PROJECT_DIR$/templates/images/tag_view.html.twig" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/Controller/EsController.php" />
+        <option value="$PROJECT_DIR$/config/api/services.yaml" />
+        <option value="$PROJECT_DIR$/config/services.yaml" />
       </list>
     </option>
   </component>
@@ -413,7 +413,7 @@
       <workItem from="1525417098576" duration="1205000" />
       <workItem from="1525548653103" duration="563000" />
       <workItem from="1525550726605" duration="744000" />
-      <workItem from="1525585112651" duration="621000" />
+      <workItem from="1525585112651" duration="1765000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1520772251620</created>
@@ -520,11 +520,18 @@
       <option name="project" value="LOCAL" />
       <updated>1524950148332</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Update">
+      <created>1525585779403</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1525585779403</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="237620000" />
+    <option name="totallyTimeSpent" value="238764000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="25" width="1258" height="740" extended-state="0" />
@@ -538,10 +545,10 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32686085" sideWeight="0.4967051" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32686085" sideWeight="0.4934102" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32686085" sideWeight="0.4934102" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41598022" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41598022" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959083" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -571,9 +578,9 @@
     <MESSAGE value="Fix #4" />
     <MESSAGE value="Update #4" />
     <MESSAGE value="Fix #1" />
-    <MESSAGE value="Update" />
     <MESSAGE value="Fix #5 + #9 + #11" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix #5 + #9 + #11" />
+    <MESSAGE value="Update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -586,13 +593,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/ddl/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/ddl/Fun. - We Are Young ft. Janelle Monáe [OFFICIAL VIDEO].info.json" />
     <entry file="file://$PROJECT_DIR$/config/packages/twig.yaml">
       <provider selected="true" editor-type-id="text-editor">
@@ -707,13 +707,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="56">
           <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/api/services.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-342">
-          <caret line="6" column="62" lean-forward="false" selection-start-line="6" selection-start-column="62" selection-end-line="6" selection-end-column="62" />
         </state>
       </provider>
     </entry>
@@ -847,20 +840,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/EsController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="401" column="21" lean-forward="true" selection-start-line="401" selection-start-column="21" selection-end-line="401" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/ImageViewController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="68" column="43" lean-forward="true" selection-start-line="68" selection-start-column="43" selection-end-line="68" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/api/routes.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-160">
@@ -892,10 +871,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/EsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="254" column="26" lean-forward="true" selection-start-line="254" selection-start-column="26" selection-end-line="254" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/api/services.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="7" column="80" lean-forward="true" selection-start-line="6" selection-start-column="67" selection-end-line="7" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config/services.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="12" column="53" lean-forward="false" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
+        <state relative-caret-position="98">
+          <caret line="7" column="65" lean-forward="true" selection-start-line="7" selection-start-column="65" selection-end-line="7" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/ImageViewController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="63" column="76" lean-forward="true" selection-start-line="63" selection-start-column="76" selection-end-line="63" selection-end-column="76" />
           <folding />
         </state>
       </provider>

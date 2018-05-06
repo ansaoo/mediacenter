@@ -250,7 +250,7 @@ class EsController extends Controller
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
         $body = [
-            "size"=> 10,
+            "size"=> 1000,
             "query"=> [
                 "bool"=> [
                     "must"=> [
