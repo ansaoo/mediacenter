@@ -54,7 +54,7 @@ class ImgLoader
 
     public function load($filename)
     {
-        $command = $this->getDatasourceExe() . " --file $filename";
+        $command = $this->getDatasourceExe() . " --mode oneshot --file $filename";
         file_put_contents(
             'logs/command',
             Yaml::dump(
