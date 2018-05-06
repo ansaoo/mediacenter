@@ -31,6 +31,10 @@ class UploadTaskType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => UploadTask::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            // a unique key to help generate the secret token
+            'csrf_token_id'   => 'upload_task',
         ));
     }
 }

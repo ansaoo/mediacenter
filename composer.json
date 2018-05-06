@@ -17,6 +17,8 @@
         "symfony/framework-bundle": "^3.4",
         "symfony/lts": "^3",
         "symfony/process": "^3.4",
+        "symfony/security-bundle": "^3.4",
+        "symfony/security-csrf": "^3.4",
         "symfony/translation": "^3.4",
         "symfony/twig-bundle": "^3.4",
         "symfony/yaml": "^3.4",

@@ -34,6 +34,10 @@ class YouTubeTaskType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => YouTubeTask::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            // a unique key to help generate the secret token
+            'csrf_token_id'   => 'youtube_task',
         ));
     }
 }

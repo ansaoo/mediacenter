@@ -1,0 +1,7 @@
+<ul class="tag-list" style="padding: 0">
+    {% for val in agg %}
+    <li>
+        <a href="{{ path('images', {'tag':val.key}) }}">{{val.key }} ({{ val.doc_count }})</a>
+    </li>
+    {% endfor %}
+</ul>

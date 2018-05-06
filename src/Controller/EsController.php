@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Services\Utils;
 use Elasticsearch\ClientBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class EsController extends Controller
@@ -249,23 +250,41 @@ class EsController extends Controller
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
         $body = [
-            "size"=> 500,
+            "size"=> 10,
             "query"=> [
-                "range"=> [
-                    "eventDate"=> [
-                        "gte"=> $request->query->get('gte') ?? 'now',
-                        "lt"=> $request->query->get('lt') ?? 'now'
+                "bool"=> [
+                    "must"=> [
+                        [
+                            "range"=> [
+                                "eventDate"=> [
+                                    "gte"=> $request->query->get('gte') ?? 'now',
+                                    "lt"=> $request->query->get('lt') ?? 'now'
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ],
-            "sort" => [
+            "sort"=> [
                 [
-                    "eventDate" => [
-                        "order" => "asc"
+                    "eventDate"=> [
+                        "order"=> "asc"
                     ]
                 ]
             ]
         ];
+        if ($request->query->has('tag')) {
+//            $body['query'] = [
+//                "match"=> [
+//                    "tag"=> $request->query->get('tag')
+//                ]
+//            ];
+            $body['query']['bool']['must'] = [
+                "match"=> [
+                    "tag"=> $request->query->get('tag')
+                ]
+            ];
+        }
         $params = array(
             'index' => $index,
             'type' => '_doc',
@@ -332,9 +351,63 @@ class EsController extends Controller
         );
         $response = $client->update($params);
         if ($response['result'] == 'updated') {
-            return $this->json('Updated successfully');
+            return $this->json("'$_id' deleted successfully");
         }
         return $this->json('No update');
+    }
+
+    public function addTag(Request $request, $index, $_id, $tag)
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(array($this->getParameter('es_url')))
+            ->build();
+        $body = [
+            "script" => [
+                "source"=> "if (!ctx._source.containsKey(\"tag\")) {ctx._source.tag.add(params.add)} else { ctx._source.tag = [params.add] }",
+                "params" => [
+                    "add" => $tag
+                ]
+            ]
+        ];
+        $params = array(
+            'index' => $index,
+            'type' => '_doc',
+            'id' => md5("jpeg$_id"),
+            'body' => $body
+        );
+        $response = $client->update($params);
+        if ($response['result'] == 'updated') {
+            return $this->json("'$_id' updated successfully");
+        }
+        return $this->json('No update');
+    }
+
+    public function tagView(Request $request, $index)
+    {
+        sleep(1.5);
+        $client = ClientBuilder::create()
+            ->setHosts(array($this->getParameter('es_url')))
+            ->build();
+        $params = array(
+            'index' => $index,
+            'type' => '_doc',
+            'body' => [
+                "size"=> 0,
+                "aggs"=> [
+                    "tags"=> [
+                        "terms"=> [
+                            "field"=> "tag.keyword",
+                            "size"=> 20
+                        ]
+                    ]
+                ]
+            ]
+        );
+        $response = $client->search($params);
+        return $this->render('images/tag_view.html.twig', array(
+            'agg' => $response['aggregations']['tags']['buckets'] ?? array(),
+            'tag' => $request->query->get('tag') ?? null
+        ));
     }
 
     public function load(Request $request, $index, $filename)

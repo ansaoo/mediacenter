@@ -99,39 +99,55 @@ class UploadController extends Controller
         $filename = $request->query->get('file') ?? null;
         $size = $request->query->get('size') ?? null;
         $lastModified = $request->query->get('lastModified') ?? null;
-        $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $filename);
+        $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.=]/', '', $filename);
         if ($filename) {
             $find = glob($fileUploader->getTargetDir() . '/' . $filename . '.*');
             $count = count($find);
             $files = implode("\" \"", $find);
             $cleanedName = $this->getParameter($_type) . '/' . $cleanedName;
-            $command = "cat \"$files\" > \"$cleanedName\"";
-            $process = new Process($command);
-            $process->run();
-            if ($lastModified && date_create($lastModified)) {
-                $lastModified = date_create($lastModified)->format('YmdHi.s');
-                $cmd = "touch -t $lastModified $cleanedName";
-                $setDate = new Process($cmd);
-                $setDate->run();
-                file_put_contents(
-                    'logs/command',
-                    Yaml::dump(
-                        array(
-                            md5(uniqid('touch'),true) => array(
-                                'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
-                                'subject' => $filename,
-                                'cmd' => $cmd,
-                                'output' => $setDate->getOutput() ?? $setDate->getErrorOutput()
-                            )
+            $catCommand = "cat \"$files\" > \"$cleanedName\"";
+            $catProcess = new Process($catCommand);
+            $catProcess->run();
+            file_put_contents(
+                'logs/command',
+                Yaml::dump(
+                    array(
+                        md5(uniqid('cat',true)) => array(
+                            'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
+                            'subject' => $filename,
+                            'soft' => 'cat',
+                            'cmd' => $catCommand,
+                            'output' => $catProcess->getOutput() ?? $catProcess->getErrorOutput()
                         )
-                    ),
-                    FILE_APPEND
-                );
-            }
+                    )
+                ),
+                FILE_APPEND
+            );
             foreach ($find as $files) {
                 unlink($files);
             }
             if (filesize($cleanedName) == $size) {
+                if ($lastModified && date_create($lastModified)) {
+                    $lastModified = date_create($lastModified)->format('YmdHi.s');
+                    $dateCmd = "touch -t $lastModified $cleanedName";
+                    $dateProcess = new Process($dateCmd);
+                    $dateProcess->run();
+                    file_put_contents(
+                        'logs/command',
+                        Yaml::dump(
+                            array(
+                                md5(uniqid('touch',true)) => array(
+                                    'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
+                                    'subject' => $filename,
+                                    'soft' => 'touch',
+                                    'cmd' => $dateCmd,
+                                    'output' => $dateProcess->getOutput() ?? $dateProcess->getErrorOutput()
+                                )
+                            )
+                        ),
+                        FILE_APPEND
+                    );
+                }
                 if ($_type == 'image_path') {
                     if ($imgLoader->check($cleanedName)) {
                         $cleanedName = $imgLoader->rename($cleanedName);

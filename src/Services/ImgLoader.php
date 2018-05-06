@@ -40,7 +40,7 @@ class ImgLoader
 
     public function rename($filename)
     {
-        $rename = new Process('exiv2 -v -r %Y-%m-%d_%Hh%Mm%S_:basename: '.$filename);
+        $rename = new Process('exiv2 -v -f -r %Y-%m-%d_%Hh%Mm%S_:basename: '.$filename);
         $rename->run();
         $response = $rename->getOutput();
         if ($response) {
@@ -71,12 +71,13 @@ class ImgLoader
         $load->run();
         if ($load->getOutput()) {
             file_put_contents(
-                'logs/es_load_success',
+                'logs/es_load',
                 Yaml::dump(
                     array(
                         md5(uniqid('es', true)) => array(
                             'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
                             'subject' => $filename,
+                            'success' => 1,
                             'body' => $load->getOutput()
                         )
                     )
@@ -84,13 +85,14 @@ class ImgLoader
                 FILE_APPEND);
         } else {
             file_put_contents(
-                'logs/es_load_error',
+                'logs/es_load',
                 Yaml::dump(
                     array(
                         md5(uniqid('es', true)) => array(
                             'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
                             'subject' => $filename,
-                            'error' => $load->getErrorOutput()
+                            'success' => 0,
+                            'body' => $load->getErrorOutput()
                         )
                     )
                 ),

@@ -10,6 +10,10 @@ es_health:
   path: /elastic/health
   controller: App\Controller\EsController::health
 
+es_add_tag:
+  path: /elastic/add_tag/{index}/{_id}/{tag}
+  controller: App\Controller\EsController::addTag
+
 es_data:
   path: /elastic/data/{index}/{_type}
   controller: App\Controller\EsController::data

@@ -35,6 +35,10 @@ class ImgSearchTaskType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => ImgSearchTask::class,
+//            'csrf_protection' => true,
+//            'csrf_field_name' => '_token',
+//            // a unique key to help generate the secret token
+//            'csrf_token_id'   => 'search_img_task',
         ));
     }
 }

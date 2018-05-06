@@ -23,17 +23,52 @@ class ImageViewController extends Controller
 
         $ref = $request->headers->get('referer');
         preg_match('/(.*):8000*/', $ref, $match);
+        $menu = array(
+            'book' => null,
+            'video' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'movie' => null,
+                'tvshow' => null
+            ),
+            'audio' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'album' => null,
+                'performer' => null,
+                'kind' => null,
+                'youtube' => null
+            ),
+            'image' => 'active',
+            'game' => null,
+            'car' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'data' => null,
+                'overview' => null
+            )
+        );
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($request->query->has('tag')) {
+            $keyword = array(
+                'tag' => $request->query->get('tag')
+            );
+            $method = 'search/image';
+        } else {
+            $keyword = array();
+            $method = 'recent/image';
+        }
+
+        if ($form->isSubmitted()) {
+            $keyword['gte'] = $task->getKeyword()->format('Y-m-d');
+            $keyword['lt'] = $task->getKeyword()->add(new \DateInterval('P1M'))->format('Y-m-d');
             return $this->render('images/index.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $task->getKeyword()->format('Y-m-d'),
                 'api_url' => $match[0] ?? null,
                 'method' => 'search/image',
-                'keyword' => array(
-                    'gte' => $task->getKeyword()->format('Y-m-d'),
-                    'lt' => $task->getKeyword()->add(new \DateInterval('P1M'))->format('Y-m-d'),
-                )
+                'keyword' => $keyword,
+                'menu' => $menu
             ));
         }
 
@@ -41,8 +76,9 @@ class ImageViewController extends Controller
             'form' => $form->createView(),
             'title' => 'Récents',
             'api_url' => $match[0] ?? null,
-            'method' => 'recent/image',
-            'keyword' => array()
+            'method' => $method,
+            'keyword' => $keyword,
+            'menu' => $menu
         ));
     }
 }

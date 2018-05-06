@@ -66,16 +66,9 @@
                         </div>
 
                         <h5 class="tag-title">Tags</h5>
-                        <ul class="tag-list" style="padding: 0">
-                            <li><a href="">Family</a></li>
-                            <li><a href="">Work</a></li>
-                            <li><a href="">Home</a></li>
-                            <li><a href="">Children</a></li>
-                            <li><a href="">Holidays</a></li>
-                            <li><a href="">Music</a></li>
-                            <li><a href="">Photography</a></li>
-                            <li><a href="">Film</a></li>
-                        </ul>
+                        <hx:include src="{{ url('tag_view', {'index':'image','tag':app.request.get('tag')}) }}" xmlns:hx="http://purl.org/NET/hinclude">
+                            {{ include('utils/loading.html.twig') }}
+                        </hx:include>
                         <div class="clearfix"></div>
 
                         <div class="hr-line-dashed"></div>
@@ -94,6 +87,7 @@
                         <div class="ibox-title">
                             <h5>{{ title }}</h5>
                             <div class="pull-right">
+                                <button type="button" class="btn btn-xs btn-info hidden" id="add_tag">Tagger</button>
                                 <button type="button" class="btn btn-xs btn-warning hidden" id="delete">Supprimer</button>
                             </div>
                         </div>
@@ -237,13 +231,21 @@
                 thumbnailSelectable: true,
                 thumbnailAlignment: 'center',
                 thumbnailLabel:     { display: false },
+//                viewerToolbar:    {
+//                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
+//                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
+//                viewerTools:    {
+//                    topLeft:   'label',
+//                    topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
                 itemsBaseURL:    '{{ path('download', {'base': 'img', 'filename': ''}) }}',
                 locationHash:    false
             }).on('itemSelected.nanogallery2', function () {
                 $('#delete').removeClass('hidden');
+                $('#add_tag').removeClass('hidden');
             }).on('itemUnSelected.nanogallery2', function () {
                 if ($('#my_nanogallery2').nanogallery2('itemsSelectedGet').length === 0) {
                     $('#delete').addClass('hidden');
+                    $('#add_tag').addClass('hidden');
                 }
             });
 
@@ -252,6 +254,20 @@
                 $(arr).each(function () {
                     $.getJSON(
                         '{{ api_url }}/api.php/elastic/delete/image/'+this.title,
+                        {},
+                        function (response) {
+                            toastr.success(response);
+                        }
+                    );
+                });
+            });
+
+            $('#add_tag').on('click', function () {
+                var arr = $('#my_nanogallery2').nanogallery2('itemsSelectedGet');
+                var tag = prompt('Set a tag:');
+                $(arr).each(function () {
+                    $.getJSON(
+                        '{{ api_url }}/api.php/elastic/add_tag/image/'+this.title+'/'+tag,
                         {},
                         function (response) {
                             toastr.success(response);
