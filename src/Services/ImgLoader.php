@@ -54,7 +54,7 @@ class ImgLoader
 
     public function load($filename)
     {
-        $command = $this->getDatasourceExe() . " --mode oneshot --file $filename";
+        $command = $this->getDatasourceExe() . " --mode oneshot --file $filename --target /home/ansaoo/Images/thumbnail";
         file_put_contents(
             'logs/command',
             Yaml::dump(
