@@ -25,7 +25,7 @@ class ImageViewController extends Controller
         $form->handleRequest($request);
 
         $ref = $request->headers->get('referer');
-        preg_match('/(.*):8001*/', $ref, $match);
+        preg_match('/(.*):8000*/', $ref, $match);
         $menu = array(
             'book' => null,
             'video' => array(
