@@ -17,6 +17,9 @@ class DownloadController extends Controller
 {
     public function index($base, $filename)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         /**
          * $basePath can be either exposed (typically inside web/)
          * or "internal"

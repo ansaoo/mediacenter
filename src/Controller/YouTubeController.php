@@ -19,6 +19,9 @@ class YouTubeController extends Controller
 {
     public function index(Request $request, YouTubeDownloader $downloader)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $task = new YouTubeTask();
         $form = $this->createForm(YouTubeTaskType::class, $task);
         $form->handleRequest($request);
@@ -35,13 +38,13 @@ class YouTubeController extends Controller
             ),
             'audio' => array(
                 'li' => null,
-                'ul' => 'collapse',
+                'ul' => null,
                 'album' => null,
                 'performer' => null,
                 'kind' => null,
-                'youtube' => null
+                'youtube' => 'active'
             ),
-            'image' => 'active',
+            'image' => null,
             'game' => null,
             'car' => array(
                 'li' => null,

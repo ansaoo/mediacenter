@@ -22,12 +22,6 @@ tag_view:
   path: /images/tag_view/{index}
   controller: App\Controller\EsController::tagView
 
-delete:
-  path: /delete/{filename}
-  controller: App\Controller\DeleteController::index
-  requirements:
-      filename: .+
-
 upload:
   path: /upload
   controller: App\Controller\UploadController::index

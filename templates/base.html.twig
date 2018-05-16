@@ -32,7 +32,7 @@
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
                                 <span class="block m-t-xs">
-                                    <strong class="font-bold">{{ app.session.get('profile', 'Home') }}</strong>
+                                    <strong class="font-bold">{{ app.user.username }}</strong>
                                 </span>
                                 {#<span class="text-muted text-xs block">Director <b class="caret"></b></span> #}
                             </span>
@@ -134,7 +134,7 @@
                         <ul class="dropdown-menu collapse">
                             <li>
                                 <div class="text-center link-block">
-                                <a href=""><strong>Éteindre</strong></a>
+                                <a href="{{ path('logout') }}"><strong>Éteindre</strong></a>
                                 </div>
                             </li>
                             <li>

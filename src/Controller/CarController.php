@@ -16,6 +16,9 @@ class CarController extends Controller
 {
     public function overview(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $ref = $request->headers->get('referer');
         preg_match('/(.*):8000*/', $ref, $match);
         return $this->render('car/overview.html.twig', array(
@@ -50,6 +53,9 @@ class CarController extends Controller
 
     public function data(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $ref = $request->headers->get('referer');
         preg_match('/(.*):8000*/', $ref, $match);
         return $this->render('car/data.html.twig', array(

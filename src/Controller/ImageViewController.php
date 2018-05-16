@@ -17,12 +17,15 @@ class ImageViewController extends Controller
 {
     public function index(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $task = new ImgSearchTask();
         $form = $this->createForm(ImgSearchTaskType::class, $task);
         $form->handleRequest($request);
 
         $ref = $request->headers->get('referer');
-        preg_match('/(.*):8000*/', $ref, $match);
+        preg_match('/(.*):8001*/', $ref, $match);
         $menu = array(
             'book' => null,
             'video' => array(
@@ -68,7 +71,8 @@ class ImageViewController extends Controller
                 'api_url' => $match[0] ?? null,
                 'method' => 'search/image',
                 'keyword' => $keyword,
-                'menu' => $menu
+                'menu' => $menu,
+                'user' => $user
             ));
         }
 
@@ -78,7 +82,15 @@ class ImageViewController extends Controller
             'api_url' => $match[0] ?? null,
             'method' => $method,
             'keyword' => $keyword,
-            'menu' => $menu
+            'menu' => $menu,
+            'user' => $user
         ));
+    }
+
+    public function sendToDrop(Request $request, $filename)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
     }
 }

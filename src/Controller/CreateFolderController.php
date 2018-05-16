@@ -17,6 +17,9 @@ class CreateFolderController extends Controller
 {
     public function mkdir(Request $request)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $folder = $request->request->get('folder') ?? null;
 
         if (!$folder) {
@@ -32,6 +35,9 @@ class CreateFolderController extends Controller
 
     public function create()
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $car = new Car();
         $car->setMarque('Toyota');
         $car->setModel('Celica');

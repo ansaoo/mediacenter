@@ -24,6 +24,9 @@ class UploadController extends Controller
 {
     public function index(Request $request, FileUploader $fileUploader)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $task = new UploadTask();
         $form = $this->createForm(UploadTaskType::class, $task);
         $form->handleRequest($request);
@@ -71,6 +74,9 @@ class UploadController extends Controller
      */
     public function uploadedBytes(Request $request, FileUploader $fileUploader)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $filename = $request->query ? $request->query->get('file') : null;
         $maxChunkSize = $request->query->get('maxChunkSize') ? $request->query->get('maxChunkSize') : 0;
         if ($filename) {
@@ -94,6 +100,9 @@ class UploadController extends Controller
      */
     public function merge_file(Request $request, FileUploader $fileUploader, ImgLoader $imgLoader)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $count = 0;
         $_type = $request->query->get('type') ?? 'uploadPath';
         $filename = $request->query->get('file') ?? null;

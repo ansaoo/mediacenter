@@ -19,6 +19,9 @@ class ApiController extends Controller
 {
     public function index(Request $request, YouTubeDownloader $downloader)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+
         $app = $request->query->get('app') ?? null;
         switch ($app) {
             case 'extract':

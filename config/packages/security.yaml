@@ -1,0 +1,56 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        in_memory:
+          memory:
+            users:
+                angela:
+                  password: alfred
+                  roles: 'ROLE_USER'
+                samuel:
+                  password: alfred
+                  roles: 'ROLE_ADMIN'
+    encoders:
+            Symfony\Component\Security\Core\User\User: plaintext
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+
+            # activate different ways to authenticate
+
+            http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                login_path: login
+                check_path: login
+
+                # field names for the username and password fields
+                username_parameter: _username
+                password_parameter: _password
+
+                # login success redirecting options (read further below)
+#                always_use_default_target_path: false
+                default_target_path:            images
+#                target_path_parameter:          _target_path
+#                use_referer:                    false
+
+                # csrf token options
+                csrf_parameter:       _csrf_token
+                csrf_token_id:        authenticate
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path:   logout
+                target: login
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+         - { path: ^/car, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/images, roles: [ROLE_USER,ROLE_ADMIN] }
+         - { path: ^/profile, roles: ROLE_USER }
