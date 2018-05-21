@@ -12,6 +12,7 @@ use App\Entity\ImgSearchTask;
 use App\Form\ImgSearchTaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Process\Process;
 
 class ImageViewController extends Controller
 {
@@ -63,11 +64,11 @@ class ImageViewController extends Controller
         }
 
         if ($form->isSubmitted()) {
-            $keyword['gte'] = $task->getKeyword()->format('Y-m-d');
-            $keyword['lt'] = $task->getKeyword()->add(new \DateInterval('P1M'))->format('Y-m-d');
+            $keyword['gte'] = $task->getFromDate();
+            $keyword['lt'] = $task->getToDate();
             return $this->render('images/index.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $task->getKeyword()->format('Y-m-d'),
+                'title' => $task->getKeyword() ?? $task->getFromDate().' to '.$task->getToDate(),
                 'api_url' => $match[0] ?? null,
                 'method' => 'search/image',
                 'keyword' => $keyword,
@@ -91,6 +92,8 @@ class ImageViewController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
         $user = $this->getUser();
+        $command = "cp $filename";
+        $copy = new Process($command);
 
     }
 }

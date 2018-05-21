@@ -11,14 +11,14 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DownloadController extends Controller
 {
     public function index($base, $filename)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
-        $user = $this->getUser();
+
 
         /**
          * $basePath can be either exposed (typically inside web/)
@@ -26,6 +26,11 @@ class DownloadController extends Controller
          */
 //        $basePath = $this->container->getParameter('imagePath');
         if ($base == 'img') {
+            if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                return $this->json(array(
+                    'error' => 'access_denied'
+                ), Response::HTTP_FORBIDDEN);
+            }
             $base = $this->getParameter('img_thumb_path').'/'.substr($filename, 0, 7);
         }
 

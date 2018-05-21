@@ -258,7 +258,7 @@ class EsController extends Controller
                             "range"=> [
                                 "eventDate"=> [
                                     "gte"=> $request->query->get('gte') ?? 'now',
-                                    "lt"=> $request->query->get('lt') ?? 'now'
+                                    "lte"=> $request->query->get('lt') ?? 'now'
                                 ]
                             ]
                         ]
@@ -274,11 +274,6 @@ class EsController extends Controller
             ]
         ];
         if ($request->query->has('tag')) {
-//            $body['query'] = [
-//                "match"=> [
-//                    "tag"=> $request->query->get('tag')
-//                ]
-//            ];
             $body['query']['bool']['must'] = [
                 "match"=> [
                     "tag"=> $request->query->get('tag')
@@ -341,7 +336,7 @@ class EsController extends Controller
         $params = array(
             'index' => $index,
             'type' => '_doc',
-            'id' => md5("jpeg$_id"),
+            'id' => md5($_id),
             'body' => [
                 "doc"=> [
                     "status"=> false,
@@ -358,12 +353,13 @@ class EsController extends Controller
 
     public function addTag(Request $request, $index, $_id, $tag)
     {
+        if ($tag) {}
         $client = ClientBuilder::create()
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
         $body = [
             "script" => [
-                "source"=> "if (!ctx._source.containsKey(\"tag\")) {ctx._source.tag.add(params.add)} else { ctx._source.tag = [params.add] }",
+                "source"=> "if (ctx._source.containsKey(\"tag\")) {ctx._source.tag.add(params.add)} else { ctx._source.tag = [params.add] }",
                 "params" => [
                     "add" => $tag
                 ]
@@ -372,7 +368,7 @@ class EsController extends Controller
         $params = array(
             'index' => $index,
             'type' => '_doc',
-            'id' => md5("jpeg$_id"),
+            'id' => md5($_id),
             'body' => $body
         );
         $response = $client->update($params);
@@ -418,7 +414,7 @@ class EsController extends Controller
         $params = array(
             'index' => $index,
             'type' => '_doc',
-            'id' => md5("jpeg$filename"),
+            'id' => md5($filename),
             'body' => [
                 "doc"=> [
                     "status"=> false,

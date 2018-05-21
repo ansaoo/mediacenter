@@ -6,6 +6,7 @@
 
     <link href="{{ asset('css/plugins/jsTree/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins/nanogallery2/nanogallery2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css') }}" rel="stylesheet">
     <style>
         .hidden {
             display: none;
@@ -34,10 +35,10 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
-                <div class="ibox-content">
+                <div class="ibox-content mailbox-content">
                     <div class="file-manager">
-                        <div class="hr-line-dashed"></div>
-
+                        {#<div class="hr-line-dashed"></div>#}
+                        <h5>New</h5>
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <span class="btn btn-primary btn-file">
                                 <i class="fa fa-upload"></i>
@@ -52,51 +53,58 @@
                         <div id="progress" class="progress progress-mini" style="margin-bottom: 10px">
                             <div class="progress-bar" style="width: 0%;"></div>
                         </div>
-
-                        <div class="hr-line-dashed"></div>
+                        <div class="space-25"></div>
+                        {#<div class="hr-line-dashed"></div>#}
 
                         <h5>Search </h5>
                         {{ form_start(form) }}
+                        <div class="input-group input-daterange">
+                            {{ form_widget(form.fromDate, {attr: {placeholder: '2012-12-01'}}) }}
+                            <div class="input-group-addon">to</div>
+                            {{ form_widget(form.toDate, {attr: {placeholder: '2012-12-01'}}) }}
+                        </div>
                         <div class="input-group m-b">
-                            {{ form_widget(form.keyword, {attr: {placeholder: 'yyyy, yyyy-mm, ...'}}) }}
+                            {{ form_widget(form.keyword, {attr: {placeholder: 'Keyword'}}) }}
                             <span class="input-group-btn">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i> Search
+                                <i class="fa fa-search"></i>
                             </button>
-                        </span>
+                            </span>
                         </div>
+                        {{ form_end(form) }}
 
                         <h5 class="tag-title">Tags</h5>
                         <hx:include src="{{ url('tag_view', {'index':'image','tag':app.request.get('tag')}) }}" xmlns:hx="http://purl.org/NET/hinclude">
                             {{ include('utils/loading.html.twig') }}
                         </hx:include>
-                        <div class="clearfix"></div>
 
-                        <div class="hr-line-dashed"></div>
+                        <div class="clearfix"></div><br/>
+
+                        {#<div class="hr-line-dashed"></div>#}
 
                         <h5>Stats </h5>
                         <div class="tot-img">0 photos</div>
                         <div class="size-img">0 Go</div>
+
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-9 animated fadeInRight">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>{{ title }}</h5>
+            <div class="ibox float-e-margins">
+                        <div class="mail-box-header">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-xs btn-info hidden" id="add_tag">Tagger</button>
-                                <button type="button" class="btn btn-xs btn-warning hidden" id="delete">Supprimer</button>
+                                <button id="refresh" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i class="fa fa-refresh"></i> Refresh</button>
+                                <button type="button" class="btn btn-sm btn-white hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>
+                                <button type="button" class="btn btn-sm btn-white hidden" id="add_tag" title="Tagger"><i class="fa fa-pencil"> </i></button>
+                                <button type="button" class="btn btn-sm btn-white hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
                             </div>
+                            <h2>{{ title }}</h2>
                         </div>
                         <div class="ibox-content">
                             <div id="my_nanogallery2"></div>
                         </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -125,8 +133,32 @@
     {#<!--[if (gte IE 8)&(lt IE 10)]>#}
     {#<script src="{{ asset('js/plugins/blueimp/js/cors/jquery.xdr-transport.js') }}"></script>#}
     {#<![endif]-->#}
+
+    <script src="{{ asset('js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script>
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 1000);
+            }
+        }
+
         $(document).ready(function () {
+
+            var $gallery = $("#my_nanogallery2");
+
+//            $('input#img_search_task_keyword').datepicker();
+            $('.input-daterange input').each(function() {
+                $(this).datepicker({
+                    'clearDates': true,
+                    format: 'yyyy-mm-dd'
+                });
+            });
 
             $.ajax({
                 url: '{{ api_url }}/api.php/elastic/size/image',
@@ -171,6 +203,7 @@
 //                        $('#progress .progress-bar').css('width', '0%');
                         toastr.error('Error');
                     });
+//                    $('button#refresh').click();
                 },
                 progressall: function (e, data) {
                     var progress_info = $('#progress_span');
@@ -206,8 +239,8 @@
                 }
             });
 
-            $("#my_nanogallery2").nanogallery2({
-                items: JSON.parse($.ajax({
+            $.when(
+                $.ajax({
                     url: '{{ api_url }}/api.php/elastic/{{ method }}',
                     data: {
                         {% for key,value in keyword %}
@@ -215,85 +248,80 @@
                         {% endfor %}
                     },
                     dataType: 'json',
-                    async: false,
+//                    async: false,
                     error: function () {
                         toastr.error('Error in loading data');
-                        $("#my_nanogallery2").append(
+                        $gallery.append(
                             $('<div>').attr({'class': 'alert alert-danger'}).append(
                                 $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
                             )
                         );
                     }
-                }).responseText),
-                thumbnailWidth:  'auto',
-                thumbnailHeight: 150,
-                thumbnailBorderHorizontal: 0,
-                thumbnailBorderVertical: 0,
-                thumbnailSelectable: true,
-                thumbnailAlignment: 'center',
-                thumbnailLabel:     { display: false },
+                })
+            ).done(function (data) {
+                    $gallery.nanogallery2({
+                        items: data,
+                        thumbnailWidth:  'auto',
+                        thumbnailHeight: 150,
+                        thumbnailBorderHorizontal: 0,
+                        thumbnailBorderVertical: 0,
+                        thumbnailSelectable: true,
+                        thumbnailAlignment: 'center',
+                        thumbnailLabel:     { display: false },
 //                viewerToolbar:    {
 //                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
 //                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
 //                viewerTools:    {
 //                    topLeft:   'label',
 //                    topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
-                itemsBaseURL:    '{{ path('download', {'base': 'img', 'filename': ''}) }}',
-                locationHash:    false
-            }).on('itemSelected.nanogallery2', function () {
-                $('#delete').removeClass('hidden');
-                $('#add_tag').removeClass('hidden');
-            }).on('itemUnSelected.nanogallery2', function () {
-                if ($('#my_nanogallery2').nanogallery2('itemsSelectedGet').length === 0) {
-                    $('#delete').addClass('hidden');
-                    $('#add_tag').addClass('hidden');
-                }
-            });
-
-            $('#delete').on('click', function () {
-                var arr = $('#my_nanogallery2').nanogallery2('itemsSelectedGet');
-                $(arr).each(function () {
-                    $.getJSON(
-                        '{{ api_url }}/api.php/elastic/delete/image/'+this.title,
-                        {},
-                        function (response) {
-                            toastr.success(response);
+                        itemsBaseURL:    '{{ path('download', {'base': 'img', 'filename': ''}) }}',
+                        locationHash:    false
+                    }).on('itemSelected.nanogallery2', function () {
+                        $('#delete').removeClass('hidden');
+                        $('#add_tag').removeClass('hidden');
+                        $('#to_dropbox').removeClass('hidden');
+                    }).on('itemUnSelected.nanogallery2', function () {
+                        if ($gallery.nanogallery2('itemsSelectedGet').length === 0) {
+                            $('#delete').addClass('hidden');
+                            $('#add_tag').addClass('hidden');
+                            $('#to_dropbox').addClass('hidden');
                         }
-                    );
-                });
+                    });
             });
 
-            $('#add_tag').on('click', function () {
-                var arr = $('#my_nanogallery2').nanogallery2('itemsSelectedGet');
-                var tag = prompt('Set a tag:');
-                $(arr).each(function () {
-                    $.getJSON(
-                        '{{ api_url }}/api.php/elastic/add_tag/image/'+this.title+'/'+tag,
-                        {},
-                        function (response) {
-                            toastr.success(response);
-                        }
-                    );
-                });
-            });
-
-            $('#mkdir').on('click',function () {
-                var new_folder = prompt('Nouveau dossier');
-                $.ajax({
-                    url: '{{ path('create_folder') }}',
-                    method: 'POST',
-                    data: {'folder': new_folder},
-                    dataType: 'json'
-                }).done(function (response) {
-                    if (response.done) {
-                        toastr.success('Folder %name% was created.'.replace('%name%', response.done));
-                    } else {
-                        toastr.error(response.error)
-                    }
-                }).fail(function (xhr, textStatus, errorThrown) {
-                    toastr.error(errorThrown);
+            $(document)
+                .on('click','button#refresh',function () {
+                    btn = $(this);
+                    simpleLoad(btn, true);
+                    $gallery.nanogallery2('refresh');
+                    simpleLoad(btn, false);
                 })
-            });
+                .on('click','button#delete', function () {
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    $(arr).each(function () {
+                        $.getJSON(
+                            '{{ api_url }}/api.php/elastic/delete/image/'+this.title,
+                            {},
+                            function (response) {
+                                toastr.success(response);
+                            }
+                        );
+                    });
+                })
+                .on('click','button#add_tag', function () {
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    var tag = prompt('Set a tag:');
+                    $(arr).each(function () {
+                        $.getJSON(
+                            '{{ api_url }}/api.php/elastic/add_tag/image/'+this.title+'/'+tag,
+                            {},
+                            function (response) {
+                                toastr.success(response);
+                            }
+                        );
+                    });
+                })
+            ;
         })
     </script>
 

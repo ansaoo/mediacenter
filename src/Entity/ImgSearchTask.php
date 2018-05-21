@@ -12,6 +12,8 @@ namespace App\Entity;
 class ImgSearchTask
 {
     private $keyword;
+    private $fromDate;
+    private $toDate;
     private $send;
 
     /**
@@ -20,6 +22,22 @@ class ImgSearchTask
     public function getKeyword()
     {
         return $this->keyword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFromDate()
+    {
+        return $this->fromDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToDate()
+    {
+        return $this->toDate;
     }
 
     /**
@@ -38,6 +56,22 @@ class ImgSearchTask
     {
         $this->keyword = $keyword;
         return $this;
+    }
+
+    /**
+     * @param mixed $fromDate
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+    }
+
+    /**
+     * @param mixed $toDate
+     */
+    public function setToDate($toDate)
+    {
+        $this->toDate = $toDate;
     }
     /**
      * @param mixed $send

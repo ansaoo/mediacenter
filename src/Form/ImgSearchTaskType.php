@@ -22,13 +22,21 @@ class ImgSearchTaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('keyword', DateType::class)
-            ->add('send', SubmitType::class, array(
-                'label' => 'Search',
-                'attr' => array(
-                    'class' => 'btn btn-primary'
-                )
+            ->add('keyword', TextType::class, array(
+                'required' => false
             ))
+            ->add('fromDate', TextType::class, array(
+                'required' => false
+            ))
+            ->add('toDate', TextType::class, array(
+                'required' => false
+            ))
+//            ->add('send', SubmitType::class, array(
+//                'label' => 'Search',
+//                'attr' => array(
+//                    'class' => 'btn btn-primary'
+//                )
+//            ))
         ;
     }
     public function configureOptions(OptionsResolver $resolver)
