@@ -443,9 +443,16 @@ class EsController extends Controller
                     ]
                 ],
                 "aggs"=> [
-                    "total_size"=> [
-                        "sum"=> [
-                            "field"=> "mediainfo.General.FileSize"
+                    "groupByAttr"=> [
+                        "terms"=> [
+                            "field"=> "attr.keyword"
+                        ],
+                        "aggs"=> [
+                            "size"=> [
+                                "sum"=> [
+                                    "field"=> "mediainfo.General.FileSize"
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -453,10 +460,15 @@ class EsController extends Controller
         );
         $response = $client->search($params);
         $tot = $response['hits']['total'] ?? 0;
-        $size = $response['aggregations']['total_size']['value'] ?? 0;
-        return $this->json(array(
-            'total'=> $tot,
-            'size'=> Utils::human_filesize($size)
-        ));
+        $size = $response['aggregations']['groupByAttr']['buckets'] ?? array();
+        $result = array(
+            'size' => 0
+        );
+        foreach ($size as $item) {
+            $result[$item['key']] = $item['doc_count'];
+            $result['size'] += $item['size']['value'] ?? 0;
+        }
+        $result['size'] = Utils::human_filesize($result['size']);
+        return $this->json($result);
     }
 }

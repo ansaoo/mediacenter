@@ -175,11 +175,9 @@
                 dataType: 'json'
             }).done(function (response) {
                 $('.tot-img').text(
-                    '%nb% photos'.replace('%nb%',response.total)
+                    '%nb% photos'.replace('%nb%',response.image)
                 );
-                $('.size-img').text(
-                    '%nb%'.replace('%nb%', response.size)
-                );
+                $('.size-img').text(response.size);
             }).fail(function () {
 
             });

@@ -4,10 +4,10 @@ security:
         in_memory:
           memory:
             users:
-                angela:
+                poutchou:
                   password: alfred
                   roles: 'ROLE_USER'
-                samuel:
+                gheugeu:
                   password: alfred
                   roles: 'ROLE_ADMIN'
     encoders:
