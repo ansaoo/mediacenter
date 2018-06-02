@@ -40,7 +40,6 @@ class DownloadController extends Controller
                 $base = $this->getParameter('image_path') .'/'. substr($filename, 10, 4) .'/'. substr($filename, 10, 7);
                 $filePath = str_replace('image_path',$base.'/',$filename);
             }
-            file_put_contents('test',$base);
         } else {
             $filePath = $base . '/' . $filename;
         }
