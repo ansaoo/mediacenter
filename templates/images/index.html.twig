@@ -96,9 +96,20 @@
                         <div class="mail-box-header">
                             <div class="pull-right">
                                 <button id="refresh" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i class="fa fa-refresh"></i> Refresh</button>
-                                <button type="button" class="btn btn-sm btn-white hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>
-                                <button type="button" class="btn btn-sm btn-white hidden" id="add_tag" title="Tagger"><i class="fa fa-pencil"> </i></button>
-                                <button type="button" class="btn btn-sm btn-white hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
+                                {#<button type="button" class="btn btn-sm btn-success hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>#}
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-sm btn-success hidden dropdown-toggle" id="dropbox"><i class="fa fa-dropbox"></i></button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="">vers Photos</a>
+                                        </li>
+                                        <li>
+                                            <a href="">vers Parents</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-warning hidden" id="add_tag" title="Tagger"><i class="fa fa-pencil"> </i></button>
+                                <button type="button" class="btn btn-sm btn-danger hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
                             </div>
                             <h2>{{ title }}</h2>
                         </div>
@@ -152,12 +163,11 @@
 
             var $gallery = $("#my_nanogallery2");
 
-//            $('input#img_search_task_keyword').datepicker();
-            $('.input-daterange input').each(function() {
-                $(this).datepicker({
-                    'clearDates': true,
-                    format: 'yyyy-mm-dd'
-                });
+            $('.input-daterange').datepicker({
+                format: 'yyyy-mm-dd',
+                keyboardNavigation: true,
+                forceParse: false,
+                autoclose: false
             });
 
             $.ajax({
@@ -189,7 +199,7 @@
                             file: data.files[0].name,
                             size: data.files[0].size,
                             lastModified: data.files[0].lastModifiedDate.toString(),
-                            type: 'image_path'
+                            type: 'image_tmp_path'
                         },
                         function (result) {//                            progress_info.text('');
                             if (result.success) {
@@ -239,60 +249,64 @@
                 }
             });
 
-            $.when(
-                $.ajax({
-                    url: '{{ api_url }}/api.php/elastic/{{ method }}',
-                    data: {
-                        {% for key,value in keyword %}
-                        '{{ key }}': '{{ value }}',
-                        {% endfor %}
-                    },
-                    dataType: 'json',
+            function init() {
+                $.when(
+                    $.ajax({
+                        url: '{{ api_url }}/api.php/elastic/{{ method }}',
+                        data: {
+                            {% for key,value in keyword %}
+                            '{{ key }}': '{{ value }}',
+                            {% endfor %}
+                        },
+                        dataType: 'json',
 //                    async: false,
-                    error: function () {
-                        toastr.error('Error in loading data');
-                        $gallery.append(
-                            $('<div>').attr({'class': 'alert alert-danger'}).append(
-                                $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
-                            )
-                        );
-                    }
-                })
-            ).done(function (data) {
+                        error: function () {
+                            toastr.error('Error in loading data');
+                            $gallery.append(
+                                $('<div>').attr({'class': 'alert alert-danger'}).append(
+                                    $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
+                                )
+                            );
+                        }
+                    })
+                ).done(function (data) {
                     $gallery.nanogallery2({
                         items: data,
-                        thumbnailWidth:  'auto',
+                        thumbnailWidth: 'auto',
                         thumbnailHeight: 150,
                         thumbnailBorderHorizontal: 0,
                         thumbnailBorderVertical: 0,
                         thumbnailSelectable: true,
                         thumbnailAlignment: 'center',
-                        thumbnailLabel:     { display: false },
+                        thumbnailLabel: {display: false},
 //                viewerToolbar:    {
 //                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
 //                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
 //                viewerTools:    {
 //                    topLeft:   'label',
 //                    topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
-                        itemsBaseURL:    '{{ path('download', {'base': 'img', 'filename': ''}) }}',
-                        locationHash:    false
+                        itemsBaseURL: '{{ path('download', {'base': 'img', 'filename': ''}) }}',
+                        locationHash: false
                     }).on('itemSelected.nanogallery2', function () {
                         $('#delete').removeClass('hidden');
                         $('#add_tag').removeClass('hidden');
-                        $('#to_dropbox').removeClass('hidden');
+                        $('#dropbox').removeClass('hidden');
                     }).on('itemUnSelected.nanogallery2', function () {
                         if ($gallery.nanogallery2('itemsSelectedGet').length === 0) {
                             $('#delete').addClass('hidden');
                             $('#add_tag').addClass('hidden');
-                            $('#to_dropbox').addClass('hidden');
+                            $('#dropbox').addClass('hidden');
                         }
                     });
-            });
+                });
+            }
+            init();
 
             $(document)
                 .on('click','button#refresh',function () {
                     btn = $(this);
                     simpleLoad(btn, true);
+                    init();
                     $gallery.nanogallery2('refresh');
                     simpleLoad(btn, false);
                 })
@@ -317,6 +331,27 @@
                             {},
                             function (response) {
                                 toastr.success(response);
+                            }
+                        );
+                    });
+                })
+                .on('click','.dropdown-menu a', function (event) {
+                    event.preventDefault();
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    $(arr).each(function () {
+                        console.log(this.title);
+                        $.getJSON(
+                            '{{ path('send_to_dropbox') }}',
+                            {
+                                src: this.src,
+                                title: this.title
+                            },
+                            function (response) {
+                                if (response.error) {
+                                    toastr.error(response.error);
+                                } else {
+                                    toastr.success(response.success);
+                                }
                             }
                         );
                     });

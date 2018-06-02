@@ -235,7 +235,7 @@ class EsController extends Controller
         foreach ($response['hits']['hits'] ?? array() as $doc) {
             if ($doc['_source']['status'] ?? false) {
                 $result[] = array(
-                    'src'=> $doc['_source']['fileName']. '_thumb.jpg',
+                    'src'=> $doc['_source']['path'] . $doc['_source']['fileName'],
                     'srct'=> $doc['_source']['fileName']. '_thumb.jpg',
                     'title'=> $doc['_source']['fileName'],
                 );
@@ -290,7 +290,7 @@ class EsController extends Controller
         foreach ($response['hits']['hits'] ?? array() as $doc) {
             if ($doc['_source']['status'] ?? false) {
                 $result[] = array(
-                    'src'=> $doc['_source']['fileName']. '_thumb.jpg',
+                    'src'=> $doc['_source']['path']. $doc['_source']['fileName'],
                     'srct'=> $doc['_source']['fileName']. '_thumb.jpg',
                     'title'=> $doc['_source']['fileName'],
                 );
@@ -353,27 +353,28 @@ class EsController extends Controller
 
     public function addTag(Request $request, $index, $_id, $tag)
     {
-        if ($tag) {}
-        $client = ClientBuilder::create()
-            ->setHosts(array($this->getParameter('es_url')))
-            ->build();
-        $body = [
-            "script" => [
-                "source"=> "if (ctx._source.containsKey(\"tag\")) {ctx._source.tag.add(params.add)} else { ctx._source.tag = [params.add] }",
-                "params" => [
-                    "add" => $tag
+        if ($tag) {
+            $client = ClientBuilder::create()
+                ->setHosts(array($this->getParameter('es_url')))
+                ->build();
+            $body = [
+                "script" => [
+                    "source" => "if (ctx._source.containsKey(\"tag\")) {ctx._source.tag.add(params.add)} else { ctx._source.tag = [params.add] }",
+                    "params" => [
+                        "add" => $tag
+                    ]
                 ]
-            ]
-        ];
-        $params = array(
-            'index' => $index,
-            'type' => '_doc',
-            'id' => md5($_id),
-            'body' => $body
-        );
-        $response = $client->update($params);
-        if ($response['result'] == 'updated') {
-            return $this->json("'$_id' updated successfully");
+            ];
+            $params = array(
+                'index' => $index,
+                'type' => '_doc',
+                'id' => md5($_id),
+                'body' => $body
+            );
+            $response = $client->update($params);
+            if ($response['result'] == 'updated') {
+                return $this->json("'$_id' updated successfully");
+            }
         }
         return $this->json('No update');
     }
@@ -444,7 +445,7 @@ class EsController extends Controller
                 "aggs"=> [
                     "total_size"=> [
                         "sum"=> [
-                            "field"=> "fileSize"
+                            "field"=> "mediainfo.General.FileSize"
                         ]
                     ]
                 ]

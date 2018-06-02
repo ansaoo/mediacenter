@@ -157,12 +157,9 @@ class UploadController extends Controller
                         FILE_APPEND
                     );
                 }
-                if ($_type == 'image_path') {
-                    if ($imgLoader->check($cleanedName)) {
-                        $cleanedName = $imgLoader->rename($cleanedName);
-                        $response = $imgLoader->load($cleanedName);
-                        return $this->json($response);
-                    }
+                if ($_type == 'image_tmp_path') {
+                    $response = $imgLoader->load($cleanedName);
+                    return $this->json($response);
                 }
                 return $this->json(array('success' => basename($cleanedName)));
             } else {

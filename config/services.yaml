@@ -1,15 +1,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-#    imagePath: '/home/ansaoo/Images'
     api_url: 'http://localhost:8000/api.php'
     es_url: '127.0.0.1:9200'
 #    datasource_cmd: '/home/samuel/Projects/datasource/sql/boot.py'
     datasource_cmd: '/home/ansaoo/Documents/08-myProject/datasource/sql/boot.py'
     ddlPath: '%kernel.project_dir%/public/ddl'
     dropbox_path: '/home/ansaoo/Images/Dropbox/Dropbox/Photos'
-    image_path: '/home/ansaoo/Images/TEMP'
-    img_thumb_path: '/home/ansaoo/Images/thumbnail'
+    image_path: '/home/ansaoo/Images'
+    image_tmp_path: '/home/ansaoo/Images/TEMP'
+    image_thumb_path: '/home/ansaoo/Images/thumbnail'
     publicPath: '%kernel.project_dir%/public'
     uploadPath: '%kernel.project_dir%/public/upload'
     tmpPath: '%kernel.project_dir%/public/upload/tmp'
@@ -41,7 +41,7 @@ services:
 
     App\Services\ImgLoader:
         arguments:
-            $targetDir: '%image_path%'
+            $targetDir: '%image_tmp_path%'
             $datasourceExe: '%datasource_cmd%'
 
     App\Services\FileUploader:

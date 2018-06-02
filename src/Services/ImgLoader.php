@@ -69,35 +69,19 @@ class ImgLoader
             FILE_APPEND);
         $load = new Process($command);
         $load->run();
-        if ($load->getOutput()) {
-            file_put_contents(
-                'logs/es_load',
-                Yaml::dump(
-                    array(
-                        md5(uniqid('es', true)) => array(
-                            'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
-                            'subject' => $filename,
-                            'success' => 1,
-                            'body' => $load->getOutput()
-                        )
+        file_put_contents(
+            'logs/es_load',
+            Yaml::dump(
+                array(
+                    md5(uniqid('es', true)) => array(
+                        'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
+                        'subject' => $filename,
+                        'success' => $load->getOutput() ? 1 : 0,
+                        'body' => $load->getOutput() ?? $load->getErrorOutput()
                     )
-                ),
-                FILE_APPEND);
-        } else {
-            file_put_contents(
-                'logs/es_load',
-                Yaml::dump(
-                    array(
-                        md5(uniqid('es', true)) => array(
-                            'eventDate' => date_create('now')->format('Y-m-d\TH:i:s.vO'),
-                            'subject' => $filename,
-                            'success' => 0,
-                            'body' => $load->getErrorOutput()
-                        )
-                    )
-                ),
-                FILE_APPEND);
-        }
+                )
+            ),
+            FILE_APPEND);
         return array(
             'filename' => $filename,
             'success' => $load->getOutput(),

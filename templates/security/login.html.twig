@@ -52,36 +52,13 @@
 
     </nav>
 </div>
-<div class="loginColumns animated fadeInDown">
-    <div class="row">
-
-        <div class="col-md-6">
-            <h2 class="font-bold">{{ 'title.heading'|trans }}</h2>
-
-            <p>
-
-            </p>
-
-            <p>
-
-            </p>
-
-            <p>
-
-            </p>
-
-            <p>
-                <small></small>
-            </p>
-
-        </div>
-        <div class="col-md-6">
-            {% if error %}
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        {% if error %}
                 <div class="alert alert-danger">
                     <p class=" text-center"><strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong></p>
                 </div>
             {% endif %}
-            <div class="ibox-content">
                 <form action="{{ path('login') }}" method="post" class="m-t form-horizontal">
                     <div class="form-group">
                         {#<label for="username">Username:</label>#}
@@ -104,17 +81,6 @@
                         <button type="submit" class="btn btn-primary block full-width m-b btn">login</button>
                     </div>
                 </form>
-                {#{{ form_start(form, {attr: {class: 'm-t'}}) }}#}
-                {#{{ form_row(form.client_login) }}#}
-                {#{{ form_row(form.password) }}#}
-                {#{{ form_row(form.send, {label: 'form.send'|trans, attr: {class: 'btn btn-primary block full-width m-b'}}) }}#}
-                {#{{ form_end() }}#}
-
-                {#<a class="m-t" href="{{ path('forgot_pwd') }}" target="_blank">#}
-                    {#<small>{{ 'forgot_password'|trans }}</small>#}
-                {#</a>#}
-            </div>
-        </div>
     </div>
     <hr/>
 
