@@ -18,6 +18,10 @@ images:
   path: /images
   controller: App\Controller\ImageViewController::index
 
+images_cropper:
+  path: /images_cropper
+  controller: App\Controller\ImageViewController::cropper
+
 tag_view:
   path: /images/tag_view/{index}
   controller: App\Controller\EsController::tagView

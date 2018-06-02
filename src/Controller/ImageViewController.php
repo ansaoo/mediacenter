@@ -90,6 +90,41 @@ class ImageViewController extends Controller
         ));
     }
 
+    public function cropper(Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
+        $user = $this->getUser();
+        $menu = array(
+            'book' => null,
+            'video' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'movie' => null,
+                'tvshow' => null
+            ),
+            'audio' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'album' => null,
+                'performer' => null,
+                'kind' => null,
+                'youtube' => null
+            ),
+            'image' => 'active',
+            'game' => null,
+            'car' => array(
+                'li' => null,
+                'ul' => 'collapse',
+                'data' => null,
+                'overview' => null
+            )
+        );
+        return $this->render('images/cropper.html.twig', array(
+            'menu' => $menu,
+            'user' => $user
+        ));
+    }
+
     public function sendToDrop(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
