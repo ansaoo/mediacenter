@@ -83,8 +83,10 @@
                         {#<div class="hr-line-dashed"></div>#}
 
                         <h5>Stats </h5>
-                        <div class="tot-img">0 photos</div>
-                        <div class="size-img">0 Go</div>
+                        <div class="stats">
+                            <span>0 photos</span><br/>
+                            <span>0 Go</span>
+                        </div>
 
                         <div class="clearfix"></div>
                     </div>
@@ -159,6 +161,32 @@
             }
         }
 
+        function stats($selector) {
+            $.ajax({
+                url: '{{ api_url }}/api.php/elastic/size/image',
+                dataType: 'json'
+            }).done(function (response) {
+                var data = '';
+                if (response.image) {
+                    data = data + '<span>%nb% photos</span>'.replace('%nb%', response.image);
+                }
+                if (response.video) {
+                    data = data + '<br/><span>%nb% videos</span>'.replace('%nb%', response.video);
+                }
+                if (response.size) {
+                    data = data + '<br/><span>%nb%</span>'.replace('%nb%', response.size);
+                }
+                $($selector).html(data);
+            }).fail(function () {
+                toastr.error('Error in loading data');
+                $($selector).append(
+                    $('<div>').attr({'class': 'alert alert-danger'}).append(
+                        $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
+                    )
+                );
+            });
+        }
+
         $(document).ready(function () {
 
             var $gallery = $("#my_nanogallery2");
@@ -170,24 +198,14 @@
                 autoclose: false
             });
 
-            $.ajax({
-                url: '{{ api_url }}/api.php/elastic/size/image',
-                dataType: 'json'
-            }).done(function (response) {
-                $('.tot-img').text(
-                    '%nb% photos'.replace('%nb%',response.image)
-                );
-                $('.size-img').text(response.size);
-            }).fail(function () {
-
-            });
+            stats('.stats');
 
             $('#upload_task_file').fileupload({
                 url: 'upload',
                 sequentialUploads: false,
                 dataType: 'json',
                 replaceFileInput: true,
-                limitConcurrentUploads: 5,
+                limitConcurrentUploads: 4,
                 done: function (e, data) {
                     var progress_info = $('#progress_span');
 //                    progress_info.text('Finalisation ...');
@@ -306,6 +324,7 @@
                     simpleLoad(btn, true);
                     init();
                     $gallery.nanogallery2('refresh');
+                    stats('.stats');
                     simpleLoad(btn, false);
                 })
                 .on('click','button#delete', function () {

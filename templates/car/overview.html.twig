@@ -171,23 +171,23 @@
 
         $(document).ready(function () {
             $(function() {
-                var data = JSON.parse($.ajax({
+                $.ajax({
                     url: '{{ api_url }}/api.php/elastic/stat',
-                    dataType: 'json',
-                    async: false
-                }).responseText);
-                $('.km-celica').text(
-                    '%nb% kms'.replace('%nb%', $.number(data[0].kilometre.value,1))
-                );
-                $('.km-laguna').text(
-                    '%nb% kms'.replace('%nb%', $.number(data[1].kilometre.value,1))
-                );
-                $('.cpt-celica').text(
-                    '%nb%'.replace('%nb%', $.number(data[0].compteur.value,0))
-                );
-                $('.cpt-laguna').text(
-                    '%nb%'.replace('%nb%', $.number(data[1].compteur.value,0))
-                );
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('.km-celica').text(
+                        '%nb% kms'.replace('%nb%', $.number(data[0].kilometre.value, 1))
+                    );
+                    $('.km-laguna').text(
+                        '%nb% kms'.replace('%nb%', $.number(data[1].kilometre.value, 1))
+                    );
+                    $('.cpt-celica').text(
+                        '%nb%'.replace('%nb%', $.number(data[0].compteur.value, 0))
+                    );
+                    $('.cpt-laguna').text(
+                        '%nb%'.replace('%nb%', $.number(data[1].compteur.value, 0))
+                    );
+                });
             });
 
             function dateHisto(period) {
@@ -236,11 +236,10 @@
             });
 
             //Flot Multiple Axes Line Chart
-            $(function() {
-                var data = JSON.parse($.ajax({
+            $.when(
+                $.ajax({
                     url: '{{ api_url }}/api.php/elastic/histo_price',
                     dataType: 'json',
-                    async: false,
                     beforeSend: function () {
                         $('.data-4').addClass('sk-loading');
                     },
@@ -255,20 +254,18 @@
                             )
                         );
                     }
-                }).responseText);
-                var oilPrices = data.SP98;
-                var gazolPrices = data.GO;
-
+                })
+            ).done(function (data) {
                 function euroFormatter(v, axis) {
                     return v.toFixed(axis.tickDecimals) + "€";
                 }
 
                 function doPlot(position) {
                     $.plot($("#flot-line-chart-multi"), [{
-                        data: oilPrices,
+                        data: data.SP98,
                         label: "SP98 (€)"
                     }, {
-                        data: gazolPrices,
+                        data: data.GO,
                         label: "Gazole (€)",
                         yaxis: 2
                     }], {

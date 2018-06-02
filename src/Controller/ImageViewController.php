@@ -103,6 +103,8 @@ class ImageViewController extends Controller
                 substr($filename, 0, 4).'/'.
                 substr($filename, 0, 7).'/'.$filename;
         }
+        $filePath = str_replace('&#x3D;','=',$filePath);
+        $filename = str_replace('&#x3D;','=',$filename);
         $command = "cp $filePath ".$this->getParameter('dropbox_path')."/$filename";
         file_put_contents(
             'logs/command',
@@ -119,7 +121,7 @@ class ImageViewController extends Controller
         $copy = new Process($command);
         $copy->run();
         return $this->json(array(
-            'success' => $copy->getOutput(),
+            'success' => 'Success',
             'error' => $copy->getErrorOutput()
         ));
     }
