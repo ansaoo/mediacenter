@@ -46,6 +46,10 @@ send_to_dropbox:
   path: /send_to_dropbox
   controller: App\Controller\ImageViewController::sendToDrop
 
+movies:
+  path: /movies
+  controller: App\Controller\VideoController::movies
+
 youtube_dl:
   path: /music/youtube
   controller: App\Controller\YouTubeController::index

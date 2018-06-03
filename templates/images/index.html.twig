@@ -167,10 +167,10 @@
             }).done(function (response) {
                 var data = '';
                 if (response.image) {
-                    data = data + '<span>%nb% photos</span>'.replace('%nb%', response.image);
+                    data = data + '<span>%nb% photos</span>'.replace('%nb%', $.number(response.image));
                 }
                 if (response.video) {
-                    data = data + '<br/><span>%nb% videos</span>'.replace('%nb%', response.video);
+                    data = data + '<br/><span>%nb% videos</span>'.replace('%nb%', $.number(response.video));
                 }
                 if (response.size) {
                     data = data + '<br/><span>%nb%</span>'.replace('%nb%', response.size);
@@ -183,6 +183,58 @@
                         $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
                     )
                 );
+            });
+        }
+
+        function init($gallery) {
+            $.when(
+                $.ajax({
+                    url: '{{ api_url }}/api.php/elastic/{{ method }}',
+                    data: {
+                        {% for key,value in keyword %}
+                        '{{ key }}': '{{ value }}',
+                        {% endfor %}
+                    },
+                    dataType: 'json',
+//                    async: false,
+                    error: function () {
+                        toastr.error('Error in loading data');
+                        $gallery.append(
+                            $('<div>').attr({'class': 'alert alert-danger'}).append(
+                                $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
+                            )
+                        );
+                    }
+                })
+            ).done(function (data) {
+                $gallery.nanogallery2({
+                    items: data,
+                    thumbnailWidth: 'auto',
+                    thumbnailHeight: 150,
+                    thumbnailBorderHorizontal: 0,
+                    thumbnailBorderVertical: 0,
+                    thumbnailSelectable: true,
+                    thumbnailAlignment: 'center',
+                    thumbnailLabel: {display: false},
+//                viewerToolbar:    {
+//                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
+//                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
+//                viewerTools:    {
+//                    topLeft:   'label',
+//                    topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
+                    itemsBaseURL: '{{ path('download', {'base': 'img', 'filename': ''}) }}',
+                    locationHash: false
+                }).on('itemSelected.nanogallery2', function () {
+                    $('#delete').removeClass('hidden');
+                    $('#add_tag').removeClass('hidden');
+                    $('#dropbox').removeClass('hidden');
+                }).on('itemUnSelected.nanogallery2', function () {
+                    if ($gallery.nanogallery2('itemsSelectedGet').length === 0) {
+                        $('#delete').addClass('hidden');
+                        $('#add_tag').addClass('hidden');
+                        $('#dropbox').addClass('hidden');
+                    }
+                });
             });
         }
 
@@ -264,65 +316,14 @@
                 }
             });
 
-            function init() {
-                $.when(
-                    $.ajax({
-                        url: '{{ api_url }}/api.php/elastic/{{ method }}',
-                        data: {
-                            {% for key,value in keyword %}
-                            '{{ key }}': '{{ value }}',
-                            {% endfor %}
-                        },
-                        dataType: 'json',
-//                    async: false,
-                        error: function () {
-                            toastr.error('Error in loading data');
-                            $gallery.append(
-                                $('<div>').attr({'class': 'alert alert-danger'}).append(
-                                    $('<p>').attr({'class': 'text-center'}).append('Node not found in cluster')
-                                )
-                            );
-                        }
-                    })
-                ).done(function (data) {
-                    $gallery.nanogallery2({
-                        items: data,
-                        thumbnailWidth: 'auto',
-                        thumbnailHeight: 150,
-                        thumbnailBorderHorizontal: 0,
-                        thumbnailBorderVertical: 0,
-                        thumbnailSelectable: true,
-                        thumbnailAlignment: 'center',
-                        thumbnailLabel: {display: false},
-//                viewerToolbar:    {
-//                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
-//                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
-//                viewerTools:    {
-//                    topLeft:   'label',
-//                    topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
-                        itemsBaseURL: '{{ path('download', {'base': 'img', 'filename': ''}) }}',
-                        locationHash: false
-                    }).on('itemSelected.nanogallery2', function () {
-                        $('#delete').removeClass('hidden');
-                        $('#add_tag').removeClass('hidden');
-                        $('#dropbox').removeClass('hidden');
-                    }).on('itemUnSelected.nanogallery2', function () {
-                        if ($gallery.nanogallery2('itemsSelectedGet').length === 0) {
-                            $('#delete').addClass('hidden');
-                            $('#add_tag').addClass('hidden');
-                            $('#dropbox').addClass('hidden');
-                        }
-                    });
-                });
-            }
-            init();
+            init($gallery);
 
             $(document)
                 .on('click','button#refresh',function () {
                     btn = $(this);
                     simpleLoad(btn, true);
-                    init();
-                    $gallery.nanogallery2('refresh');
+                    $gallery.nanogallery2('destroy');
+                    init($gallery);
                     stats('.stats');
                     simpleLoad(btn, false);
                 })

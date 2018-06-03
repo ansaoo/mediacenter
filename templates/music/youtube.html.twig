@@ -37,7 +37,7 @@
                     <div class="input-group m-b">
                         {{ form_widget(form.url, {attr: {placeholder: 'Youtube url'}}) }}
                         <span class="input-group-btn">
-                            <button type="button" id="submit" class="btn btn-primary">
+                            <button type="submit" id="submit" class="btn btn-primary">
                                 <i class="fa fa-download"></i> Download
                             </button>
                         </span>
@@ -61,18 +61,6 @@
             </div>
         </div>
     </div>
-    {#{% if title %}#}
-    {#<div class="row">#}
-        {#<div class="col-lg-12">#}
-            {#<div class="ibox float-e-margins">#}
-
-                {#<div id="results" class="ibox-content">#}
-                   {#<h4>{{ title.success }}</h4>#}
-                {#</div>#}
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    {#{% endif %}#}
 {% endblock %}
 
 
@@ -109,18 +97,20 @@
             ;
             {% endif %}
 
-            $('#submit').on('click', function () {
+            $('form').on('submit', function (event) {
+                event.preventDefault();
                 var $url = $('input').val();
                 var $id;
-                $.ajax({
-                    url: '{{ api_url }}/api.php?app=youtube',
-                    dataType: 'json',
-                    data: {url: $url },
-                    async: false,
-                    success: function (data) {
-                        $id = data;
-                    }
-                }).done(function (result) {
+                $.when(
+                    $.ajax({
+                        url: '{{ api_url }}/api.php?app=youtube',
+                        dataType: 'json',
+                        data: {url: $url },
+                        success: function (data) {
+                            $id = data;
+                        }
+                    })
+                ).done(function (result) {
                     $id = result.id;
                     console.log(result.success);
                     $('.data')
@@ -138,36 +128,36 @@
                                 .append($('<span>').attr({'class': 'loading dots'}))
                             )
                         );
-                });
-                $.ajax({
-                    url: '{{ api_url }}/api.php?app=youtubedl',
-                    dataType: 'json',
-                    data: {url: $url }
-                }).done(function (data) {
-                    console.log(data);
-                    $('#'+$id+'_video').empty().append(
-                        $('<a>',
-                            {href: '{{ path('download', {'base': 'ddl', 'filename': ''}) }}'+data}
-                            ).append($('<i>', {'class': "fa fa-download"}))
-                    );
                     $.ajax({
-                        url: '{{ api_url }}/api.php?app=extract',
+                        url: '{{ api_url }}/api.php?app=youtubedl',
                         dataType: 'json',
-                        data: {filename: data}
-                    }).done(function (result) {
-                        console.log(result.filename);
-                        $('#'+$id+'_audio').empty().append(
+                        data: {url: $url }
+                    }).done(function (data) {
+                        console.log(data);
+                        $('#'+$id+'_video').empty().append(
                             $('<a>',
-                                {href: '{{ path('download', {'base': 'ddl', 'filename': ''}) }}'+result.filename}
-                                ).append($('<i>', {'class': "fa fa-download"}))
+                                {href: '{{ path('download', {'base': 'ddl', 'filename': ''}) }}'+data}
+                            ).append($('<i>', {'class': "fa fa-download"}))
                         );
-                        toastr.success('Done');
+                        $.ajax({
+                            url: '{{ api_url }}/api.php?app=extract',
+                            dataType: 'json',
+                            data: {filename: data}
+                        }).done(function (result) {
+                            console.log(result.filename);
+                            $('#'+$id+'_audio').empty().append(
+                                $('<a>',
+                                    {href: '{{ path('download', {'base': 'ddl', 'filename': ''}) }}'+result.filename}
+                                ).append($('<i>', {'class': "fa fa-download"}))
+                            );
+                            toastr.success('Done');
+                        })
+                        ;
+                    }).fail(function (xhr, textStatus, errorThrown) {
+                        toastr.error('Fail');
                     })
                     ;
-                }).fail(function (xhr, textStatus, errorThrown) {
-                    toastr.error('Fail');
-                })
-                ;
+                });
             })
         })
     </script>

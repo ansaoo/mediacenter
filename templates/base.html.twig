@@ -47,36 +47,36 @@
                     </div>
                     <div class="logo-element">Home</div>
                 </li>
-                <li class="{{ menu.book }}">
+                <li class="{{ menu.book ?? null }}">
                     <a href="{{ path('images') }}"><i class="fa fa-book"></i> <span class="nav-label">Bibliothèque</span></a>
                 </li>
-                <li class="{{ menu.video.li }}">
+                <li class="{{ menu.video.li ?? null }}">
                     <a href=""><i class="fa fa-film"></i> <span class="nav-label">Vidéos</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level {{ menu.video.ul }}">
-                        <li class="{{ menu.video.movie }}"><a href="{{ path('images') }}">Films</a></li>
-                        <li class="{{ menu.video.tvshow }}"><a href="{{ path('images') }}">Séries</a></li>
+                    <ul class="nav nav-second-level {{ menu.video.ul ?? 'collapse' }}">
+                        <li class="{{ menu.video.movie ?? null }}"><a href="{{ path('movies') }}">Films</a></li>
+                        <li class="{{ menu.video.tvshow ?? null }}"><a href="{{ path('movies') }}">Séries</a></li>
                     </ul>
                 </li>
-                <li class="{{ menu.audio.li }}">
+                <li class="{{ menu.audio.li ?? null }}">
                     <a href=""><i class="fa fa-music"></i> <span class="nav-label">Musiques</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level {{ menu.audio.ul }}">
-                        <li class="{{ menu.audio.album }}"><a href="{{ path('images') }}">Albums</a></li>
-                        <li class="{{ menu.audio.performer }}"><a href="{{ path('images') }}">Artistes</a></li>
-                        <li class="{{ menu.audio.kind }}"><a href="{{ path('images') }}">Genres</a></li>
-                        <li class="{{ menu.audio.youtube }}"><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>
+                    <ul class="nav nav-second-level {{ menu.audio.ul ?? 'collapse' }}">
+                        <li class="{{ menu.audio.album ?? null }}"><a href="{{ path('images') }}">Albums</a></li>
+                        <li class="{{ menu.audio.performer ?? null }}"><a href="{{ path('images') }}">Artistes</a></li>
+                        <li class="{{ menu.audio.kind ?? null }}"><a href="{{ path('images') }}">Genres</a></li>
+                        <li class="{{ menu.audio.youtube ?? null }}"><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>
                     </ul>
                 </li>
-                <li class="{{ menu.image }}">
+                <li class="{{ menu.image ?? null }}">
                     <a href="{{ path('images') }}"><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span></a>
                 </li>
-                <li class="{{ menu.game }}">
+                <li class="{{ menu.game ?? null }}">
                     <a href="{{ path('images') }}"><i class="fa fa-gamepad"></i> <span class="nav-label">Jeux</span></a>
                 </li>
-                <li class="{{ menu.car.li }}">
+                <li class="{{ menu.car.li ?? null }}">
                     <a href=""><i class="fa fa-car"></i> <span class="nav-label">Voitures</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level {{ menu.car.ul }}">
-                        <li class="{{ menu.car.overview }}"><a href="{{ path('car_view') }}">Overview</a></li>
-                        <li class="{{ menu.car.data }}"><a href="{{ path('car_data') }}">Data</a></li>
+                    <ul class="nav nav-second-level {{ menu.car.ul ?? 'collapse' }}">
+                        <li class="{{ menu.car.overview ?? null }}"><a href="{{ path('car_view') }}">Overview</a></li>
+                        <li class="{{ menu.car.data ?? null }}"><a href="{{ path('car_data') }}">Data</a></li>
                     </ul>
                 </li>
             </ul>

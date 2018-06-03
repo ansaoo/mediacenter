@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title_page %}Cropper{% endblock %}
+
+{% block stylesheets %}
+
+    <link href="{{ asset('css/plugins/cropper/cropper.min.css') }}" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+        /* Limit image width to avoid overflow the container */
+        img {
+            max-width: 100%; /* This rule is very important, please do not ignore this! */
+        }
+    </style>
+{% endblock %}
+
+{% block page_heading %}
+    <div class="col-lg-10">
+        <h2>Images</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#">Videos</a>
+            </li>
+            <li class="active">
+                <strong>Movies</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+{% endblock page_heading %}
+
+{% block body %}
+<div class="row">
+    {% for i in [0,1,2,3,4,5,6,7,8,9,10,11,12] %}
+
+        <div class="col-md-2" style="width: 176px;">
+            <div class="ibox">
+                <a href="#">
+                    <div class="ibox-content product-box">
+
+                        <div class="product-imitation">
+                            [ INFO ]
+                        </div>
+                        <div class="product-desc" style="padding: 0px 0px 0px 4px;">
+                                <span class="product-price">
+                                    $10
+                                </span>
+                            <a href="#" class="product-name"><small> Product</small></a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+{% endblock %}
