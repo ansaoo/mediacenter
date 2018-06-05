@@ -328,12 +328,12 @@ class EsController extends Controller
         return $this->json($response['hits']['hits'] ?? null);
     }
 
-    public function delete(Request $request, $index, $_id)
+    public function delete(Request $request, $index)
     {
         $client = ClientBuilder::create()
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
-        $_id = str_replace('&#x3D;','=',$_id);
+        $_id = str_replace('&#x3D;','=',$request->get('_id'));
         $params = array(
             'index' => $index,
             'type' => '_doc',
@@ -352,9 +352,10 @@ class EsController extends Controller
         return $this->json('No update');
     }
 
-    public function addTag(Request $request, $index, $_id, $tag)
+    public function addTag(Request $request, $index)
     {
-        $_id = str_replace('&#x3D;','=',$_id);
+        $_id = str_replace('&#x3D;','=',$request->get('_id'));
+        $tag = $request->get('tag');
         if ($tag) {
             $client = ClientBuilder::create()
                 ->setHosts(array($this->getParameter('es_url')))

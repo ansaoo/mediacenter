@@ -11,7 +11,7 @@ es_health:
   controller: App\Controller\EsController::health
 
 es_add_tag:
-  path: /elastic/add_tag/{index}/{_id}/{tag}
+  path: /elastic/add_tag/{index}
   controller: App\Controller\EsController::addTag
 
 es_data:
@@ -19,7 +19,7 @@ es_data:
   controller: App\Controller\EsController::data
 
 es_delete:
-  path: /elastic/delete/{index}/{_id}
+  path: /elastic/delete/{index}
   controller: App\Controller\EsController::delete
 
 es_histo:

@@ -331,8 +331,10 @@
                     var arr = $gallery.nanogallery2('itemsSelectedGet');
                     $(arr).each(function () {
                         $.getJSON(
-                            '{{ api_url }}/api.php/elastic/delete/image/'+this.title,
-                            {},
+                            '{{ api_url }}/api.php/elastic/delete/image',
+                            {
+                                _id: this.title
+                            },
                             function (response) {
                                 toastr.success(response);
                             }
@@ -344,8 +346,11 @@
                     var tag = prompt('Set a tag:');
                     $(arr).each(function () {
                         $.getJSON(
-                            '{{ api_url }}/api.php/elastic/add_tag/image/'+this.title+'/'+tag,
-                            {},
+                            '{{ api_url }}/api.php/elastic/add_tag/image',
+                            {
+                                _id: this.title,
+                                tag: tag
+                            },
                             function (response) {
                                 toastr.success(response);
                             }
