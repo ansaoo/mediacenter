@@ -333,6 +333,7 @@ class EsController extends Controller
         $client = ClientBuilder::create()
             ->setHosts(array($this->getParameter('es_url')))
             ->build();
+        $_id = str_replace('&#x3D;','=',$_id);
         $params = array(
             'index' => $index,
             'type' => '_doc',
@@ -353,6 +354,7 @@ class EsController extends Controller
 
     public function addTag(Request $request, $index, $_id, $tag)
     {
+        $_id = str_replace('&#x3D;','=',$_id);
         if ($tag) {
             $client = ClientBuilder::create()
                 ->setHosts(array($this->getParameter('es_url')))
