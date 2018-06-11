@@ -42,6 +42,46 @@ car_data:
   path: /car/data
   controller: App\Controller\CarController::data
 
+es_health:
+  path: /elastic/health
+  controller: App\Controller\EsController::health
+
+es_add_tag:
+  path: /elastic/add_tag/{index}
+  controller: App\Controller\EsController::addTag
+
+es_data:
+  path: /elastic/data/{index}/{_type}
+  controller: App\Controller\EsController::data
+
+es_delete:
+  path: /elastic/delete/{index}
+  controller: App\Controller\EsController::delete
+
+es_histo:
+  path: /elastic/histo/{period}
+  controller: App\Controller\EsController::histo
+
+es_histo_price:
+  path: /elastic/histo_price
+  controller: App\Controller\EsController::histo_price
+
+es_recent:
+  path: /elastic/recent/{index}
+  controller: App\Controller\EsController::recent
+
+es_search:
+  path: /elastic/search/{index}
+  controller: App\Controller\EsController::search
+
+es_size:
+  path: /elastic/size/{index}
+  controller: App\Controller\EsController::size
+
+es_stat:
+  path: /elastic/stat
+  controller: App\Controller\EsController::index
+
 send_to_dropbox:
   path: /send_to_dropbox
   controller: App\Controller\ImageViewController::sendToDrop

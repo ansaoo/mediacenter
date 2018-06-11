@@ -162,7 +162,7 @@
 
         function stats($selector) {
             $.ajax({
-                url: '{{ api_url }}/api.php/elastic/size/image',
+                url: '{{ path('es_size', {'index':'image'}) }}',
                 dataType: 'json'
             }).done(function (response) {
                 var data = '';
@@ -189,7 +189,11 @@
         function init($gallery) {
             $.when(
                 $.ajax({
-                    url: '{{ api_url }}/api.php/elastic/{{ method }}',
+                    {% if method == 'recent/image' %}
+                    url: '{{ path('es_recent',{'index':'image'}) }}',
+                    {% else %}
+                    url: '{{ path('es_search',{'index':'image'}) }}',
+                    {% endif %}
                     data: {
                         {% for key,value in keyword %}
                         '{{ key }}': '{{ value }}',
@@ -299,20 +303,24 @@
                 add: function (e, data) {
                     var that = this;
                     var fu = $(this).data('blueimp-fileupload') || $(this).data('fileupload');
-                    $.getJSON('verif_file', {
-                        file: data.files[0].name,
-                        maxChunkSize: fu.options.maxChunkSize
-                    }, function (result) {
-                        var file = result.file;
-                        data.uploadedBytes = file && file.size;
-                        if (file.size === 0) {
-                            $.blueimp.fileupload.prototype
-                                .options.add.call(that, e, data);
-                        } else if (confirm('File partial uploaded. Do you want to resume it ?')) {
-                            $.blueimp.fileupload.prototype
-                                .options.add.call(that, e, data);
+                    $.getJSON(
+                        'verif_file',
+                        {
+                            file: data.files[0].name,
+                            maxChunkSize: fu.options.maxChunkSize
+                        },
+                        function (result) {
+                            var file = result.file;
+                            data.uploadedBytes = file && file.size;
+                            if (file.size === 0) {
+                                $.blueimp.fileupload.prototype
+                                    .options.add.call(that, e, data);
+                            } else if (confirm('File partial uploaded. Do you want to resume it ?')) {
+                                $.blueimp.fileupload.prototype
+                                    .options.add.call(that, e, data);
+                            }
                         }
-                    });
+                    );
                 }
             });
 
@@ -331,7 +339,7 @@
                     var arr = $gallery.nanogallery2('itemsSelectedGet');
                     $(arr).each(function () {
                         $.getJSON(
-                            '{{ api_url }}/api.php/elastic/delete/image',
+                            '{{ path('es_delete', {'index': 'image'}) }}',
                             {
                                 _id: this.title
                             },
@@ -346,7 +354,7 @@
                     var tag = prompt('Set a tag:');
                     $(arr).each(function () {
                         $.getJSON(
-                            '{{ api_url }}/api.php/elastic/add_tag/image',
+                            '{{ path('es_add_tag', {'index': 'image'}) }}',
                             {
                                 _id: this.title,
                                 tag: tag
