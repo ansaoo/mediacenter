@@ -189,11 +189,7 @@
         function init($gallery) {
             $.when(
                 $.ajax({
-                    {% if method == 'recent/image' %}
-                    url: '{{ path('es_recent',{'index':'image'}) }}',
-                    {% else %}
-                    url: '{{ path('es_search',{'index':'image'}) }}',
-                    {% endif %}
+                    url: '{{ path(method,{'index':'image'}) }}',
                     data: {
                         {% for key,value in keyword %}
                         '{{ key }}': '{{ value }}',

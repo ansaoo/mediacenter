@@ -58,10 +58,10 @@ class ImageViewController extends Controller
             $keyword = array(
                 'tag' => $request->query->get('tag')
             );
-            $method = 'search/image';
+            $method = 'es_search';
         } else {
             $keyword = array();
-            $method = 'recent/image';
+            $method = 'es_recent';
         }
 
         if ($form->isSubmitted()) {
@@ -72,7 +72,7 @@ class ImageViewController extends Controller
                 'title' => $task->getKeyword() ??
                     date_create($task->getFromDate())->format('D, j F Y').' to '.date_create($task->getToDate())->format('D, j F Y'),
                 'api_url' => $match[0] ?? null,
-                'method' => 'search/image',
+                'method' => 'es_search',
                 'keyword' => $keyword,
                 'menu' => $menu,
                 'user' => $user
