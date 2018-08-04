@@ -38,11 +38,11 @@
                             </span>
                         </a>
                         {#<ul class="dropdown-menu animated fadeInRight m-t-xs">#}
-                            {#<li><a href="#">Profile</a></li>#}
-                            {#<li><a href="#">Contacts</a></li>#}
-                            {#<li><a href="#">Mailbox</a></li>#}
-                            {#<li class="divider"></li>#}
-                            {#<li><a href="{{ path('logout') }}">Logout</a></li>#}
+                        {#<li><a href="#">Profile</a></li>#}
+                        {#<li><a href="#">Contacts</a></li>#}
+                        {#<li><a href="#">Mailbox</a></li>#}
+                        {#<li class="divider"></li>#}
+                        {#<li><a href="{{ path('logout') }}">Logout</a></li>#}
                         {#</ul>#}
                     </div>
                     <div class="logo-element">Home</div>
@@ -53,16 +53,16 @@
                 <li class="{{ menu.video.li ?? null }}">
                     <a href=""><i class="fa fa-film"></i> <span class="nav-label">Vidéos</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level {{ menu.video.ul ?? 'collapse' }}">
-                        <li class="{{ menu.video.movie ?? null }}"><a href="{{ path('movies') }}">Films</a></li>
-                        <li class="{{ menu.video.tvshow ?? null }}"><a href="{{ path('movies') }}">Séries</a></li>
+                        <li class="{{ menu.video.movie ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#movies/recent">Films</a></li>
+                        <li class="{{ menu.video.tvshow ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#tvshows/recent">Séries</a></li>
                     </ul>
                 </li>
                 <li class="{{ menu.audio.li ?? null }}">
                     <a href=""><i class="fa fa-music"></i> <span class="nav-label">Musiques</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level {{ menu.audio.ul ?? 'collapse' }}">
-                        <li class="{{ menu.audio.album ?? null }}"><a href="{{ path('images') }}">Albums</a></li>
-                        <li class="{{ menu.audio.performer ?? null }}"><a href="{{ path('images') }}">Artistes</a></li>
-                        <li class="{{ menu.audio.kind ?? null }}"><a href="{{ path('images') }}">Genres</a></li>
+                        <li class="{{ menu.audio.album ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/albums">Albums</a></li>
+                        <li class="{{ menu.audio.performer ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/artists">Artistes</a></li>
+                        <li class="{{ menu.audio.kind ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/genres">Genres</a></li>
                         {#<li class="{{ menu.audio.youtube ?? null }}"><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>#}
                     </ul>
                 </li>
@@ -92,9 +92,9 @@
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                     {#<form role="search" class="navbar-form-custom" action="search_results.html">#}
-                        {#<div class="form-group">#}
-                            {#<input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">#}
-                        {#</div>#}
+                    {#<div class="form-group">#}
+                    {#<input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">#}
+                    {#</div>#}
                     {#</form>#}
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
@@ -137,17 +137,17 @@
                         <ul class="dropdown-menu collapse">
                             <li>
                                 <div class="text-center link-block">
-                                <a href="{{ path('logout') }}"><strong>Éteindre</strong></a>
+                                    <a href="{{ path('logout') }}"><strong>Éteindre</strong></a>
                                 </div>
                             </li>
                             <li>
                                 <div class="text-center link-block">
-                                <a href=""><strong>Mettre en vieille</strong></a>
+                                    <a href=""><strong>Mettre en vieille</strong></a>
                                 </div>
                             </li>
                             <li>
                                 <div class="text-center link-block">
-                                <a href=""><strong>Redémarrer</strong></a>
+                                    <a href=""><strong>Redémarrer</strong></a>
                                 </div>
                             </li>
                         </ul>
