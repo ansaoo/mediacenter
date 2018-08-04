@@ -29,29 +29,7 @@ class YouTubeController extends Controller
         $ref = $request->headers->get('referer');
         preg_match('/(.*):8000*/', $ref, $match);
         $menu = array(
-            'book' => null,
-            'video' => array(
-                'li' => null,
-                'ul' => 'collapse',
-                'movie' => null,
-                'tvshow' => null
-            ),
-            'audio' => array(
-                'li' => null,
-                'ul' => null,
-                'album' => null,
-                'performer' => null,
-                'kind' => null,
-                'youtube' => 'active'
-            ),
-            'image' => null,
-            'game' => null,
-            'car' => array(
-                'li' => null,
-                'ul' => 'collapse',
-                'data' => null,
-                'overview' => null
-            )
+            'youtube' => 'active'
         );
 
         if ($form->isSubmitted() && $form->isValid()) {

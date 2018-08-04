@@ -63,7 +63,7 @@
                         <li class="{{ menu.audio.album ?? null }}"><a href="{{ path('images') }}">Albums</a></li>
                         <li class="{{ menu.audio.performer ?? null }}"><a href="{{ path('images') }}">Artistes</a></li>
                         <li class="{{ menu.audio.kind ?? null }}"><a href="{{ path('images') }}">Genres</a></li>
-                        <li class="{{ menu.audio.youtube ?? null }}"><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>
+                        {#<li class="{{ menu.audio.youtube ?? null }}"><a href="{{ path('youtube_dl') }}">Youtube-dl</a></li>#}
                     </ul>
                 </li>
                 <li class="{{ menu.image ?? null }}">
@@ -78,6 +78,9 @@
                         <li class="{{ menu.car.overview ?? null }}"><a href="{{ path('car_view') }}">Overview</a></li>
                         <li class="{{ menu.car.data ?? null }}"><a href="{{ path('car_data') }}">Data</a></li>
                     </ul>
+                </li>
+                <li class="{{ menu.youtube ?? null }}">
+                    <a href="{{ path('youtube_dl') }}"><i class="fa fa-youtube"></i> <span class="nav-label">Youtube-dl</span></a>
                 </li>
             </ul>
         </div>
