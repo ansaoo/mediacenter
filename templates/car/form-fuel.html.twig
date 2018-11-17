@@ -1,0 +1,69 @@
+
+<button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="modal" data-target="#new-fuel-entry">
+    {{ 'task.new'|trans }}
+</button>
+<div class="modal inmodal" id="new-fuel-entry" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-clock-o modal-icon"></i>
+                <h4 class="modal-title">{{ 'form.title'|trans }}</h4>
+            </div>
+            <form class="form-vertical new-task" name="carburant_task" action="{{ path('car_data_fuel_new') }}" method="post">
+                <div class="modal-body">
+                    <div class="form-group" id="data_1">
+                        <label for="carburant_task_date">Simple data input format</label>
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input id="carburant_task_date" type="text" name="carburant_task[date]" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_compteur">{{ 'form.fuel.compteur'|trans }}</label>
+                        <input id="carburant_task_compteur" type="text" class="form-control" name="carburant_task[compteur]" placeholder="166000">
+                    </div>
+                    <div class="form-group">
+                        <label for="kilometre">{{ 'form.fuel.kilometre'|trans }}</label>
+                        <input id="kilometre" type="text" class="form-control" name="carburant_task[kilometre]" placeholder="500">
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_litre">{{ 'form.fuel.litre'|trans }}</label>
+                        <input id="carburant_task_litre" type="text" class="form-control" name="carburant_task[litre]" placeholder="46.51">
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_prix">{{ 'form.fuel.prix'|trans }}</label>
+                        <input id="carburant_task_prix" type="text" class="form-control" name="carburant_task[prix]" placeholder="1.672">
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_lieu">{{ 'form.fuel.lieu'|trans }}</label>
+                        <input id="carburant_task_lieu" type="text" class="form-control" name="carburant_task[lieu]" placeholder="Oyonnax">
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_station">{{ 'form.fuel.station'|trans }}</label>
+                        <input id="carburant_task_station" type="text" class="form-control" name="carburant_task[station]" placeholder="Total">
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_type">{{ 'form.fuel.type'|trans }}</label>
+                        <select id="carburant_task_type" name="carburant_task[type]" class="form-control">
+                            <option value="GO" selected>Diesel</option>
+                            <option value="SP98">Sans Plomb 98</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="carburant_task_voitureId">{{ 'form.fuel.type'|trans }}</label>
+                        <select id="carburant_task_voitureId" name="carburant_task[voitureId]" class="form-control">
+                            <option value="1">Celica</option>
+                            <option value="2" selected>Laguna</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" id="carburant_task__token" name="carburant_task[_token]"
+                       value="{{ csrf_token('fuel') }}">
+                <div class="modal-footer">
+                    <button type="submit" id="carburant_task_submit" name="carburant_task[submit]" class="btn btn-primary">{{ 'form.submit'|trans }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

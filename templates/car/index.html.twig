@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block title_page %}Voiture | Data{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block page_heading %}
+    <div class="col-lg-10">
+        <h2>Data</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a>Voiture</a>
+            </li>
+            <li class="active">
+                <strong>Data</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+{% endblock page_heading %}
+
+
+{% block body %}
+    <div class="row">
+        {#{{ form_start(form) }}#}
+        {#{{ form_end(form) }}#}
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Consommation</h5>
+                    <div class="ibox-tools">
+                        {{ include("car/form-fuel.html.twig") }}
+                    </div>
+                </div>
+                <div class="ibox-content fuel">
+                    {{ include("utils/loading.html.twig") }}
+                    <div class="table-responsive" style="width: 100%">
+                        <table class="table table-hover fuel">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Entretiens</h5>
+                    <div class="ibox-tools">
+                        {{ include("car/form-maintain.html.twig") }}
+                    </div>
+                </div>
+                <div class="ibox-content maintains">
+                    {{ include("utils/loading.html.twig") }}
+                    <div class="table-responsive" style="width: 100%">
+                        <table class="table table-hover maintains">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('js/plugins/dataTables/datatables.min.js') }}"></script>
+    <!-- Data picker -->
+    <script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+
+    <script>
+        var languageTrans = {
+            "decimal":        "{{ 'dt.decimal'|trans({},'datatable') }}",
+            "emptyTable":     "{{ 'dt.emptyTable'|trans({},'datatable') }}",
+            "info":           "{{ 'dt.info'|trans({},'datatable') }}",
+            "infoEmpty":      "{{ 'dt.infoEmpty'|trans({},'datatable') }}",
+            "infoFiltered":   "{{ 'dt.infoFiltered'|trans({},'datatable') }}",
+            "infoPostFix":    "{{ 'dt.infoPostFix'|trans({},'datatable') }}",
+            "thousands":      "{{ 'dt.thousands'|trans({},'datatable') }}",
+            "lengthMenu":     "{{ 'dt.lengthMenu'|trans({},'datatable') }}",
+            "loadingRecords": "{{ 'dt.loadingRecords'|trans({},'datatable') }}",
+            "processing":     "{{ 'dt.processing'|trans({},'datatable') }}",
+            "search":         "{{ 'dt.search'|trans({},'datatable') }}",
+            "zeroRecords":    "{{ 'dt.zeroRecords'|trans({},'datatable') }}",
+            "paginate": {
+                "first":      "{{ 'dt.paginate.first'|trans({},'datatable') }}",
+                "last":       "{{ 'dt.paginate.last'|trans({},'datatable') }}",
+                "next":       "{{ 'dt.paginate.next'|trans({},'datatable') }}",
+                "previous":   "{{ 'dt.paginate.previous'|trans({},'datatable') }}"
+            },
+            "aria": {
+                "sortAscending":  "{{ 'dt.aria.sortAscending'|trans({},'datatable') }}",
+                "sortDescending": "{{ 'dt.aria.sortDescending'|trans({},'datatable') }}"
+            }
+        };
+
+        $(document).ready(function () {
+            $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                format: "dd/mm/yyyy",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+            $('#data_2 .input-group.date').datepicker({
+                todayBtn: "linked",
+                format: "dd/mm/yyyy",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+
+            var $fuel = $('table.fuel').DataTable({
+                ajax: {
+                    url: '{{ path("car_data_fuel") }}',
+                    dataSrc: '',
+                    beforeSend: function () {
+                        $('div.fuel').addClass('sk-loading');
+                    },
+                    error: function (xhr, error, thrown) {
+                        toastr.error('Fail');
+                        $('.dataTables_empty').text('Error occurred. No cluster.');
+                    },
+                    complete: function () {
+                        $('div.fuel').removeClass('sk-loading');
+                    }
+                },
+//            buttons: [],
+                columns: [
+                    { data: 'date.date', title: 'Date', defaultContent: '' },
+                    { data: 'voitureId', title: 'Voiture', defaultContent: '' },
+                    { data: 'compteur', title: 'Compteur', defaultContent: '' },
+                    { data: 'kilometre', title: 'Kilometres', defaultContent: '' },
+                    { data: 'litre', title: 'Litres', defaultContent: '' },
+                    { data: 'lieu', title: 'Lieu', defaultContent: '' }
+                ],
+                dom: '<"html5buttons"B>lTfgitp',
+                language: languageTrans,
+                order: [[ 0, "desc" ]]
+            });
+
+            var $maintains = $('table.maintains').DataTable({
+                ajax: {
+                    url: '{{ path("car_data_maintains") }}',
+                    dataSrc: '',
+                    beforeSend: function () {
+                        $('div.maintains').addClass('sk-loading');
+                    },
+                    error: function (xhr, error, thrown) {
+                        toastr.error('Fail');
+                        $('.dataTables_empty').text('Error occurred. No cluster.');
+                    },
+                    complete: function () {
+                        $('div.maintains').removeClass('sk-loading');
+                    }
+                },
+//            buttons: [],
+                columns: [
+                    { data: 'date.date', title: 'Date', defaultContent: '' },
+                    { data: 'voitureId', title: 'Voiture', defaultContent: '' },
+                    { data: 'compteur', title: 'Compteur', defaultContent: '' },
+                    { data: 'libelle', title: 'Libellé', defaultContent: '' },
+                    { data: 'garage', title: 'Garage', defaultContent: '' },
+                    { data: 'lieu', title: 'Lieu', defaultContent: '' },
+                    { data: 'prix', title: 'Prix', defaultContent: '' }
+                ],
+                dom: '<"html5buttons"B>lTfgitp',
+                language: languageTrans,
+                order: [[ 0, "desc" ]]
+            });
+
+            $(document)
+                .on('submit', 'form[name="carburant_task"]', function (event) {
+                    event.preventDefault();
+                    var $form = $(this);
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: $form.attr('action'),
+                        method: $form.attr('method'),
+                        data: formData,
+                        contentType: false,
+                        processData: false
+                    }).done(function (data) {
+                        toastr.success(data.save);
+                        $fuel.ajax.reload();
+                        $('.close').click();
+                    })
+                })
+                .on('submit', 'form[name="entretien_task"]', function (event) {
+                    event.preventDefault();
+                    var $form = $(this);
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: $form.attr('action'),
+                        method: $form.attr('method'),
+                        data: formData,
+                        contentType: false,
+                        processData: false
+                    }).done(function (data) {
+                        toastr.success(data.save);
+                        $fuel.ajax.reload();
+                        $('.close').click();
+                    })
+                })
+            ;
+        })
+
+    </script>
+{% endblock javascripts %}

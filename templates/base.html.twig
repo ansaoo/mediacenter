@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title_page %}Welcome!{% endblock %}</title>
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/dropzone/basic.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/dropzone/dropzone.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/jasny/jasny-bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/codemirror/codemirror.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/iCheck/custom.css') }}" rel="stylesheet">
+    <!-- Toastr style -->
+    <link href="{{ asset('css/plugins/toastr/toastr.min.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+{% if locale is not defined %}
+    {% set locale = app.request.getLocale() %}
+{% endif %}
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span></span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">{{ app.user.username|capitalize }}</strong>
+                                </span>
+                                {#<span class="text-muted text-xs block">Director <b class="caret"></b></span> #}
+                            </span>
+                        </a>
+                        {#<ul class="dropdown-menu animated fadeInRight m-t-xs">#}
+                        {#<li><a href="#">Profile</a></li>#}
+                        {#<li><a href="#">Contacts</a></li>#}
+                        {#<li><a href="#">Mailbox</a></li>#}
+                        {#<li class="divider"></li>#}
+                        {#<li><a href="{{ path('logout') }}">Logout</a></li>#}
+                        {#</ul>#}
+                    </div>
+                    <div class="logo-element">Home</div>
+                </li>
+                <li class="{{ menu.book ?? null }}">
+                    <a href="#"><i class="fa fa-book"></i> <span class="nav-label">Bibliothèque</span></a>
+                </li>
+                <li class="{{ menu.video.li ?? null }}">
+                    <a href=""><i class="fa fa-film"></i> <span class="nav-label">Vidéos</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level {{ menu.video.ul ?? 'collapse' }}">
+                        <li class="{{ menu.video.movie ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#movies/recent">Films</a></li>
+                        <li class="{{ menu.video.tvshow ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#tvshows/recent">Séries</a></li>
+                    </ul>
+                </li>
+                <li class="{{ menu.audio.li ?? null }}">
+                    <a href=""><i class="fa fa-music"></i> <span class="nav-label">Musiques</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level {{ menu.audio.ul ?? 'collapse' }}">
+                        <li class="{{ menu.audio.album ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/albums">Albums</a></li>
+                        <li class="{{ menu.audio.performer ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/artists">Artistes</a></li>
+                        <li class="{{ menu.audio.kind ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/genres">Genres</a></li>
+                    </ul>
+                </li>
+                <li class="{{ menu.image ?? null }}">
+                    <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span></a>
+                </li>
+                <li class="{{ menu.game ?? null }}">
+                    <a href="#"><i class="fa fa-gamepad"></i> <span class="nav-label">Jeux</span></a>
+                </li>
+                <li class="{{ menu.car.li ?? null }}">
+                    <a href=""><i class="fa fa-car"></i> <span class="nav-label">Voitures</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level {{ menu.car.ul ?? 'collapse' }}">
+                        <li class="{{ menu.car.overview ?? null }}"><a href="#">Overview</a></li>
+                        <li class="{{ menu.car.data ?? null }}"><a href="{{ path('car_data_index') }}">Data</a></li>
+                    </ul>
+                </li>
+                <li class="{{ menu.youtube ?? null }}">
+                    <a href="#"><i class="fa fa-youtube"></i> <span class="nav-label">Youtube-dl</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <form role="search" class="navbar-form-custom" action="search_results.html">
+                    <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                    </div>
+                    </form>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome.</span>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="#">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="#">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href=""><i class="fa fa-power-off"></i></a>
+                        <ul class="dropdown-menu collapse">
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="{{ path('logout') }}"><strong>Éteindre</strong></a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href=""><strong>Mettre en vieille</strong></a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href=""><strong>Redémarrer</strong></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            {% block page_heading %}
+            {% endblock page_heading %}
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            {% block body %}
+            {% endblock body %}
+        </div>
+        <div class="footer">
+            <div class="text-center">
+                {#<small>ISAN System provided by</small><img src="{{ asset('img/isan_ia_s1.gif') }}">#}
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Mainly scripts -->
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+<script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+<script src="{{ asset('js/plugins/number/jquery.number.min.js') }}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{ asset('js/inspinia.js') }}"></script>
+<script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
+
+<!-- Jasny -->
+<script src="{{  asset('js/plugins/jasny/jasny-bootstrap.min.js') }}"></script>
+
+<!-- DROPZONE -->
+<script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+
+<!-- CodeMirror -->
+<script src="{{ asset('js/plugins/codemirror/codemirror.js') }}"></script>
+<script src="{{ asset('js/plugins/codemirror/mode/xml/xml.js') }}"></script>
+
+<!-- Peity -->
+{#<script src="{{ asset('js/plugins/peity/jquery.peity.min.js') }}"></script>#}
+{#<script src="{{ asset('js/demo/peity-demo.js') }}"></script>#}
+
+<!-- iCheck -->
+<script src="{{ asset('js/plugins/iCheck/icheck.min.js') }}"></script>
+<!-- Toastr script -->
+<script src="{{ asset('js/plugins/toastr/toastr.min.js') }}"></script>
+
+<!-- hinclude -->
+<script src="{{ asset('js/plugins/hinclude/hinclude.js') }}"></script>
+
+<!-- md5 -->
+<script src="{{ asset('js/plugins/md5/jquery.md5.js') }}"></script>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "preventDuplicates": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "6000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>
+
+{% block javascripts %}{% endblock javascripts %}
+</body>
+</html>

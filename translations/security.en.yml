@@ -1,0 +1,14 @@
+form:
+  admin_login: "Admin login"
+  client_login: "Log as"
+  delegation: "Delegation"
+  login: "Login"
+  password: "Password"
+  send: "Login"
+forgot_password: "Forgot password ?"
+title:
+  page: "ISAN | Login"
+  heading: "Welcome to ISAN International Agency"
+access_denied: "Access denied. Incorrect user or password."
+access_denied_deleg: "Access denied. Incorrect user or password or admin user is not allowed to log on behalf the '%client%' client."
+not_available: "Service is not available."

@@ -1,0 +1,31 @@
+dt:
+  button:
+    copy:         "Copier"
+    csv:          "CSV"
+    excel:        "Excel"
+    pdf:          "PDF"
+    print:        "Imprimer"
+  decimal:        "."
+  emptyTable:     "Aucune donnée disponible"
+  info:           "Visualisation du _START_ au _END_ de _TOTAL_ éléments"
+  infoEmpty:      "Visualisation du 0 au 0 de 0 éléments"
+  infoFiltered:   "(filtered from _MAX_ total entries)"
+  infoPostFix:    ""
+  thousands:      ","
+  lengthMenu:     "Afficher _MENU_ éléments"
+  loadingRecords: "Chargement..."
+  processing:     "Chargement..."
+  search:         "Filtrer:"
+  zeroRecords:    "Aucune donnée trouvée"
+  paginate:
+      first:      "Premier"
+      last:       "Dernier"
+      next:       "Suivant"
+      previous:   "Précédent"
+  aria:
+      sortAscending:  ": activer le tri ascendant"
+      sortDescending: ": activer le tri descendant"
+error_data:
+  regid: "REGID"
+  error_count: "Nombre d'erreur"
+  error: "Erreur"

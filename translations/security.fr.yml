@@ -1,0 +1,14 @@
+form:
+  admin_login: "Admin login"
+  client_login: "Se connecter en tant que"
+  delegation: "Délégation"
+  login: "Login"
+  password: "Mot de passe"
+  send: "Se connecter"
+forgot_password: 'Mot de passe oublié ?'
+title:
+  page: "ISAN | Connexion"
+  heading: "Bienvenue à ISAN Agence Internationale"
+access_denied: "Accès refusé. Utilisateur ou mot de passe incorrect."
+access_denied_deleg: "Accès refusé. Utilisateur ou mot de passe incorrect ou vous n'êtes pas autorisé à vous connecter pour le compte de '%client%'."
+not_available: "Ce service est momentanément hors-service."

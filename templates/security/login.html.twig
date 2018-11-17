@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+{% trans_default_domain 'security' %}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ 'title.page'|trans }}</title>
+
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+</head>
+{% if locale is not defined %}
+    {% set locale = app.request.getLocale() %}
+{% endif %}
+<body class="gray-bg">
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                    <img src="{{ asset('img/flags/16/'~ locale|trans({}, 'flag') ~'.png') }}" alt="flag">
+                </a>
+                <ul class="dropdown-menu dropdown-tasks">
+                    {#<li>#}
+                        {#<div class="text-center link-block">#}
+                            {#<a href="{{ path('set_locale', {'locale': 'en'}) }}">#}
+                                {#<img src="{{ asset('img/flags/16/United-Kingdom.png') }}" alt="flag">#}
+                                {#<strong>en</strong>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#</li>#}
+                    {#<li>#}
+                        {#<div class="text-center link-block">#}
+                            {#<a href="{{ path('set_locale', {'locale': 'fr'}) }}">#}
+                                {#<img src="{{ asset('img/flags/16/France.png') }}" alt="flag">#}
+                                {#<strong>fr</strong>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#</li>#}
+                </ul>
+            </li>
+        </ul>
+
+    </nav>
+</div>
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+            {% if error %}
+                <div class="alert alert-danger">
+                    <p class=" text-center"><strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong></p>
+                </div>
+            {% endif %}
+                <form action="{{ path('login') }}" method="post" class="m-t form-horizontal">
+                    <div class="form-group">
+                        {#<label for="username">Username:</label>#}
+                        <input type="text" id="username" name="_username" value="{{ last_username }}"
+                               class="form-control" placeholder="Login" required/>
+                    </div>
+                    <div class="form-group">
+                        {#<label for="password">Password:</label>#}
+                        <input type="password" id="password" name="_password"
+                               class="form-control" placeholder="Password" required/>
+                    </div>
+
+                    {#If you want to control the URL the user#}
+                    {#is redirected to on success (more details below)#}
+                    {#<input type="hidden" name="_target_path" value="/account" />#}
+
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token('authenticate') }}">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary block full-width m-b btn">login</button>
+                    </div>
+                </form>
+    </div>
+    <hr/>
+
+</div>
+
+</body>
+
+<!-- Mainly scripts -->
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+<script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{ asset('js/inspinia.js') }}"></script>
+<script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
+
+<!-- iCheck -->
+<script src="{{ asset('js/plugins/iCheck/icheck.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+    });
+</script>
+
+</html>

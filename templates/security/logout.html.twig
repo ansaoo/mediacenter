@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+{% trans_default_domain 'logout' %}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ 'title.page'|trans }}</title>
+
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+</head>
+{% if locale is not defined %}
+    {% set locale = app.request.getLocale() %}
+{% endif %}
+<body class="gray-bg">
+<div class="row border-bottom">
+    {#<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">#}
+        {#<ul class="nav navbar-top-links navbar-right">#}
+            {#<li class="dropdown">#}
+                {#<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">#}
+                    {#<img src="{{ asset('img/flags/16/'~ locale|trans({}, 'flag') ~'.png') }}" alt="flag">#}
+                {#</a>#}
+                {#<ul class="dropdown-menu dropdown-tasks">#}
+                    {#<li>#}
+                        {#<div class="text-center link-block">#}
+                            {#<a href="{{ path('set_locale', {'locale': 'en'}) }}">#}
+                                {#<img src="{{ asset('img/flags/16/United-Kingdom.png') }}" alt="flag">#}
+                                {#<strong>en</strong>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#</li>#}
+                    {#<li>#}
+                        {#<div class="text-center link-block">#}
+                            {#<a href="{{ path('set_locale', {'locale': 'fr'}) }}">#}
+                                {#<img src="{{ asset('img/flags/16/France.png') }}" alt="flag">#}
+                                {#<strong>fr</strong>#}
+                            {#</a>#}
+                        {#</div>#}
+                    {#</li>#}
+                {#</ul>#}
+            {#</li>#}
+        {#</ul>#}
+
+    {#</nav>#}
+</div>
+<div class="passwordBox animated fadeInDown">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="ibox-content">
+
+                <h2 class="font-bold">{{ 'title.heading'|trans }}</h2>
+
+                <p>
+                    {{ 'msg'|trans }}
+                </p>
+
+                <a href="{{ path('login') }}" class="btn btn-primary m-t">Login</a>
+                {#<div class="row">#}
+
+                    {#<div class="col-lg-12">#}
+                        {#{{ form_start(form, {attr: {class: 'm-t'}}) }}#}
+                        {#<div class="form-group">#}
+                            {#{{ form_widget(form.email, {attr: {placeholder: 'form.email'|trans}}) }}#}
+                        {#</div>#}
+                        {#<div class="form-group">#}
+                            {#{{ form_widget(form.send, {label: 'form.send'|trans, attr: {class: 'btn btn-primary block full-width m-b'}}) }}#}
+                        {#</div>#}
+                        {#{{ form_end(form) }}#}
+                    {#</div>#}
+                {#</div>#}
+            </div>
+        </div>
+    </div>
+    <hr/>
+</div>
+
+</body>
+<!-- Mainly scripts -->
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+<script src="{{ asset('js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{ asset('js/inspinia.js') }}"></script>
+<script src="{{ asset('js/plugins/pace/pace.min.js') }}"></script>
+
+<!-- iCheck -->
+<script src="{{ asset('js/plugins/iCheck/icheck.min.js') }}"></script>
+
+</html>
