@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Carburant;
 use App\Entity\Entretien;
 use App\Form\CarburantTaskType;
+use App\Form\EntretienTaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,7 +63,7 @@ class CarburantController extends Controller
     }
 
     /**
-     * @Route("/car/data/maintains", name="car_data_maintains")
+     * @Route("/car/data/maintain", name="car_data_maintain")
      */
     public function loadEntretien()
     {
@@ -74,14 +75,14 @@ class CarburantController extends Controller
     }
 
     /**
-     * @Route("/car/data/maintains/new", name="car_data_maintains_new")
+     * @Route("/car/data/maintain/new", name="car_data_maintain_new")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function addEntretien(Request $request)
     {
         $maintain = new Entretien();
-        $form = $this->createForm(CarburantTaskType::class, $maintain);
+        $form = $this->createForm(EntretienTaskType::class, $maintain);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $entityManager = $this->getDoctrine()->getManager();

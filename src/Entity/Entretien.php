@@ -73,15 +73,15 @@ class Entretien
     private $submit;
 
     /**
-     * @return int
+     * @return integer
      */
-    public function getIdEntretien(): int
+    public function getIdEntretien()
     {
         return $this->idEntretien;
     }
 
     /**
-     * @param int $idEntretien
+     * @param integer $idEntretien
      */
     public function setIdEntretien(int $idEntretien)
     {
@@ -89,15 +89,15 @@ class Entretien
     }
 
     /**
-     * @return int
+     * @return integer
      */
-    public function getCompteur(): int
+    public function getCompteur()
     {
         return $this->compteur;
     }
 
     /**
-     * @param int $compteur
+     * @param integer $compteur
      */
     public function setCompteur(int $compteur)
     {
@@ -105,9 +105,9 @@ class Entretien
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getDate(): \DateTime
+    public function getDate()
     {
         return $this->date;
     }
@@ -121,9 +121,9 @@ class Entretien
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getGarage(): string
+    public function getGarage()
     {
         return $this->garage;
     }
@@ -137,9 +137,9 @@ class Entretien
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLibelle(): string
+    public function getLibelle()
     {
         return $this->libelle;
     }
@@ -153,9 +153,9 @@ class Entretien
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLieu(): string
+    public function getLieu()
     {
         return $this->lieu;
     }
@@ -169,9 +169,9 @@ class Entretien
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getPrix(): float
+    public function getPrix()
     {
         return $this->prix;
     }
@@ -185,15 +185,15 @@ class Entretien
     }
 
     /**
-     * @return int
+     * @return integer
      */
-    public function getVoitureId(): int
+    public function getVoitureId()
     {
         return $this->voitureId;
     }
 
     /**
-     * @param int $voitureId
+     * @param integer $voitureId
      */
     public function setVoitureId(int $voitureId)
     {

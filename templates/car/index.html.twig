@@ -154,7 +154,7 @@
 
             var $maintains = $('table.maintains').DataTable({
                 ajax: {
-                    url: '{{ path("car_data_maintains") }}',
+                    url: '{{ path("car_data_maintain") }}',
                     dataSrc: '',
                     beforeSend: function () {
                         $('div.maintains').addClass('sk-loading');
