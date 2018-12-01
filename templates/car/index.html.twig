@@ -32,8 +32,6 @@
 
 {% block body %}
     <div class="row">
-        {#{{ form_start(form) }}#}
-        {#{{ form_end(form) }}#}
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -78,6 +76,8 @@
     <script src="{{ asset('js/plugins/dataTables/datatables.min.js') }}"></script>
     <!-- Data picker -->
     <script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+    <!-- Jquery Validate -->
+    <script src="{{ asset('js/plugins/validate/jquery.validate.min.js') }}"></script>
 
     <script>
         var languageTrans = {
@@ -140,7 +140,7 @@
                 },
 //            buttons: [],
                 columns: [
-                    { data: 'date.date', title: 'Date', defaultContent: '' },
+                    { data: 'date', title: 'Date', defaultContent: '' },
                     { data: 'voitureId', title: 'Voiture', defaultContent: '' },
                     { data: 'compteur', title: 'Compteur', defaultContent: '' },
                     { data: 'kilometre', title: 'Kilometres', defaultContent: '' },
@@ -169,8 +169,13 @@
                 },
 //            buttons: [],
                 columns: [
-                    { data: 'date.date', title: 'Date', defaultContent: '' },
-                    { data: 'voitureId', title: 'Voiture', defaultContent: '' },
+                    { data: 'date', title: 'Date', defaultContent: '' },
+                    {
+                        data: 'voitureId', title: 'Voiture', defaultContent: '',
+                        render: function (data) {
+                            return $.validator.format('<a id="car_info" data-path="{{ path('car_info') }}">{0}</a>', data);
+                        }
+                    },
                     { data: 'compteur', title: 'Compteur', defaultContent: '' },
                     { data: 'libelle', title: 'Libellé', defaultContent: '' },
                     { data: 'garage', title: 'Garage', defaultContent: '' },
@@ -214,6 +219,20 @@
                         $fuel.ajax.reload();
                         $('.close').click();
                     })
+                })
+                .on('click', 'a#car_info', function (event) {
+                    event.preventDefault();
+                    var that = $(this);
+                    $.ajax({
+                        url: that.data('path'),
+                        data: {q: that.text()}
+                    }).done(function (result) {
+                        var title = "";
+                        $.each(result, function (k,v) {
+                            title += $.validator.format("{0}: {1}\n",k,v);
+                        });
+                        that.attr('title', title);
+                    });
                 })
             ;
         })

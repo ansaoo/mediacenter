@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Carburant;
 use App\Entity\Entretien;
+use App\Entity\Voiture;
 use App\Form\CarburantTaskType;
 use App\Form\EntretienTaskType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,6 +30,18 @@ class CarburantController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY', null, 'Unable to access this page');
         return $this->render('car/overview.html.twig');
+    }
+
+    /**
+     * @Route("/car/info", name="car_info")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getVoiture(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Voiture::class);
+        $found = $repository->find($request->get("q",0));
+        return $found ? $this->json($found->_toArray()) : $this->json(null);
     }
 
     /**

@@ -221,6 +221,16 @@ class Voiture
         $this->serie = $serie;
     }
 
-
+    public function _toArray()
+    {
+        $data = get_object_vars($this);
+        if ($this->getDateSortie()) {
+            $data["dateSortie"] = $this->getDateSortie()->format('Y-m-d');
+        }
+        if ($this->getDateAchat()) {
+            $data["dateAchat"] = $this->getDateAchat()->format('Y-m-d');
+        }
+        return $data;
+    }
 }
 

@@ -264,7 +264,11 @@ class Carburant
 
     public function _toArray()
     {
-        return get_object_vars($this);
+        $data = get_object_vars($this);
+        if ($this->getDate()) {
+            $data["date"] = $this->getDate()->format('Y-m-d');
+        }
+        return $data;
     }
 
 }
