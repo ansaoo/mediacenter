@@ -13,7 +13,7 @@ class PictureController extends AbstractController
     public function index()
     {
         return $this->render('picture/index.html.twig', [
-            'controller_name' => 'PictureController',
+            'menu' => array('image' => 'active'),
         ]);
     }
 }

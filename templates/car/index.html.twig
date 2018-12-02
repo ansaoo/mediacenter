@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title_page %}Voiture | Data{% endblock %}
+{% trans_default_domain 'car' %}
+
+{% block title_page %}{{ 'title.page'|trans }}{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
@@ -11,16 +13,16 @@
 
 {% block page_heading %}
     <div class="col-lg-10">
-        <h2>Data</h2>
+        <h2>{{ 'title.heading'|trans }}</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="#">Home</a>
             </li>
             <li>
-                <a>Voiture</a>
+                <a>{{ 'title.controller'|trans }}</a>
             </li>
             <li class="active">
-                <strong>Data</strong>
+                <strong>{{ 'title.heading'|trans }}</strong>
             </li>
         </ol>
     </div>

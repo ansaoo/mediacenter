@@ -1,3 +1,8 @@
 voiture_id:
   1: Celica
   2: Laguna
+title:
+  box:
+  controller: "Cars"
+  heading: "Data"
+  page: "Cars"

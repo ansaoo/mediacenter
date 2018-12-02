@@ -69,7 +69,7 @@
                     </ul>
                 </li>
                 <li class="{{ menu.image ?? null }}">
-                    <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span></a>
+                    <a href="{{ path('picture') }}"><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span></a>
                 </li>
                 <li class="{{ menu.game ?? null }}">
                     <a href="#"><i class="fa fa-gamepad"></i> <span class="nav-label">Jeux</span></a>
@@ -206,7 +206,7 @@
 <script src="{{ asset('js/plugins/toastr/toastr.min.js') }}"></script>
 
 <!-- hinclude -->
-<script src="{{ asset('js/plugins/hinclude/hinclude.js') }}"></script>
+{#<script src="{{ asset('js/plugins/hinclude/hinclude.js') }}"></script>#}
 
 <!-- md5 -->
 <script src="{{ asset('js/plugins/md5/jquery.md5.js') }}"></script>

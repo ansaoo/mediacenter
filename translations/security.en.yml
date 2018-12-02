@@ -7,8 +7,8 @@ form:
   send: "Login"
 forgot_password: "Forgot password ?"
 title:
-  page: "ISAN | Login"
-  heading: "Welcome to ISAN International Agency"
+  page: "Sign in"
+  heading: "Welcome !"
 access_denied: "Access denied. Incorrect user or password."
 access_denied_deleg: "Access denied. Incorrect user or password or admin user is not allowed to log on behalf the '%client%' client."
 not_available: "Service is not available."
