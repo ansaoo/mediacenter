@@ -133,7 +133,7 @@ class UploadController extends Controller
             if (filesize($cleanedName) == $size) {
                 $user = new User();
                 $user->setName($loguser->getUsername())
-                    ->setPassword($loguser->getPassword)
+                    ->setPassword($loguser->getPassword())
                     ->setGranted("ROLE_USER")
                 ;
                 $upload = new Upload();
