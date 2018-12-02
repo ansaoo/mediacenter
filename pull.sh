@@ -5,4 +5,4 @@ NC='\033[0m'
 echo "${GREEN}$ git pull ${NC}"
 git pull
 echo "${GREEN}$ php7.2 composer.phar update ${NC}"
-php7.2 composer.phar update --no-dev
+php7.2 composer.phar update

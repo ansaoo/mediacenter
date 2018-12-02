@@ -8,7 +8,7 @@ parameters:
     locale: 'en'
     image_target: "/home/ansaoo/Images"
     image_thumb: "/home/ansaoo/Images/thumbnail"
-    upload_allowed: "jpg,jpeg,mov,mts,mp4"
+    upload_allowed: "jpg|jpeg|mov|mts|mp4"
     upload_target: "%kernel.project_dir%/public/upload"
     upload_tmp_path: "%kernel.project_dir%/public/upload/tmp"
 
