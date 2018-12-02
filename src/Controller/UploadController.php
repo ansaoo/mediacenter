@@ -9,7 +9,9 @@
 namespace App\Controller;
 
 
+use App\Entity\Upload;
 use App\Entity\UploadTask;
+use App\Entity\User;
 use App\Form\UploadTaskType;
 use App\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -80,7 +82,7 @@ class UploadController extends Controller
                 'error' => 'access_denied'
             ));
         }
-        $filename = $request->get('file') ?? null;
+        $filename = $request->get('file');
         if ($filename) {
             $info = pathinfo($filename);
             if (in_array(mb_strtolower($info['extension']), explode('|',$this->getParameter('upload_allowed')))) {
@@ -112,11 +114,13 @@ class UploadController extends Controller
                 'error' => 'access_denied'
             ));
         }
+        $loguser = $this->getUser();
         $filename = $request->get('file');
         $size = $request->get('size');
         $target = $request->get('target','upload_target');
         $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $filename);
         if ($filename) {
+            $info = pathinfo($filename);
             $find = glob($fileUploader->getTargetDir() .'/'. $filename .'.*');
             $files = implode("\" \"", $find);
             $cleanedName = $this->getParameter($target) .'/'. $cleanedName;
@@ -127,6 +131,20 @@ class UploadController extends Controller
                 unlink($files);
             }
             if (filesize($cleanedName) == $size) {
+                $user = new User();
+                $user->setName($loguser->getUsername())
+                    ->setPassword($loguser->getPassword)
+                    ->setGranted("ROLE_USER")
+                ;
+                $upload = new Upload();
+                $upload->setOriginalFilename($filename)
+                    ->setFilename($cleanedName)
+                    ->setFileSize($size)
+                    ->setTarget($target)
+                    ->setType($info["extension"])
+                    ->setCreated(date_create("now"))
+                    ->setUser($user)
+                ;
                 return $this->json(array('success' => basename($cleanedName)));
             } else {
                 unlink($cleanedName);
