@@ -114,7 +114,7 @@ class UploadController extends Controller
         }
         $filename = $request->get('file');
         $size = $request->get('size');
-        $target = $request->get('target');
+        $target = $request->get('target','upload_target');
         $cleanedName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '', $filename);
         if ($filename) {
             $find = glob($fileUploader->getTargetDir() .'/'. $filename .'.*');
