@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +37,16 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $granted;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Upload", mappedBy="user")
+     */
+    private $uploads;
+
+    public function __construct()
+    {
+        $this->uploads = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,6 +97,37 @@ class User
     public function setGranted(string $granted): self
     {
         $this->granted = $granted;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Upload[]
+     */
+    public function getUploads(): Collection
+    {
+        return $this->uploads;
+    }
+
+    public function addUpload(Upload $upload): self
+    {
+        if (!$this->uploads->contains($upload)) {
+            $this->uploads[] = $upload;
+            $upload->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpload(Upload $upload): self
+    {
+        if ($this->uploads->contains($upload)) {
+            $this->uploads->removeElement($upload);
+            // set the owning side to null (unless already changed)
+            if ($upload->getUser() === $this) {
+                $upload->setUser(null);
+            }
+        }
 
         return $this;
     }
