@@ -14,6 +14,8 @@ use App\Entity\UploadTask;
 use App\Entity\User;
 use App\Form\UploadTaskType;
 use App\Services\FileUploader;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Process;
@@ -145,11 +147,37 @@ class UploadController extends Controller
                     ->setCreated(date_create("now"))
                     ->setUser($user)
                 ;
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($upload);
+                $manager->flush();
                 return $this->json(array('success' => basename($cleanedName)));
             } else {
                 unlink($cleanedName);
             }
         }
         return $this->json(array('fail' => null));
+    }
+
+    /**
+     * @Route("/upload/data",
+     *     name="upload_data"
+     *     )
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function uploads(Request $request)
+    {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->json(array(
+                'error' => 'access_denied'
+            ));
+        }
+        $user = $this->getUser();
+        $upload = $this->getDoctrine()->getRepository(Upload::class);
+        $expr = new Comparison("name", Comparison::IS, $user->getUsername());
+        $criteria = new Criteria();
+        $criteria->where($expr);
+        $result = $upload->findBy([$criteria]);
+        return $this->json($result);
     }
 }
