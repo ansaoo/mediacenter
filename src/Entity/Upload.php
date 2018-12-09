@@ -24,7 +24,7 @@ class Upload
     /**
      * @ORM\Column(type="bigint")
      */
-    private $fileSize;
+    private $file_size;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -34,7 +34,7 @@ class Upload
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $originalFilename;
+    private $original_filename;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -71,12 +71,12 @@ class Upload
 
     public function getFileSize(): ?int
     {
-        return $this->fileSize;
+        return $this->file_size;
     }
 
-    public function setFileSize(int $fileSize): self
+    public function setFileSize(int $file_size): self
     {
-        $this->fileSize = $fileSize;
+        $this->file_size = $file_size;
 
         return $this;
     }
@@ -95,12 +95,12 @@ class Upload
 
     public function getOriginalFilename(): ?string
     {
-        return $this->originalFilename;
+        return $this->original_filename;
     }
 
-    public function setOriginalFilename(string $originalFilename): self
+    public function setOriginalFilename(string $original_filename): self
     {
-        $this->originalFilename = $originalFilename;
+        $this->original_filename = $original_filename;
 
         return $this;
     }
