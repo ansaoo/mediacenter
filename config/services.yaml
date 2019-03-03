@@ -9,9 +9,9 @@ parameters:
     env(PWD): '1234'
     locale: 'en'
     image_exclude_folder: "Dropbox|TEMP|creche|logo|_thumbnails"
-    image_target: "/home/ansaoo/Images"
-    image_root: "/home/ansaoo/Images"
-    image_thumb: "/home/ansaoo/Images/_thumbnails"
+    image_target: "/home/store/Images"
+    image_root: "/home/store/Images"
+    image_thumb: "/home/store/Images/_thumbnails"
     scan_target: "%kernel.project_dir%/public/scans"
     upload_allowed: "jpg|jpeg|mov|mts|mp4"
     upload_target: "%kernel.project_dir%/public/upload"
