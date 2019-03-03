@@ -22,18 +22,20 @@ class PictureManager
 {
     private $em;
     private $exclude;
+    private $root;
     private $scan;
 
-    public function __construct(EntityManager $em, $scanFolder, $excludeFolder)
+    public function __construct(EntityManager $em, $rootFolder, $scanHistoryFolder, $excludeFolder)
     {
         $this->em = $em;
         $this->exclude = explode("|", $excludeFolder);
-        $this->scan = $scanFolder;
+        $this->root = $rootFolder .'/';
+        $this->scan = $scanHistoryFolder;
     }
 
-    public function scan($folder, ObjectRepository $repository)
+    public function scan(ObjectRepository $repository)
     {
-        $cmd = "find $folder -type f -iname \"*.*\"";
+        $cmd = "find {$this->root} -type f -iname \"*.*\"";
         $find = new Process($cmd);
         $find->run();
         $files = explode("\n", $find->getOutput());
@@ -42,6 +44,7 @@ class PictureManager
                 return mb_strpos($filename, $folder) ? false : $carry;
             }, true);
             if ($valid) {
+                $filename = str_replace($this->root, "", $filename);
                 $found = $repository->findOneBy(["filename" => $filename]);
                 if ($found) {
                     return false;
@@ -54,12 +57,12 @@ class PictureManager
         $count = 1;
 
         $scanId = date_create("now")->getTimestamp();
-        file_put_contents("scans/$scanId.yml",Yaml::dump(array("files" => $files)));
+        file_put_contents("scans/$scanId.yml",Yaml::dump(array("files" => $result)));
         return array(
             "timestamp" => $scanId,
             "recordsTotal" => count($result),
             "data" => array_values(array_map(function ($elem) use (&$count) {
-                $info = pathinfo($elem);
+                $info = pathinfo($this->root . $elem);
                 $info["filename"] = $elem;
                 $info["DT_RowId"] = $count;
                 $count++;

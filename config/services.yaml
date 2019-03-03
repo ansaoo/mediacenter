@@ -10,6 +10,7 @@ parameters:
     locale: 'en'
     image_exclude_folder: "Dropbox|TEMP|creche|logo|_thumbnails"
     image_target: "/home/ansaoo/Images"
+    image_root: "/home/ansaoo/Images"
     image_thumb: "/home/ansaoo/Images/_thumbnails"
     scan_target: "%kernel.project_dir%/public/scans"
     upload_allowed: "jpg|jpeg|mov|mts|mp4"
@@ -53,4 +54,5 @@ services:
         arguments:
             $em: '@doctrine.orm.entity_manager'
             $excludeFolder: "%image_exclude_folder%"
-            $scanFolder: "%scan_target%"
+            $rootFolder: "%image_root%"
+            $scanHistoryFolder: "%scan_target%"

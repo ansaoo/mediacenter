@@ -75,9 +75,8 @@ class PictureController extends Controller
                 'recordsTotal' => 0
             ));
         }
-        $folder = $this->getParameter("image_target");
         $repository = $this->getDoctrine()->getRepository(Picture::class);
-        $result = $pictureManager->scan($folder, $repository);
+        $result = $pictureManager->scan($repository);
         $result['draw'] = $request->get("draw", 1);
         return $this->json($result);
     }
@@ -91,25 +90,25 @@ class PictureController extends Controller
      */
     public function addPicture(Request $request, PictureManager $pictureManager, PictureTool $tool)
     {
-        $folder = $this->getParameter("image_target") . "/";
+        $root = $this->getParameter("image_root") . "/";
         $filename = $request->get("filename");
-        if (!file_exists($filename)) {
+        if (!file_exists($root.$filename)) {
             return array(
                 "status" => 404,
                 "state" => "failed",
                 "msg" => "'{$filename}' not found."
             );
         }
-        $stat = stat($filename);
-        $info = pathinfo($filename);
+        $stat = stat($root.$filename);
+        $info = pathinfo($root.$filename);
         $ctime = date_create("now");
         $ctime->setTimestamp($stat["ctime"]);
         $name = basename($filename);
         $new = new Picture();
-        $new->setFilename(str_replace($folder, "", $filename))
+        $new->setFilename($filename)
             ->setFileSize($stat["size"])
             ->setCreated($ctime)
-            ->setOriginalFilename($filename)
+            ->setOriginalFilename($root.$filename)
             ->setName($name)
             ->setStatus(true)
             ->setAdded(date_create("now"))
@@ -128,7 +127,7 @@ class PictureController extends Controller
     public function existPicture(Request $request)
     {
         $filename = $request->get("filename");
-        if (!file_exists($filename)) {
+        if (!file_exists($this->getParameter("image_root").'/'.$filename)) {
             return array(
                 "status" => 404,
                 "state" => "failed",
