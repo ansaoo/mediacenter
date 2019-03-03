@@ -14,8 +14,6 @@ use App\Entity\UploadTask;
 use App\Entity\User;
 use App\Form\UploadTaskType;
 use App\Services\FileUploader;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Comparison;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Process;
@@ -116,7 +114,7 @@ class UploadController extends Controller
                 'error' => 'access_denied'
             ));
         }
-        $loguser = $this->getUser();
+        $user = $this->getUser();
         $filename = $request->get('file');
         $size = $request->get('size');
         $target = $request->get('target','upload_target');
@@ -133,11 +131,6 @@ class UploadController extends Controller
                 unlink($files);
             }
             if (filesize($cleanedName) == $size) {
-                $user = new User();
-                $user->setName($loguser->getUsername())
-                    ->setPassword($loguser->getPassword())
-                    ->setGranted("ROLE_USER")
-                ;
                 $upload = new Upload();
                 $upload->setOriginalFilename($filename)
                     ->setFilename($cleanedName)
@@ -173,11 +166,16 @@ class UploadController extends Controller
             ));
         }
         $user = $this->getUser();
-        $upload = $this->getDoctrine()->getRepository(Upload::class);
-        $expr = new Comparison("name", Comparison::IS, $user->getUsername());
-        $criteria = new Criteria();
-        $criteria->where($expr);
-        $result = $upload->findBy([$criteria]);
-        return $this->json($result);
+        $userManager = $this->getDoctrine()->getRepository(User::class);
+        $uploadManager = $this->getDoctrine()->getRepository(Upload::class);
+        $pUser = $userManager->findOneBy(
+            ["username" => $user->getUsername()]
+        );
+        $uploads = $uploadManager->findBy(
+            ["user" => $pUser],
+            ["id" => "DESC"],
+            10
+        );
+        return $this->json($uploads);
     }
 }

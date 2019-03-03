@@ -19,6 +19,9 @@ class SecurityController extends Controller
 {
     /**
      * @Route("/login", name="login")
+     * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function login(Request $request, AuthenticationUtils $authenticationUtils)
     {
@@ -42,6 +45,9 @@ class SecurityController extends Controller
 
     /**
      * @Route("/logout", name="logout")
+     * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function logout(Request $request, AuthenticationUtils $authenticationUtils)
     {

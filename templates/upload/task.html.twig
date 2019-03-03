@@ -21,8 +21,6 @@
 {% block javascripts %}
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ asset('js/plugins/blueimp/vendor/jquery.ui.widget.js') }}"></script>
-<!-- nanoGallery2 script -->
-<script src="{{ asset('js/plugins/nanogallery2/jquery.nanogallery2.min.js') }}"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="{{ asset('js/plugins/blueimp/jquery.iframe-transport.js') }}"></script>
 <!-- The basic File Upload plugin -->
@@ -60,6 +58,7 @@
                 function (result) {//                            progress_info.text('');
                     if (result.success) {
                         toastr.success('%filename% ok'.replace('%filename%', result.filename));
+                        $("div#uploads").trigger("add");
                     } else {
                         $('#progress .progress-bar').css('width', '0%');
                         toastr.error('%filename% fail'.replace('%filename%', result.filename))

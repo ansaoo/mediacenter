@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% use 'upload/task.html.twig' %}
+
+{% trans_default_domain 'picture' %}
+
+{% block title_page %}{{ 'title.page'|trans }}{% endblock %}
+
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block page_heading %}
+    <div class="col-lg-10">
+        <h2>{{ 'title.heading'|trans }}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a>{{ 'title.controller'|trans }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'title.heading'|trans }}</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+{% endblock page_heading %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content mailbox-content">
+                    <div class="file-manager">
+                        {#<div class="hr-line-dashed"></div>#}
+                        <h5>New</h5>
+                        {% block upload %}
+                            {{ parent() }}
+                        {% endblock %}
+                        <div class="space-25"></div>
+                        <h5>Search</h5>
+                        <p>coming soon ...</p>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="mail-box-header">
+                    <div class="pull-right">
+                        <button id="scan" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Scan library"><i class="fa fa-refresh"></i> Scan</button>
+                        {#<button type="button" class="btn btn-sm btn-success hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>#}
+                        
+                    </div>
+                    <h2>{{ 'Manager' }}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive" style="width: 100%">
+                        <table class="table table-hover manager">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- nanoGallery2 script -->
+    <script src="{{ asset('js/plugins/nanogallery2/jquery.nanogallery2.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dataTables/datatables.min.js') }}"></script>
+    <!-- Data picker -->
+    <script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+    <script>
+        var count = 0;
+        var languageTrans = {
+            "decimal":        "{{ 'dt.decimal'|trans({},'datatable') }}",
+            "emptyTable":     "{{ 'dt.emptyTable'|trans({},'datatable') }}",
+            "info":           "{{ 'dt.info'|trans({},'datatable') }}",
+            "infoEmpty":      "{{ 'dt.infoEmpty'|trans({},'datatable') }}",
+            "infoFiltered":   "{{ 'dt.infoFiltered'|trans({},'datatable') }}",
+            "infoPostFix":    "{{ 'dt.infoPostFix'|trans({},'datatable') }}",
+            "thousands":      "{{ 'dt.thousands'|trans({},'datatable') }}",
+            "lengthMenu":     "{{ 'dt.lengthMenu'|trans({},'datatable') }}",
+            "loadingRecords": "{{ 'dt.loadingRecords'|trans({},'datatable') }}",
+            "processing":     "{{ 'dt.processing'|trans({},'datatable') }}",
+            "search":         "{{ 'dt.search'|trans({},'datatable') }}",
+            "zeroRecords":    "{{ 'dt.zeroRecords'|trans({},'datatable') }}",
+            "paginate": {
+                "first":      "{{ 'dt.paginate.first'|trans({},'datatable') }}",
+                "last":       "{{ 'dt.paginate.last'|trans({},'datatable') }}",
+                "next":       "{{ 'dt.paginate.next'|trans({},'datatable') }}",
+                "previous":   "{{ 'dt.paginate.previous'|trans({},'datatable') }}"
+            },
+            "aria": {
+                "sortAscending":  "{{ 'dt.aria.sortAscending'|trans({},'datatable') }}",
+                "sortDescending": "{{ 'dt.aria.sortDescending'|trans({},'datatable') }}"
+            }
+        };
+
+        function exist(row, data) {
+            var selectorId = "persist_" + data['DT_RowId'];
+            $.ajax({
+                url: '{{ path('picture_exist') }}',
+                dataType: 'json',
+                data: {
+                    filename: data['filename']
+                },
+                beforeSend: function () {
+                    $("i#" + selectorId).replaceWith('<i id="'+ selectorId +'" class="fa fa-spinner fa-spin"></i>');
+                },
+                success: function (result) {
+                    var fa = 'fa-' + result ? 'check' : 'pause-circle';
+                    $("i#" + selectorId).replaceWith('<i class="fa '+ fa +'"></i>');
+                }
+            });
+        }
+
+        function persist(row, data) {
+            var selectorId = "persist_" + data['DT_RowId'];
+            $.ajax({
+                url: '{{ path('picture_add') }}',
+                dataType: 'json',
+                data: {
+                    filename: data['filename']
+                },
+                beforeSend: function () {
+                    $("i#" + selectorId).replaceWith('<i id="'+ selectorId +'" class="fa fa-spinner fa-spin"></i>');
+                },
+                success: function (result) {
+                    count++;
+                    $("i#" + selectorId).replaceWith('<i class="fa fa-check"></i>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            var $manager = $('table.manager').DataTable({
+                ajax: {
+                    url: '{{ path('picture_scan',{'async':'true'}) }}',
+                    complete: function (result) {
+                        var files = result['responseJSON'];
+                        if (!files) {
+                            files = {data: []};
+                        }
+                        $.each(files.data, function (i, item) {
+                            persist(i, item);
+                        });
+                        if (count > 0) {
+                            toastr.success("Saved " + count + " files.");
+                        }
+                        count = 0;
+                    }
+                },
+                columns: [
+                    {data: 'basename', title: 'File', defaultContent: ''},
+                    {data: 'extension', title: 'Ext.', defaultContent: ''},
+                    {data: 'state', title: 'Status', defaultContent: '',
+                        render: function (data, type, row) {
+                            return '<i id="persist_'+ row["DT_RowId"] +'" class="fa fa-pause-circle"></i>'
+                        }
+                    },
+                    {data: 'dirname', title: 'Folder', defaultContent: ''}
+                ],
+                dom: 'tp',
+                language: languageTrans,
+                responsive: true,
+                rowCallback: exist
+            });
+
+            $(document).on('click', 'button#scan', function (e) {
+                $manager.ajax.url('{{ path('picture_scan') }}').load();
+            })
+        });
+    </script>
+{% endblock javascripts %}

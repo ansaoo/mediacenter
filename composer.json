@@ -3,9 +3,13 @@
     "license": "proprietary",
     "require": {
         "php": "^7.0.8",
+        "ext-curl": "*",
         "ext-ctype": "*",
+        "ext-exif": "*",
+        "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.3",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "*",
         "symfony/console": "*",

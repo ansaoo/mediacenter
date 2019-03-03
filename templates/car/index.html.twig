@@ -128,7 +128,6 @@
             var $fuel = $('table.fuel').DataTable({
                 ajax: {
                     url: '{{ path("car_data_fuel") }}',
-                    dataSrc: '',
                     beforeSend: function () {
                         $('div.fuel').addClass('sk-loading');
                     },
@@ -142,22 +141,24 @@
                 },
 //            buttons: [],
                 columns: [
-                    { data: 'date', title: 'Date', defaultContent: '' },
-                    { data: 'voitureId', title: 'Voiture', defaultContent: '' },
-                    { data: 'compteur', title: 'Compteur', defaultContent: '' },
-                    { data: 'kilometre', title: 'Kilometres', defaultContent: '' },
-                    { data: 'litre', title: 'Litres', defaultContent: '' },
-                    { data: 'lieu', title: 'Lieu', defaultContent: '' }
+                    {data: 'date', title: 'Date', defaultContent: ''},
+                    {data: 'voitureId', title: 'Voiture', defaultContent: ''},
+                    {data: 'compteur', title: 'Compteur', defaultContent: ''},
+                    {data: 'kilometre', title: 'Kilometres', defaultContent: ''},
+                    {data: 'litre', title: 'Litres', defaultContent: ''},
+                    {data: 'lieu', title: 'Lieu', defaultContent: ''}
                 ],
                 dom: '<"html5buttons"B>lTfgitp',
                 language: languageTrans,
-                order: [[ 0, "desc" ]]
+                order: [[ 0, "desc" ]],
+                processing: true,
+                serverSide: true,
+                responsive: true
             });
 
             var $maintains = $('table.maintains').DataTable({
                 ajax: {
                     url: '{{ path("car_data_maintain") }}',
-                    dataSrc: '',
                     beforeSend: function () {
                         $('div.maintains').addClass('sk-loading');
                     },
@@ -186,7 +187,10 @@
                 ],
                 dom: '<"html5buttons"B>lTfgitp',
                 language: languageTrans,
-                order: [[ 0, "desc" ]]
+                order: [[ 0, "desc" ]],
+                processing: true,
+                serverSide: true,
+                responsive: true
             });
 
             $(document)

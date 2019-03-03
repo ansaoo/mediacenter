@@ -46,14 +46,24 @@ class CarburantController extends Controller
 
     /**
      * @Route("/car/data/fuel", name="car_data_fuel")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function loadCarburant()
+    public function loadCarburant(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Carburant::class);
-        $rows = $repository->findAll();
-        return $this->json(array_map(function (Carburant $elem) {
-            return $elem->_toArray();
-        }, $rows));
+        $order = $request->get("order", [array("column" => 0, "dir" => "desc")]);
+        $columns = $request->get("columns", [array("data" => "date")]);
+        $rows = $repository->findBy(
+            [],
+            [$columns[$order[0]["column"]]["data"] => $order[0]["dir"]],
+            $request->get("length", 25),
+            $request->get("start")
+        );
+        return $this->json(array(
+            "data" => array_map(function (Carburant $elem) {
+                return $elem->_toArray();
+            }, $rows)));
     }
 
     /**
@@ -77,14 +87,24 @@ class CarburantController extends Controller
 
     /**
      * @Route("/car/data/maintain", name="car_data_maintain")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function loadEntretien()
+    public function loadEntretien(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Entretien::class);
-        $rows = $repository->findAll();
-        return $this->json(array_map(function (Entretien $elem) {
-            return $elem->_toArray();
-        }, $rows));
+        $order = $request->get("order", [array("column" => 0, "dir" => "asc")]);
+        $columns = $request->get("columns", [array("data" => "date")]);
+        $rows = $repository->findBy(
+            [],
+            [$columns[$order[0]["column"]]["data"] => $order[0]["dir"]],
+            $request->get("length", 25),
+            $request->get("start")
+        );
+        return $this->json(array(
+            "data" => array_map(function (Entretien $elem) {
+                return $elem->_toArray();
+            }, $rows)));
     }
 
     /**

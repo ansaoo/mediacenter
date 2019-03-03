@@ -1,17 +1,25 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory:
-                users:
-                    poutchou:
-                        password: alfred
-                        roles: 'ROLE_USER'
-                    gheugeu:
-                        password: alfred
-                        roles: 'ROLE_ADMIN'
+#        in_memory:
+#            memory:
+#                users:
+#                    poutchou:
+#                        password: alfred
+#                        roles: 'ROLE_USER'
+#                    gheugeu:
+#                        password: alfred
+#                        roles: 'ROLE_ADMIN'
+        our_db_provider:
+            entity:
+                class: App\Entity\User
+                # the property to query by - e.g. username, email, etc
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        App\Entity\User: plaintext
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -22,6 +30,7 @@ security:
             # activate different ways to authenticate
 
             http_basic: true
+            provider: our_db_provider
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
             # form_login: true
@@ -51,11 +60,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/car, roles: ROLE_USER }
-        - { path: ^/images, roles: ROLE_USER }
-        - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/.+, roles: [ROLE_READER, ROLE_USER, ROLE_RA_ADMIN] }
     role_hierarchy:
         ROLE_USER:          ROLE_ANONYMOUS

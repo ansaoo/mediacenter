@@ -4,10 +4,14 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    env(ALLOCINE_PARTNER): '100043982026'
+    env(ALLOCINE_SECRET): '29d185d98c984a359e6e6f26a0474269'
     env(PWD): '1234'
     locale: 'en'
+    image_exclude_folder: "Dropbox|TEMP|creche|logo|_thumbnails"
     image_target: "/home/ansaoo/Images"
-    image_thumb: "/home/ansaoo/Images/thumbnail"
+    image_thumb: "/home/ansaoo/Images/_thumbnails"
+    scan_target: "%kernel.project_dir%/public/scans"
     upload_allowed: "jpg|jpeg|mov|mts|mp4"
     upload_target: "%kernel.project_dir%/public/upload"
     upload_tmp_path: "%kernel.project_dir%/public/upload/tmp"
@@ -36,6 +40,17 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\Services\Allocine:
+        arguments:
+            $partner_key: '%env(ALLOCINE_PARTNER)%'
+            $secret_key: '%env(ALLOCINE_SECRET)%'
+
     App\Services\FileUploader:
         arguments:
             $targetDir: '%upload_tmp_path%'
+
+    App\Services\PictureManager:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $excludeFolder: "%image_exclude_folder%"
+            $scanFolder: "%scan_target%"

@@ -7,6 +7,7 @@
 {% block title_page %}{{ 'title.page'|trans }}{% endblock %}
 
 {% block stylesheets %}
+    <link href="{{ asset('css/plugins/nanogallery2/nanogallery2.min.css') }}" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block page_heading %}
@@ -48,9 +49,180 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-9 animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="mail-box-header">
+                    <div class="pull-right">
+                        <button id="refresh" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i class="fa fa-refresh"></i> Refresh</button>
+                        {#<button type="button" class="btn btn-sm btn-success hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>#}
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-sm btn-success hidden dropdown-toggle" id="dropbox"><i class="fa fa-dropbox"></i></button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="">Publish</a>
+                                </li>
+                                <li>
+                                    <a href="">See folders</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-warning hidden" id="add_tag" title="Tagger"><i class="fa fa-pencil"> </i></button>
+                        <button type="button" class="btn btn-sm btn-danger hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
+                    </div>
+                    <h2>{{ 'title' }}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div id="my_nanogallery2"></div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock body %}
 
 {% block javascripts %}
+    <!-- nanoGallery2 script -->
+    <script src="{{ asset('js/plugins/nanogallery2/jquery.nanogallery2.core.js') }}"></script>
+    <script src="{{ asset('js/plugins/nanogallery2/jquery.nanogallery2.data_nano_photos_provider2.js') }}"></script>
+
     {{ parent() }}
+
+    <script src="{{ asset('js/plugins/dataTables/datatables.min.js') }}"></script>
+    <!-- Data picker -->
+    <script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+    <script>
+        var languageTrans = {
+            "decimal":        "{{ 'dt.decimal'|trans({},'datatable') }}",
+            "emptyTable":     "{{ 'dt.emptyTable'|trans({},'datatable') }}",
+            "info":           "{{ 'dt.info'|trans({},'datatable') }}",
+            "infoEmpty":      "{{ 'dt.infoEmpty'|trans({},'datatable') }}",
+            "infoFiltered":   "{{ 'dt.infoFiltered'|trans({},'datatable') }}",
+            "infoPostFix":    "{{ 'dt.infoPostFix'|trans({},'datatable') }}",
+            "thousands":      "{{ 'dt.thousands'|trans({},'datatable') }}",
+            "lengthMenu":     "{{ 'dt.lengthMenu'|trans({},'datatable') }}",
+            "loadingRecords": "{{ 'dt.loadingRecords'|trans({},'datatable') }}",
+            "processing":     "{{ 'dt.processing'|trans({},'datatable') }}",
+            "search":         "{{ 'dt.search'|trans({},'datatable') }}",
+            "zeroRecords":    "{{ 'dt.zeroRecords'|trans({},'datatable') }}",
+            "paginate": {
+                "first":      "{{ 'dt.paginate.first'|trans({},'datatable') }}",
+                "last":       "{{ 'dt.paginate.last'|trans({},'datatable') }}",
+                "next":       "{{ 'dt.paginate.next'|trans({},'datatable') }}",
+                "previous":   "{{ 'dt.paginate.previous'|trans({},'datatable') }}"
+            },
+            "aria": {
+                "sortAscending":  "{{ 'dt.aria.sortAscending'|trans({},'datatable') }}",
+                "sortDescending": "{{ 'dt.aria.sortDescending'|trans({},'datatable') }}"
+            }
+        };
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 1000);
+            }
+        }
+
+        $(document).ready(function () {
+            var $gallery = $("#my_nanogallery2");
+            $gallery.nanogallery2({
+                kind:             'nano_photos_provider2',
+                dataProvider:     '{{ path('picture_provider') }}',
+                thumbnailWidth:   '250',
+                thumbnailHeight:  'auto',
+                thumbnailBorderHorizontal: 0,
+                thumbnailBorderVertical: 0,
+                thumbnailSelectable: true,
+                thumbnailGutterWidth:      2,
+                thumbnailGutterHeight:     2,
+                "galleryMaxRows":            1,
+                // "galleryDisplayMode":        "rows",
+                // "galleryDisplayMode":        "pagination",
+                // thumbnailAlignment: 'center',
+                thumbnailLabel: {display: false},
+                viewerToolbar:    {
+                   standard:  'minimizeButton, label, shareButton, fullscreenButton',
+                   minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
+                viewerTools:    {
+                   topLeft:   'label',
+                   topRight:  'playPauseButton, zoomButton, fullscreenButton, closeButton' },
+                locationHash: false
+            }).on('itemSelected.nanogallery2', function () {
+                $('#delete').removeClass('hidden');
+                $('#add_tag').removeClass('hidden');
+                $('#dropbox').removeClass('hidden');
+            }).on('itemUnSelected.nanogallery2', function () {
+                if ($gallery.nanogallery2('itemsSelectedGet').length === 0) {
+                    $('#delete').addClass('hidden');
+                    $('#add_tag').addClass('hidden');
+                    $('#dropbox').addClass('hidden');
+                }
+            });
+
+            $(document)
+                .on('click','button#refresh',function () {
+                    btn = $(this);
+                    simpleLoad(btn, true);
+                    $gallery.nanogallery2('destroy');
+                    $gallery.nanogallery2('reload');
+                    simpleLoad(btn, false);
+                })
+                .on('click','button#delete', function () {
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    $(arr).each(function () {
+                        $.getJSON(
+                            '{{ path('TODO', {'index': 'image'}) }}',
+                            {
+                                _id: this.title
+                            },
+                            function (response) {
+                                toastr.success(response);
+                            }
+                        );
+                    });
+                })
+                .on('click','button#add_tag', function () {
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    var tag = prompt('Set a tag:');
+                    $(arr).each(function () {
+                        $.getJSON(
+                            '{{ path('TODO', {'index': 'image'}) }}',
+                            {
+                                _id: this.title,
+                                tag: tag
+                            },
+                            function (response) {
+                                toastr.success(response);
+                            }
+                        );
+                    });
+                })
+                .on('click','.dropdown-menu a', function (event) {
+                    event.preventDefault();
+                    var arr = $gallery.nanogallery2('itemsSelectedGet');
+                    $(arr).each(function () {
+                        console.log(this.title);
+                        $.getJSON(
+                            '{{ path('TODO') }}',
+                            {
+                                src: this.src,
+                                title: this.title
+                            },
+                            function (response) {
+                                if (response.error) {
+                                    toastr.error(response.error);
+                                } else {
+                                    toastr.success(response.success);
+                                }
+                            }
+                        );
+                    });
+                })
+            ;
+        });
+    </script>
 {% endblock javascripts %}

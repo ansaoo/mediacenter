@@ -228,4 +228,20 @@ class Picture
 
         return $this;
     }
+
+    public function toNanoGallery()
+    {
+        return array(
+            "description" => $this->name,
+            "title" => $this->name,
+            "src" => $this->filename,
+            "ID" => $this->id,
+            "albumID" => 0,
+            "kind" => "image",
+            "t_url" => array($this->filename),
+            "t_width" => array($this->filename),
+            "t_height" => array($this->filename),
+            "dc" => "#888"
+        );
+    }
 }

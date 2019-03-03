@@ -68,8 +68,12 @@
                         <li class="{{ menu.audio.kind ?? null }}"><a target="_blank" href="http://192.168.0.13:8080/#music/genres">Genres</a></li>
                     </ul>
                 </li>
-                <li class="{{ menu.image ?? null }}">
-                    <a href="{{ path('picture') }}"><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span></a>
+                <li class="{{ menu.image.li ?? null }}">
+                    <a href=""><i class="fa fa-picture-o"></i> <span class="nav-label">Images</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level {{ menu.image.ul ?? 'collapse' }}">
+                        <li class="{{ menu.image.spotlight ?? null }}"><a href="{{ path('picture') }}">Spotlight</a></li>
+                        <li class="{{ menu.image.manager ?? null }}"><a href="{{ path('picture_manager') }}">Manager</a></li>
+                    </ul>
                 </li>
                 <li class="{{ menu.game ?? null }}">
                     <a href="#"><i class="fa fa-gamepad"></i> <span class="nav-label">Jeux</span></a>
@@ -204,12 +208,6 @@
 <script src="{{ asset('js/plugins/iCheck/icheck.min.js') }}"></script>
 <!-- Toastr script -->
 <script src="{{ asset('js/plugins/toastr/toastr.min.js') }}"></script>
-
-<!-- hinclude -->
-{#<script src="{{ asset('js/plugins/hinclude/hinclude.js') }}"></script>#}
-
-<!-- md5 -->
-<script src="{{ asset('js/plugins/md5/jquery.md5.js') }}"></script>
 
 <script>
     toastr.options = {
