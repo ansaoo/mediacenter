@@ -166,7 +166,7 @@ class User implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array($this->granted);
+        return array("ROLE_".mb_strtoupper($this->granted));
     }
 
     /**
