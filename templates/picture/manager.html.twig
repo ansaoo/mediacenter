@@ -41,8 +41,8 @@
                             {{ parent() }}
                         {% endblock %}
                         <div class="space-25"></div>
-                        <h5>Search</h5>
-                        <p>coming soon ...</p>
+                        <h5>Processing</h5>
+                        <p><span id="records_current">0</span> / <span id="records_total">0</span></p>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -134,6 +134,7 @@
                 },
                 success: function (result) {
                     count++;
+                    $("#records_current").text(count);
                     $("i#" + selectorId).replaceWith('<i class="fa fa-check"></i>');
                 }
             });
@@ -146,8 +147,9 @@
                     complete: function (result) {
                         var files = result['responseJSON'];
                         if (!files) {
-                            files = {data: []};
+                            files = {data: [], recordsTotal: 0};
                         }
+                        $("#records_total").text(files.recordsTotal);
                         $.each(files.data, function (i, item) {
                             persist(i, item);
                         });
@@ -169,7 +171,7 @@
                 ],
                 dom: 'tp',
                 language: languageTrans,
-                pageLength: 20,
+                pageLength: 500,
                 responsive: true
                 // rowCallback: exist
             });
