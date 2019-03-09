@@ -40,6 +40,11 @@ class Gallery
         $this->setConfig(self::CONFIG_FILE);
     }
 
+    public function setTnSize($tnSize)
+    {
+        $this->tn_size = $tnSize;
+    }
+
     public function retrieve(Request $request, array $pictures)
     {
         // retrieve the album ID in the URL
@@ -121,7 +126,7 @@ class Gallery
 //        }
 
         $lstImages = array_map(function (Picture $picture) {
-            return $this->PrepareData($picture->getFilename(), "IMAGE")
+            return $this->prepareData($picture->getFilename(), "IMAGE")
                 ->toObject();
         }, $pictures);
 
@@ -159,6 +164,9 @@ class Gallery
     }
 
 
+    /**
+     * @param $filePath
+     */
     protected function setConfig($filePath)
     {
         $config = parse_ini_file($filePath, true);
@@ -905,7 +913,7 @@ class Gallery
 
     }
 
-    protected function PrepareData($filename, $kind)
+    public function prepareData($filename, $kind)
     {
         // $oneItem = new item();
         $this->currentItem = new Item();

@@ -63,7 +63,7 @@ security:
         - { path: ^/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/.+, roles: [ROLE_READER, ROLE_USER, ROLE_RA_ADMIN] }
+        - { path: ^/.+, roles: [ROLE_READER, ROLE_USER, ROLE_ADMIN] }
     role_hierarchy:
         ROLE_USER:          ROLE_ANONYMOUS
         ROLE_ADMIN:         ROLE_USER

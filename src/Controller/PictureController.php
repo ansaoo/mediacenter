@@ -88,19 +88,19 @@ class PictureController extends Controller
      * @param PictureTool $tool
      * @return array|\Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function addPicture(Request $request, PictureManager $pictureManager, PictureTool $tool)
+    public function addPicture(Request $request, PictureManager $pictureManager, PictureTool $tool, Gallery $gallery)
     {
         $root = $this->getParameter("image_root") . "/";
         $filename = $request->get("filename");
-        if (!file_exists($root.$filename)) {
+        if (!file_exists($root . $filename)) {
             return array(
                 "status" => 404,
                 "state" => "failed",
                 "msg" => "'{$filename}' not found."
             );
         }
-        $stat = stat($root.$filename);
-        $info = pathinfo($root.$filename);
+        $stat = stat($root . $filename);
+        $info = pathinfo($root . $filename);
         $ctime = date_create("now");
         $ctime->setTimestamp($stat["ctime"]);
         $name = basename($filename);
@@ -108,7 +108,7 @@ class PictureController extends Controller
         $new->setFilename($filename)
             ->setFileSize($stat["size"])
             ->setCreated($ctime)
-            ->setOriginalFilename($root.$filename)
+            ->setOriginalFilename($root . $filename)
             ->setName($name)
             ->setStatus(true)
             ->setAdded(date_create("now"))
@@ -116,6 +116,18 @@ class PictureController extends Controller
         $new->setExif($tool->exif2($new));
         $new->setMediainfo($tool->mediainfo($new));
         $result = $pictureManager->add($new);
+        $gallery->setTnSize(array(
+            "hxs" => "auto",
+            "wxs" => 250,
+            "hsm" => "auto",
+            "wsm" => 250,
+            "hme" => "auto",
+            "wme" => 250,
+            "hla" => "auto",
+            "wla" => 250,
+            "hxl" => "auto",
+            "wxl" => 250));
+        $gallery->prepareData($new->getFilename(), "IMAGE");
         return $this->json($result);
     }
 
