@@ -38,6 +38,10 @@ class Gallery
     {
         $this->downloadPath = $router->generate("download") .'/';
         $this->setConfig(self::CONFIG_FILE);
+        $this->albumID = '0';
+        $this->album = '/';
+        $this->data = new GalleryData();
+        $this->data->fullDir = ($this->config['contentFolder']) . ($this->album);
     }
 
     public function setTnSize($tnSize)
@@ -70,9 +74,6 @@ class Gallery
         $this->tn_size['hla']   = strtolower($this->CheckThumbnailSize( $request->get('hla') ));
         $this->tn_size['wxl']   = strtolower($this->CheckThumbnailSize( $request->get('wxl') ));
         $this->tn_size['hxl']   = strtolower($this->CheckThumbnailSize( $request->get('hxl') ));
-
-        $this->data           = new GalleryData();
-        $this->data->fullDir  = ($this->config['contentFolder']) . ($this->album);
 
         $lstImages = array();
         $lstAlbums = array();
