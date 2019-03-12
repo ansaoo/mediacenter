@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Repository\PictureRepository;
 use App\Services\NanoPhotosProvider\Gallery;
 use App\Services\PictureManager;
 use App\Services\PictureTool;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,50 +39,14 @@ class PictureController extends Controller
     public function provider(Gallery $gallery, Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Picture::class);
-        $pictures = $repository->findAll();
-//        return $this->json(array(
-//            "nano_status" => "ok",
-//            "nano_message" => "",
-//            "album_content" => array_map(function (Picture $elem) {
-//                return $elem->toNanoGallery();
-//            }, $pictures)
-//        ));
-        return $this->json($gallery->retrieve($request, $pictures));
-    }
-
-    /**
-     * @Route("/picture/manager", name="picture_manager")
-     */
-    public function manager()
-    {
-        return $this->render('picture/manager.html.twig', [
-            'menu' => array('image' => array(
-                'li' => 'active',
-                'ul' => '',
-                'manager' => 'active'
-            )),
-        ]);
-    }
-
-    /**
-     * @Route("/picture/scan", name="picture_scan")
-     * @param Request $request
-     * @param PictureManager $pictureManager
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function scanLibrary(Request $request, PictureManager $pictureManager)
-    {
-        if ($request->get("async")) {
-            return $this->json(array(
-                'draw' => $request->get("draw", 1),
-                'data' => array(),
-                'recordsTotal' => 0
-            ));
-        }
-        $repository = $this->getDoctrine()->getRepository(Picture::class);
-        $result = $pictureManager->scan($repository);
-        $result['draw'] = $request->get("draw", 1);
-        return $this->json($result);
+        $pictures = $repository->findBy(["status" => true],["created" => "desc"]);
+        return $this->json(array(
+            "nano_status" => "ok",
+            "nano_message" => "",
+            "album_content" => array_map(function (Picture $elem) {
+                return $elem->toNanoGallery();
+            }, $pictures)
+        ));
     }
 
     /**
@@ -86,9 +54,10 @@ class PictureController extends Controller
      * @param Request $request
      * @param PictureManager $pictureManager
      * @param PictureTool $tool
+     * @param Gallery $gallery
      * @return array|\Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function addPicture(Request $request, PictureManager $pictureManager, PictureTool $tool, Gallery $gallery)
+    public function add(Request $request, PictureManager $pictureManager, PictureTool $tool, Gallery $gallery)
     {
         $root = $this->getParameter("image_root") . "/";
         $filename = $request->get("filename");
@@ -112,10 +81,9 @@ class PictureController extends Controller
             ->setName($name)
             ->setStatus(true)
             ->setAdded(date_create("now"))
+            ->setExif($tool->exif2($new))
+            ->setMediainfo($tool->mediainfo($new))
         ;
-        $new->setExif($tool->exif2($new));
-        $new->setMediainfo($tool->mediainfo($new));
-        $result = $pictureManager->add($new);
         $gallery->setTnSize(array(
             "hxs" => "auto",
             "wxs" => 250,
@@ -127,7 +95,8 @@ class PictureController extends Controller
             "wla" => 250,
             "hxl" => "auto",
             "wxl" => 250));
-        $gallery->prepareData($new->getFilename(), "IMAGE");
+        $new->setGalleryItem($gallery->prepareData($new->getFilename(), "IMAGE"));
+        $result = $pictureManager->add($new);
         return $this->json($result);
     }
 
@@ -136,7 +105,7 @@ class PictureController extends Controller
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function existPicture(Request $request)
+    public function exist(Request $request)
     {
         $filename = $request->get("filename");
         if (!file_exists($this->getParameter("image_root").'/'.$filename)) {
@@ -152,4 +121,50 @@ class PictureController extends Controller
         );
     }
 
+    /**
+     * @Route("/picture/remove", name="picture_remove")
+     * @param Request $request
+     * @param LoggerInterface $logger
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function remove(Request $request, LoggerInterface $logger)
+    {
+        $title = $request->get("title");
+        $picture = $this->getDoctrine()
+            ->getRepository(Picture::class)
+            ->findOneBy(["title" => $title]);
+        if ($picture instanceof Picture) {
+            try {
+                $picture->setStatus(false);
+                $this->getDoctrine()->getManager()->persist($picture);
+                $this->getDoctrine()->getManager()->flush();
+                return $this->json(array("deleted" => true));
+            } catch (OptimisticLockException $e) {
+                $logger->error($e->getMessage());
+                $error = $e->getMessage();
+            }
+        }
+        return $this->json(array(
+            "deleted" => false,
+            "error" => $error ?? "$title not found"
+        ));
+    }
+
+    /**
+     * @Route("/picture/metric", name="picture_metric")
+     */
+    public function metric()
+    {
+        $stat = array();
+        $repository = $this->getDoctrine()->getRepository(Picture::class);
+        if ($repository instanceof PictureRepository) {
+            $stat["total_element"] = $repository->count([]);
+            try {
+                $stat["total_size"] = $repository->sumFileSize();
+            } catch (NonUniqueResultException $e) {
+
+            }
+        }
+        return $this->json($stat);
+    }
 }

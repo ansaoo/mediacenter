@@ -463,6 +463,9 @@ class Gallery
 
             $pi=pathinfo($filename);
             $tn= $pi['filename'] . '_' . $this->tn_size[$sw[$i]] . '_' . $this->tn_size[$sh[$i]] . '.' . $pi['extension'];
+//            if (file_exists($baseFolder . '_thumbnails/' . $tn)) {
+//                $this->currentItem->addTUrl($i, $this->downloadPath . $this->CustomEncode($baseFolder . '_thumbnails/' . $tn));
+//            }
             if ( $this->GenerateThumbnail2($baseFolder, $filename, $tn, $this->tn_size[$sw[$i]], $this->tn_size[$sh[$i]], $i ) == true ) {
                 $this->currentItem->addTUrl($i, $this->downloadPath . $this->CustomEncode($baseFolder . '_thumbnails/' . $tn));
             }
@@ -914,7 +917,7 @@ class Gallery
 
     }
 
-    public function prepareData($filename, $kind)
+    public function prepareData($filename, $kind, $byPass = false)
     {
         // $oneItem = new item();
         $this->currentItem = new Item();

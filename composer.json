@@ -2,10 +2,11 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.0.8",
+        "php": "^7.1",
         "ext-curl": "*",
         "ext-ctype": "*",
         "ext-exif": "*",
+        "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",

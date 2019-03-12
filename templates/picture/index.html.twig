@@ -42,8 +42,12 @@
                             {{ parent() }}
                         {% endblock %}
                         <div class="space-25"></div>
-                        <h5>Search</h5>
-                        <p>coming soon ...</p>
+                        <h5>Stat</h5>
+                        <div class="stats">
+                            <span id="total_pictures">0</span><em> photos</em><br/>
+                            <span id="total_movies">0</span><em> videos</em><br/>
+                            <span id="total_size">0</span><em> Go</em>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -139,11 +143,12 @@
                 thumbnailSelectable: true,
                 thumbnailGutterWidth:      2,
                 thumbnailGutterHeight:     2,
-                "galleryMaxRows":            1,
+                galleryMaxRows:            1,
                 // "galleryDisplayMode":        "rows",
                 // "galleryDisplayMode":        "pagination",
                 // thumbnailAlignment: 'center',
                 thumbnailLabel: {display: false},
+                thumbnailHoverEffect2: "scale120",
                 viewerToolbar:    {
                    standard:  'minimizeButton, label, shareButton, fullscreenButton',
                    minimized: 'minimizeButton, label, fullscreenButton, downloadButton, infoButton' },
@@ -163,26 +168,38 @@
                 }
             });
 
+            $.ajax({
+                url: '{{ path('picture_metric') }}',
+                success: function (data) {
+                    if (!data) {
+                        data = {total_element: 0, total_size: 0};
+                    }
+                    $("#total_pictures").text(data.total_element);
+                    $("#total_size").text(data.total_size);
+                }
+            });
+
             $(document)
                 .on('click','button#refresh',function () {
                     btn = $(this);
                     simpleLoad(btn, true);
-                    $gallery.nanogallery2('destroy');
                     $gallery.nanogallery2('reload');
                     simpleLoad(btn, false);
                 })
                 .on('click','button#delete', function () {
                     var arr = $gallery.nanogallery2('itemsSelectedGet');
                     $(arr).each(function () {
-                        $.getJSON(
-                            '{{ path('TODO', {'index': 'image'}) }}',
-                            {
-                                _id: this.title
-                            },
-                            function (response) {
-                                toastr.success(response);
+                        $.ajax({
+                            url: '{{ path('picture_remove') }}',
+                            data: {title: this.title.replace(/&#x2F;/g, '/').replace(/ /g, '_')},
+                            success: function (response) {
+                                if (response.error) {
+                                    toastr.error(response.error);
+                                } else {
+                                    toastr.success("deleted");
+                                }
                             }
-                        );
+                        });
                     });
                 })
                 .on('click','button#add_tag', function () {

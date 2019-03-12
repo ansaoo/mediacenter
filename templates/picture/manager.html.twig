@@ -42,6 +42,7 @@
                         {% endblock %}
                         <div class="space-25"></div>
                         <h5>Processing</h5>
+                        <h6><span id="records_progress_percent">-</span> %</h6>
                         <p><span id="records_current">0</span> / <span id="records_total">0</span></p>
                         <div class="clearfix"></div>
                     </div>
@@ -53,6 +54,7 @@
                 <div class="mail-box-header">
                     <div class="pull-right">
                         <button id="scan" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Scan library"><i class="fa fa-refresh"></i> Scan</button>
+                        <button id="flush" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Persist files"><i class="fa fa-arrow-right"></i> Flush</button>
                         {#<button type="button" class="btn btn-sm btn-success hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>#}
                         
                     </div>
@@ -78,6 +80,7 @@
     <script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
     <script>
         var count = 0;
+        var scanId;
         var languageTrans = {
             "decimal":        "{{ 'dt.decimal'|trans({},'datatable') }}",
             "emptyTable":     "{{ 'dt.emptyTable'|trans({},'datatable') }}",
@@ -140,6 +143,19 @@
             });
         }
 
+        function refreshStat() {
+            if (scanId) {
+                $.ajax({
+                    url: '{{ path('picture_scan_stat') }}',
+                    data: {ref: scanId},
+                    success: function (data) {
+                        $("#records_current").text(data.progress | 0);
+                        $("#records_progress_percent").text(data.percent | 0);
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
             var $manager = $('table.manager').DataTable({
                 ajax: {
@@ -147,12 +163,10 @@
                     complete: function (result) {
                         var files = result['responseJSON'];
                         if (!files) {
-                            files = {data: [], recordsTotal: 0};
+                            files = {data: [], recordsTotal: 0, scanId: null};
                         }
                         $("#records_total").text(files.recordsTotal);
-                        $.each(files.data, function (i, item) {
-                            persist(i, item);
-                        });
+                        scanId = files.scanId;
                         if (count > 0) {
                             toastr.success("Saved " + count + " files.");
                         }
@@ -176,9 +190,32 @@
                 // rowCallback: exist
             });
 
-            $(document).on('click', 'button#scan', function (e) {
-                $manager.ajax.url('{{ path('picture_scan') }}').load();
-            })
+            $(document)
+                .on('click', 'button#scan', function (e) {
+                    $manager.ajax.url('{{ path('picture_scan') }}').load();
+                })
+                .on('click', 'button#flush', function (e) {
+                    if (scanId) {
+                        $.ajax({
+                            url: '{{ path('picture_scan_load') }}',
+                            data: {ref: scanId},
+                            timeout: 1000,
+                            error: function (xhr, textStatus, errorThrown) {
+                                if (textStatus === 'timeout') {
+                                    toastr.success(
+                                    '{{ 'toastr.success.msg'|trans }}',
+                                    '{{ 'toastr.success.title'|trans }}'
+                                    );
+                                    setTimeout(refreshStat, 5000);
+                                }
+                                toastr.error('{{ 'toastr.error'|trans }}')
+                            }
+                        });
+                    } else {
+                        toastr.error("No scan");
+                    }
+                })
+
         });
     </script>
 {% endblock javascripts %}

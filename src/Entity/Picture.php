@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Services\NanoPhotosProvider\Entity\Item;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -72,6 +73,71 @@ class Picture
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="pictures")
      */
     private $tag;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dc;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dcGIF;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $imgHeight;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $imgWidth;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $kind;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $originalUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $src;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $t_height;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $t_width;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $t_url;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
 
     public function __construct()
     {
@@ -229,19 +295,194 @@ class Picture
         return $this;
     }
 
+    public function getDc(): ?string
+    {
+        return $this->dc;
+    }
+
+    public function setDc(?string $dc): self
+    {
+        $this->dc = $dc;
+
+        return $this;
+    }
+
+    public function getDcGIF(): ?string
+    {
+        return $this->dcGIF;
+    }
+
+    public function setDcGIF(?string $dcGIF): self
+    {
+        $this->dcGIF = $dcGIF;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImgHeight(): ?int
+    {
+        return $this->imgHeight;
+    }
+
+    public function setImgHeight(?int $imgHeight): self
+    {
+        $this->imgHeight = $imgHeight;
+
+        return $this;
+    }
+
+    public function getImgWidth(): ?int
+    {
+        return $this->imgWidth;
+    }
+
+    public function setImgWidth(?int $imgWidth): self
+    {
+        $this->imgWidth = $imgWidth;
+
+        return $this;
+    }
+
+    public function getKind(): ?string
+    {
+        return $this->kind;
+    }
+
+    public function setKind(?string $kind): self
+    {
+        $this->kind = $kind;
+
+        return $this;
+    }
+
+    public function getOriginalUrl(): ?string
+    {
+        return $this->originalUrl;
+    }
+
+    public function setOriginalUrl(?string $originalUrl): self
+    {
+        $this->originalUrl = $originalUrl;
+
+        return $this;
+    }
+
+    public function getSrc(): ?string
+    {
+        return $this->src;
+    }
+
+    public function setSrc(?string $src): self
+    {
+        $this->src = $src;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTHeight(): ?string
+    {
+        return $this->t_height;
+    }
+
+    public function setTHeight(?string $t_height): self
+    {
+        $this->t_height = $t_height;
+
+        return $this;
+    }
+
+    public function getTWidth(): ?string
+    {
+        return $this->t_width;
+    }
+
+    public function setTWidth(?string $t_width): self
+    {
+        $this->t_width = $t_width;
+
+        return $this;
+    }
+
+    public function getTUrl(): ?string
+    {
+        return $this->t_url;
+    }
+
+    public function setTUrl(?string $t_url): self
+    {
+        $this->t_url = $t_url;
+
+        return $this;
+    }
+
+    public function setGalleryItem(Item $item): self
+    {
+        $this->dc = $item->getDc();
+        $this->dcGIF = $item->getDcGIF();
+        $this->description = $item->getDescription();
+        $this->imgHeight = $item->getImgHeight();
+        $this->imgWidth = $item->getImgWidth();
+        $this->kind = $item->getKind();
+        $this->originalUrl = $item->getOriginalUrl();
+        $this->src = $item->getSrc();
+        $this->t_url = implode(",", $item->getTUrl());
+        $this->t_height = implode(",", $item->getTHeight());
+        $this->t_width = implode(",", $item->getTWidth());
+        $this->title = $item->getTitle();
+        return $this;
+    }
+
     public function toNanoGallery()
     {
         return array(
-            "description" => $this->name,
-            "title" => $this->name,
-            "src" => $this->filename,
+            "description" => $this->description,
+            "title" => $this->title,
+            "src" => $this->src,
             "ID" => $this->id,
             "albumID" => 0,
-            "kind" => "image",
-            "t_url" => array($this->filename),
-            "t_width" => array($this->filename),
-            "t_height" => array($this->filename),
-            "dc" => "#888"
+            "kind" => $this->kind,
+            "t_url" => explode(",", $this->t_url),
+            "t_width" => explode(",", $this->t_width),
+            "t_height" => explode(",", $this->t_height),
+            "dc" => $this->dc,
+            "dcGIF" => $this->dcGIF
         );
     }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
 }

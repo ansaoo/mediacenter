@@ -19,6 +19,34 @@ class PictureRepository extends ServiceEntityRepository
         parent::__construct($registry, Picture::class);
     }
 
+//    /**
+//     * @return mixed
+//     * @throws \Doctrine\ORM\NoResultException
+//     * @throws \Doctrine\ORM\NonUniqueResultException
+//     */
+//    public function count()
+//    {
+//        return $this->createQueryBuilder("p")
+//            ->select("count(p.id)")
+//            ->from('Picture', 'p')
+//            ->getQuery()
+//            ->getSingleScalarResult();
+//    }
+
+
+    /**
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function sumFileSize()
+    {
+        return $this->createQueryBuilder("sum")
+            ->select("sum(p.fileSize)")
+            ->from(Picture::class, 'p')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Picture[] Returns an array of Picture objects
     //  */
