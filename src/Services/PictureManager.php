@@ -147,7 +147,7 @@ class PictureManager
                 ->setName($name)
                 ->setStatus(true)
                 ->setAdded(date_create("now"))
-                ->setType(mimetype_from_filename($filename))
+                ->setType(mime_content_type($this->root . $filename))
                 ->setExif($tool->exif2($new))
                 ->setMediainfo($tool->mediainfo($new))
                 ->setGalleryItem($this->gallery->prepareData($new->getFilename(), "IMAGE"));
