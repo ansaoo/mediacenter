@@ -138,6 +138,7 @@ class PictureManager
         $files = Yaml::parseFile("{$this->scanPath}/{$scan->getRefId()}.yml");
         $count = 0;
         foreach ($files["files"] as $filename) {
+            set_time_limit(20);
             $count++;
             try {
                 $now = date_create("now");
