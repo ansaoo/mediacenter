@@ -7,6 +7,7 @@
         "ext-ctype": "*",
         "ext-exif": "*",
         "ext-fileinfo": "*",
+        "ext-http": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
@@ -28,7 +29,8 @@
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/yaml": "*",
-        "twig/twig": "^2.5"
+        "twig/twig": "^2.5",
+        "twig/extensions": "^1.5"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.8",

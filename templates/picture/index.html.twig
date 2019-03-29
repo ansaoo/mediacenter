@@ -42,6 +42,25 @@
                             {{ parent() }}
                         {% endblock %}
                         <div class="space-25"></div>
+                        <h5>Folders</h5>
+                        <div class="panel-group" id="accordion">
+                            {% for year in [2019,2018,2017,2016,2015,2014,2013,2012,2011] %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ year }}" aria-expanded="false" class="collapsed">{{ year }}</a>
+                                    </h5>
+                                </div>
+                                <div id="collapse{{ year }}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    {% for month_i in ['01','02','03','04','05','06','07','08','09','10','11','12'] %}
+                                    <div class="panel-body">
+                                        <a href="{{ path('picture',{'year': year,'month':month_i}) }}">{{ ('month.'~month_i)|trans }}</a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                         <h5>Stat</h5>
                         <div class="stats">
                             <span id="total_pictures">0</span><em> photos</em><br/>
@@ -70,7 +89,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-sm btn-warning hidden" id="add_tag" title="Tagger"><i class="fa fa-pencil"> </i></button>
+                        <button type="button" class="btn btn-sm btn-primary hidden dropdown-toggle" data-toggle="modal" data-target="#edit-entry" title="Edit">
+                            <i class="fa fa-pencil"></i> {{ 'task.new'|trans }}
+                        </button>
                         <button type="button" class="btn btn-sm btn-danger hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
                     </div>
                     <h2>{{ 'title' }}</h2>
@@ -135,7 +156,7 @@
             var $gallery = $("#my_nanogallery2");
             $gallery.nanogallery2({
                 kind:             'nano_photos_provider2',
-                dataProvider:     '{{ path('picture_provider') }}',
+                dataProvider:     '{{ focus ? path('picture_provider',focus) : path('picture_provider') }}',
                 thumbnailWidth:   '250',
                 thumbnailHeight:  'auto',
                 thumbnailBorderHorizontal: 0,
@@ -145,7 +166,7 @@
                 thumbnailGutterHeight:     2,
                 // galleryMaxRows:            1,
                 galleryDisplayMode:        "moreButton",
-                galleryDisplayMoreStep: 5,
+                galleryDisplayMoreStep: 10,
                 // thumbnailAlignment: 'center',
                 thumbnailLabel: {display: false},
                 thumbnailHoverEffect2: "scale120",

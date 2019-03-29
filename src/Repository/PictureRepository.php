@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Picture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -45,6 +46,34 @@ class PictureRepository extends ServiceEntityRepository
             ->from(Picture::class, 'p')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * @param $albumId
+     * @return mixed
+     */
+    public function findByAlbum($albumId)
+    {
+        return $this->createQueryBuilder("fba")
+            ->select("*")
+            ->from(Picture::class, 'p')
+            ->where(Criteria::expr()->startsWith("filename", $albumId))
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByYearAndMonth($year, $month)
+    {
+        $fromTime = new \DateTime($year . '-' . sprintf("%.2d", $month) . '-01');
+        $toTime = new \DateTime($fromTime->format('Y-m-d') . ' first day of next month');
+        return $this->createQueryBuilder('p')
+            ->where('p.created >= :fromTime')
+            ->andWhere('p.created < :toTime')
+            ->setParameter('fromTime', $fromTime)
+            ->setParameter('toTime', $toTime)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

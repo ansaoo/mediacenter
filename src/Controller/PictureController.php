@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Form\PictureTaskType;
 use App\Repository\PictureRepository;
 use App\Services\NanoPhotosProvider\Gallery;
 use App\Services\PictureManager;
 use App\Services\PictureTool;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
+use http\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,11 +19,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class PictureController extends Controller
 {
     /**
-     * @Route("/picture/spotlight", name="picture")
+     * @Route("/picture/spotlight/{year}/{month}",
+     *     name="picture",
+     *     requirements={"year": "\d{4}", "month": "\d{2}"},
+     *     defaults={"year": "8888", "month": "88"}
+     * )
+     * @param int $year
+     * @param int $month
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function index(int $year, int $month)
     {
         return $this->render('picture/index.html.twig', [
+            'focus' => $year != 8888 && $month != 88 ?
+                array("year" => $year, "month" => $month)
+                : null,
             'menu' => array('image' => array(
                 'li' => 'active',
                 'ul' => '',
@@ -31,15 +43,32 @@ class PictureController extends Controller
     }
 
     /**
-     * @Route("/picture/provider", name="picture_provider")
+     * @Route("/picture/provider/{year}/{month}",
+     *      name="picture_provider",
+     *      requirements={"year": "\d{4}", "month": "\d{1}|\d{2}"},
+     *      defaults={"year": "8888", "month": "88"}
+     * )
      * @param Gallery $gallery
      * @param Request $request
+     * @param int $year
+     * @param int $month
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function provider(Gallery $gallery, Request $request)
+    public function provider(Gallery $gallery, Request $request, int $year, int $month)
     {
         $repository = $this->getDoctrine()->getRepository(Picture::class);
-        $pictures = $repository->findBy(["status" => true],["created" => "desc"]);
+        if (!$repository instanceof PictureRepository) {
+            throw new RuntimeException("failed_to_load_picture_repository");
+        }
+        if ($year != 8888 && $month != 88) {
+            $pictures = $repository->findByYearAndMonth($year, $month);
+        } else {
+            $pictures = $repository->findBy(
+                ["status" => true],
+                ["created" => "desc"],
+                50
+            );
+        }
         return $this->json(array(
             "nano_status" => "ok",
             "nano_message" => "",
@@ -98,6 +127,28 @@ class PictureController extends Controller
         $new->setGalleryItem($gallery->prepareData($new->getFilename(), "IMAGE"));
         $result = $pictureManager->add($new);
         return $this->json($result);
+    }
+
+    /**
+     * @Route("/picture/edit", name="picture_edit")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function edit(Request $request)
+    {
+        $pictureId = $request->get("id");
+        $repository = $this->getDoctrine()->getRepository(Picture::class);
+        $picture = $repository->find($pictureId);
+
+        $form = $this->createForm(PictureTaskType::class, $picture);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($picture);
+            $entityManager->flush();
+            return $this->json(array('save' => true));
+        }
+        return $this->render("picture/form-update.html.twig");
     }
 
     /**
