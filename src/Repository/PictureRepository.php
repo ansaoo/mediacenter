@@ -70,6 +70,8 @@ class PictureRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.created >= :fromTime')
             ->andWhere('p.created < :toTime')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', true)
             ->setParameter('fromTime', $fromTime)
             ->setParameter('toTime', $toTime)
             ->getQuery()
