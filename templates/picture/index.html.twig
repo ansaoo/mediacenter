@@ -65,7 +65,7 @@
                         <div class="stats">
                             <span id="total_pictures">0</span><em> photos</em><br/>
                             <span id="total_movies">0</span><em> videos</em><br/>
-                            <span id="total_size">0</span><em> Go</em>
+                            <span id="total_size">0</span><em> Mo</em>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -74,7 +74,7 @@
         </div>
         <div class="col-lg-9 animated fadeInRight">
             <div class="ibox float-e-margins">
-                <div class="mail-box-header">
+                <div class="mail-box-header no-borders">
                     <div class="pull-right">
                         <button id="refresh" type="button" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i class="fa fa-refresh"></i> Refresh</button>
                         {#<button type="button" class="btn btn-sm btn-success hidden" id="to_dropbox" title="Dropbox"><i class="fa fa-dropbox"> </i></button>#}
@@ -94,7 +94,7 @@
                         </button>
                         <button type="button" class="btn btn-sm btn-danger hidden" id="delete" title="Supprimer"><i class="fa fa-trash"> </i></button>
                     </div>
-                    <h2>{{ 'title' }}</h2>
+                    <h2>{{ focus ? (focus.year~'-'~focus.month~'-01')|localizeddate('medium', 'none', locale,null,'MMMM, yyyy') : 'New added' }}</h2>
                 </div>
                 <div class="ibox-content">
                     <div id="my_nanogallery2"></div>
@@ -162,8 +162,8 @@
                 thumbnailBorderHorizontal: 0,
                 thumbnailBorderVertical: 0,
                 thumbnailSelectable: true,
-                thumbnailGutterWidth:      2,
-                thumbnailGutterHeight:     2,
+                thumbnailGutterWidth:      8,
+                thumbnailGutterHeight:     8,
                 // galleryMaxRows:            1,
                 galleryDisplayMode:        "moreButton",
                 galleryDisplayMoreStep: 10,

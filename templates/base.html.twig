@@ -24,9 +24,9 @@
 {% if locale is not defined %}
     {% set locale = app.request.getLocale() %}
 {% endif %}
-<body>
-<div id="wrapper">
-    <nav class="navbar-default navbar-static-side" role="navigation">
+<body class="fixed-sidebar">
+<div id="wrapper white-bg">
+    <nav class="navbar-default navbar-static-side fixed" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
@@ -92,7 +92,7 @@
         </div>
     </nav>
 
-    <div id="page-wrapper" class="gray-bg">
+    <div id="page-wrapper" class="white-bg">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -162,7 +162,7 @@
 
             </nav>
         </div>
-        <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="row wrapper white-bg page-heading">
             {% block page_heading %}
             {% endblock page_heading %}
         </div>
@@ -225,7 +225,8 @@
         "hideEasing": "linear",
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
-    }
+    };
+    $("a.navbar-minimalize").on('click',function(){$("body").toggleClass('fixed-sidebar')});
 </script>
 
 {% block javascripts %}{% endblock javascripts %}
