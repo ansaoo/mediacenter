@@ -4,5 +4,34 @@ voiture_id:
 title:
   box:
   controller: "Cars"
-  heading: "Data"
+  heading:
+    fuel: "Fuels"
+    maintain: "Maintains"
   page: "Cars"
+task.new: "New entry"
+form.title: "New entry"
+form.fuel:
+  date: "Date"
+  compteur: "Counter"
+  kilometre: "Kilometer"
+  litre: "Liter"
+  prix: "Price"
+  lieu: "Location"
+  station: "Station"
+  type: "Type"
+  model: "Model"
+form.maintain:
+  date: "Date"
+  compteur: "Counter"
+  libelle: "Wording"
+  prix: "Price"
+  lieu: "Location"
+  garage: "Garage"
+  model: "Model"
+data:
+  fuel:
+    tab_name: "Fuels"
+    empty: "No data found"
+  maintain:
+    tab_name: "Maintains"
+    empty: "No data found"

@@ -13,7 +13,7 @@
 
 {% block page_heading %}
     <div class="col-lg-10">
-        <h2>{{ 'title.heading'|trans }}</h2>
+        <h2>{{ ('title.heading.'~tab)|trans }}</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="#">Home</a>
@@ -22,7 +22,7 @@
                 <a>{{ 'title.controller'|trans }}</a>
             </li>
             <li class="active">
-                <strong>{{ 'title.heading'|trans }}</strong>
+                <strong>{{ ('title.heading.'~tab)|trans }}</strong>
             </li>
         </ol>
     </div>
@@ -35,37 +35,36 @@
 {% block body %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Consommation</h5>
-                    <div class="ibox-tools">
-                        {{ include("car/form-fuel.html.twig") }}
-                    </div>
-                </div>
-                <div class="ibox-content fuel">
-                    {{ include("utils/loading.html.twig") }}
-                    <div class="table-responsive" style="width: 100%">
-                        <table class="table table-hover fuel">
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Entretiens</h5>
-                    <div class="ibox-tools">
-                        {{ include("car/form-maintain.html.twig") }}
-                    </div>
-                </div>
-                <div class="ibox-content maintains">
-                    {{ include("utils/loading.html.twig") }}
-                    <div class="table-responsive" style="width: 100%">
-                        <table class="table table-hover maintains">
-                        </table>
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <div class="project-list">
+                        <div class="pull-right">
+                            {% if tab == "fuel" %}
+                                {{ include("car/form-fuel.html.twig") }}
+                            {% else %}
+                                {{ include("car/form-maintain.html.twig") }}
+                            {% endif %}
+                        </div>
+                        <ul class="nav nav-tabs">
+                            {% for ind, elem in kind %}
+                                <li class="{{ elem == tab ? 'active' : '' }}">
+                                    <a class="tab-href" href="{{ path('car_follow',{'kind': elem})|raw }}">
+                                        {{ ('data.'~elem~'.tab_name')|trans }}
+                                        {#<span class="badge badge-default" id="badge-{{ elem|lower }}"></span>#}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for ind, elem in kind %}
+                                <div id="tab-{{ ind+1 }}" class="tab-pane {{ elem == tab ? 'active' : '' }}">
+                                    <div class="table-responsive" style="width: 100%">
+                                        <table class="table table-hover data-{{ ind+1 }} {{ tab }}">
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -125,9 +124,10 @@
                 autoclose: true
             });
 
+            {% if tab == "fuel" %}
             var $fuel = $('table.fuel').DataTable({
                 ajax: {
-                    url: '{{ path("car_data_fuel") }}',
+                    url: '{{ path("car_follow_data", {'kind': tab}) }}',
                     beforeSend: function () {
                         $('div.fuel').addClass('sk-loading');
                     },
@@ -148,17 +148,20 @@
                     {data: 'litre', title: 'Litres', defaultContent: ''},
                     {data: 'lieu', title: 'Lieu', defaultContent: ''}
                 ],
-                dom: '<"html5buttons"B>lTfgitp',
+                // dom: '<"html5buttons"B>tr<"row"<"col-md-4"l><"col-md-4 text-center"i><"col-md-4"p>>',
+                dom: 'tr<"row"<"col-md-4"l><"col-md-4 text-center"i><"col-md-4"p>>',
                 language: languageTrans,
                 order: [[ 0, "desc" ]],
                 processing: true,
                 serverSide: true,
                 responsive: true
             });
+            {% endif %}
 
-            var $maintains = $('table.maintains').DataTable({
+            {% if tab == "maintain" %}
+            var $maintains = $('table.maintain').DataTable({
                 ajax: {
-                    url: '{{ path("car_data_maintain") }}',
+                    url: '{{ path("car_follow_data", {'kind': tab}) }}',
                     beforeSend: function () {
                         $('div.maintains').addClass('sk-loading');
                     },
@@ -185,13 +188,15 @@
                     { data: 'lieu', title: 'Lieu', defaultContent: '' },
                     { data: 'prix', title: 'Prix', defaultContent: '' }
                 ],
-                dom: '<"html5buttons"B>lTfgitp',
+                // dom: '<"html5buttons"B>tr<"row"<"col-md-4"l><"col-md-4 text-center"i><"col-md-4"p>>',
+                dom: 'tr<"row"<"col-md-4"l><"col-md-4 text-center"i><"col-md-4"p>>',
                 language: languageTrans,
                 order: [[ 0, "desc" ]],
                 processing: true,
                 serverSide: true,
                 responsive: true
             });
+            {% endif %}
 
             $(document)
                 .on('submit', 'form[name="carburant_task"]', function (event) {

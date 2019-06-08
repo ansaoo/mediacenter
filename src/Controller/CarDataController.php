@@ -11,15 +11,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CarburantController extends Controller
+class CarDataController extends Controller
 {
     /**
-     * @Route("/car/data/index", name="car_data_index")
+     * @Route(
+     *      "/car/follow/{kind}",
+     *      name="car_follow",
+     *      requirements={
+     *          "kind": "fuel|maintain"
+     *      },
+     *      defaults={
+     *          "kind": "fuel"
+     *      })
+     * @param string $kind
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index()
+    public function index(string $kind)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY',null,'Unable to access this page!');
-        return $this->render('car/index.html.twig');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY', null, 'Unable to access this page!');
+        return $this->render('car/index.html.twig', array(
+            'kind' => explode("|", "fuel|maintain"),
+            'tab' => $kind,
+            'menu' => array(
+                'car' => array(
+                    'li' => 'active',
+                    'ul' => '',
+                    'data' => 'active'
+                ))
+        ));
     }
 
     /**
@@ -45,13 +64,22 @@ class CarburantController extends Controller
     }
 
     /**
-     * @Route("/car/data/fuel", name="car_data_fuel")
+     * @Route(
+     *      "/car/follow/{kind}/data",
+     *      name="car_follow_data",
+     *      requirements={
+     *          "kind": "fuel|maintain"
+     *      },
+     *      defaults={
+     *          "kind": "fuel"
+     *      })
      * @param Request $request
+     * @param string $kind
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function loadCarburant(Request $request)
+    public function loadData(Request $request, string $kind)
     {
-        $repository = $this->getDoctrine()->getRepository(Carburant::class);
+        $repository = $this->getDoctrine()->getRepository($kind == "fuel" ? Carburant::class : Entretien::class);
         $order = $request->get("order", [array("column" => 0, "dir" => "desc")]);
         $columns = $request->get("columns", [array("data" => "date")]);
         $rows = $repository->findBy(
@@ -61,7 +89,7 @@ class CarburantController extends Controller
             $request->get("start")
         );
         return $this->json(array(
-            "data" => array_map(function (Carburant $elem) {
+            "data" => array_map(function ($elem) {
                 return $elem->_toArray();
             }, $rows)));
     }
@@ -83,28 +111,6 @@ class CarburantController extends Controller
             return $this->json(array('save' => true));
         }
         return $this->json(array('save' => false));
-    }
-
-    /**
-     * @Route("/car/data/maintain", name="car_data_maintain")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function loadEntretien(Request $request)
-    {
-        $repository = $this->getDoctrine()->getRepository(Entretien::class);
-        $order = $request->get("order", [array("column" => 0, "dir" => "asc")]);
-        $columns = $request->get("columns", [array("data" => "date")]);
-        $rows = $repository->findBy(
-            [],
-            [$columns[$order[0]["column"]]["data"] => $order[0]["dir"]],
-            $request->get("length", 25),
-            $request->get("start")
-        );
-        return $this->json(array(
-            "data" => array_map(function (Entretien $elem) {
-                return $elem->_toArray();
-            }, $rows)));
     }
 
     /**
