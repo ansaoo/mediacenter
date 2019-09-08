@@ -74,6 +74,7 @@ class PictureRepository extends ServiceEntityRepository
             ->setParameter('status', true)
             ->setParameter('fromTime', $fromTime)
             ->setParameter('toTime', $toTime)
+            ->orderBy('p.created', 'DESC')
             ->getQuery()
             ->getResult();
     }
